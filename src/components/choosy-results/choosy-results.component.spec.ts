@@ -337,7 +337,7 @@ describe('ChoosyResultsComponent', () => {
       expect(msg).not.toBeDefined();
       (comp as any).notifications.subscribe(n => msg = n);
       comp.removeOption(x => x == 'three');
-      expect(msg).toEqual({ action: 'option_removed', value: null });
+      expect(msg).toEqual({ action: 'OPTION_REMOVED', value: null });
     });
     it('should emit selected options on select', () => {
       let sel;

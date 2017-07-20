@@ -63,7 +63,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     private configService: ChoosyConfigService,
     private cdRef: ChangeDetectorRef
   ) { }
-  /* Initial setup */
+
   ngOnInit(): void {
     if (!this.options) throw new Error(this.ENOOPT);
     if (!Array.isArray(this.options)) throw new Error(this.EINVOPT);
@@ -81,7 +81,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     if (this.resultsSubscription)
       this.resultsSubscription.unsubscribe();
   }
-  /*component events*/
+
   open(event?: Event): void {
     if (this.isOpen) return;
     this.isOpen = true;
@@ -106,7 +106,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.selectOption(res.option.value);
   }
 
-  /*actions*/
+
   selectOption(option: ChoosyRawOption): void {
     this.processedOptions = this.originalOptions.map((o: ChoosyOption) => {
       o.props.selected = false;
@@ -193,7 +193,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.results.next(this.originalOptions);
     this.notifications.next({ action: C.OPTIONS_RELOADED, value: options });
   }
-  /*utils*/
+
   updateConfig(config: {}): void {
     this.config = merge(this.config, config);
   }
@@ -203,7 +203,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.results.next(this.originalOptions);
     this.notifications.next({ action: C.OPTIONS_RESET, value: null });
   }
-  /*expose*/
+
   expose(): ChoosyDropdownExpose {
     return {
       actions: {

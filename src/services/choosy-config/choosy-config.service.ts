@@ -42,7 +42,7 @@ export class ChoosyConfigService {
       countSummary: true
     },
     keyboardShortcuts: {
-      enable: true
+      enable: false
     }
   };
   constructor( @Optional() config?: GlobalConfigData) {

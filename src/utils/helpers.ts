@@ -2,7 +2,6 @@ import { ChoosyOption } from '../interfaces/index';
 
 export const formatRawOption = (option: any): ChoosyOption => {
   const uid = Math.random().toString(36).substr(2, 6);
-
   return {
     uid,
     props: {
