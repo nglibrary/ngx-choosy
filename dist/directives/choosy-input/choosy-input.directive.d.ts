@@ -1,0 +1,36 @@
+import { AfterViewInit, ComponentFactoryResolver, ComponentRef, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, Renderer, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ControlValueAccessor } from '@angular/forms';
+import { ChoosyResultsComponent } from '../../components/choosy-results/choosy-results.component';
+export declare class ChoosyInputDirective implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
+    private eRef;
+    private renderer;
+    private viewContainerRef;
+    private compFacResolver;
+    options: Array<any>;
+    config: any;
+    template: TemplateRef<any>;
+    choosy: EventEmitter<any>;
+    componentRef: ComponentRef<ChoosyResultsComponent>;
+    initialValue: any;
+    constructor(eRef: ElementRef, renderer: Renderer, viewContainerRef: ViewContainerRef, compFacResolver: ComponentFactoryResolver);
+    ngOnInit(): void;
+    ngAfterViewInit(): void;
+    ngOnDestroy(): void;
+    ngOnChanges(change: any): void;
+    documentClickEvent(event: Event): void;
+    clickEvent($event: Event): void;
+    onChange: (_: any) => void;
+    onTouched: (_: any) => void;
+    prepareEvents(componentEvent: any): void;
+    wrapInput(): void;
+    onDocumentClick(event: any): void;
+    writeValue(value: any): void;
+    registerOnChange(fn: (_: any) => void): void;
+    registerOnTouched(fn: () => void): void;
+    openDropdown(): void;
+    closeDropdown(): void;
+    toggleDropdown(event: Event): void;
+    private setValue(value);
+    private clear();
+    private selectItem(option);
+}
