@@ -21,7 +21,7 @@ ChoosySearchComponent.decorators = [
     { type: Component, args: [{
                 selector: 'choosy-search',
                 template: "\n    <div class=\"c-search-wrapper\">\n      <input type=\"text\" (input)=\"onChange($event.target.value)\" [placeholder]=\"config?.labels?.searchPlaceholder\" #inputEl class=\"c-search-input\">\n      <i></i>\n    </div>\n  ",
-                styles: ["\n    :host(){display:block;border:1px solid #cad8d8;border-radius:0;border-width:0 0 1px 0;background:#fbfbfb}.c-search-wrapper{display:flex;align-items:center}.c-search-wrapper input{border:0;background:transparent;padding:8px;flex:1}.c-search-wrapper input:focus{outline:none}.c-search-wrapper i{padding:10px;color:rgba(0,0,0,0.38)}\n  "]
+                styles: ["\n    :host(){display:block;border:1px solid #cad8d8;border-radius:0;border-width:0 0 1px 0;background:#fbfbfb}.c-search-wrapper{display:flex;align-items:center}.c-search-wrapper input{border:0;background:transparent;padding:5px 8px;flex:1}.c-search-wrapper input:focus{outline:none}.c-search-wrapper i{padding:10px;color:rgba(0,0,0,0.38)}\n  "]
             },] },
 ];
 /** @nocollapse */

@@ -1,13 +1,14 @@
 import { AfterViewInit, ComponentFactoryResolver, ComponentRef, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, Renderer, TemplateRef, ViewContainerRef } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { ChoosyResultsComponent } from '../../components/choosy-results/choosy-results.component';
-export declare class ChoosyInputDirective implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
+import { ChoosySingleSelectConfig } from '../../interfaces';
+export declare class ChoosySingleSelectDirective implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
     private eRef;
     private renderer;
     private viewContainerRef;
     private compFacResolver;
     options: Array<any>;
-    config: any;
+    config: ChoosySingleSelectConfig;
     template: TemplateRef<any>;
     choosy: EventEmitter<any>;
     componentRef: ComponentRef<ChoosyResultsComponent>;

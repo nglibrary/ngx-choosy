@@ -76,3 +76,7 @@ export interface ChoosyFooterType {
     type: string;
     data: any;
 }
+export interface ChoosySingleSelectConfig extends ChoosyConfig {
+    displayValue: any;
+    wrapInput?: boolean;
+}
