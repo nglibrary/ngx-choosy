@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "angular-tslint-rules"
+  ],
+  "rulesDirectory": [
+    "node_modules/codelyzer"
+  ],
+  "rules": {
+    "directive-selector": [
+      true,
+      "attribute",
+      "choosy",
+      "camelCase"
+    ],
+    "component-selector": [
+      true,
+      "element",
+      "choosy",
+      "kebab-case"
+    ],
+    "pipe-naming": [
+      true,
+      "camelCase",
+      "choosy"
+    ],
+    "newline-before-return": false,
+    "no-forward-ref": false,
+    "no-null-keyword":false
+  }
+}

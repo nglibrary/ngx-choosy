@@ -1,0 +1,20 @@
+export const OPTIONS_REFRESHED = 'options_refreshed';
+export const DROPDOWN_OPENED = 'dropdown_opened';
+export const DROPDOWN_CLOSED = 'dropdown_closed';
+export const DROPDOWN_TOGGLED = 'dropdown_toggled';
+export const OPTION_SELECTED = 'option_selected';
+export const OPTION_DISABLED = 'option_disabled';
+export const CLEARED_DISABLED_OPTION = 'cleared_disabled_option';
+export const CLEARED_DISABLED_OPTIONS = 'cleared_disabled_options';
+export const NEW_OPTION_ADDED = 'new_option_added';
+export const OPTION_REMOVED = 'option_removed';
+export const OPTION_FILTERED = 'option_filtered';
+export const SELECTED_OPTION_CLEARED = 'selected_option_cleared';
+export const SELECTED_OPTIONS_CLEARED = 'selected_options_cleared';
+export const OPTION_CLICKED = 'option_clicked';
+export const OPTIONS_RESET = 'options_reset';
+export const OPTIONS_RELOADED = 'options_reloaded';
+
+export const FOOTER_DEFAULT = 'FOOTER_DEFAULT';
+export const FOOTER_FILTER = 'FOOTER_FILTER';
+export const FOOTER_INITIAL = 'FOOTER_INITIAL';

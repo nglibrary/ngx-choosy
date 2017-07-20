@@ -1,0 +1,44 @@
+:host() {
+    display: block;
+}
+
+.c-list-wrapper {
+    // max-height: 200px;
+    overflow-x: auto;
+    position: relative;
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 2px rgb(202, 216, 216);
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #00cbe2;
+        outline: 1px solid #2dd80e;
+    }
+    &:hover {
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+    }
+}
+
+.c-list-option {
+    padding: 7px 10px;
+    cursor: pointer;
+    line-height: 1.4;
+    &:hover {
+        background: #f6f8fa;
+        outline: 1px solid #e3e6e8;
+    }
+    &.selected {
+        background: #00cbe2;
+        color: #fff;
+    }
+    &.disabled,
+    &.selected.disabled {
+        background: #f5f8f9;
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}

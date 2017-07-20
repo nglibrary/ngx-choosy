@@ -1,0 +1,5 @@
+<div *ngIf="isOpen" class="{{config.theme}}" [ngClass]="{'animate':config.dropdown.animation}" [ngStyle]="{'width.px':config.dropdown.width}">
+  <choosy-search [config]="config" (search)="filterOptions($event)" *ngIf="config.search.enable && originalOptions.length>0"></choosy-search>
+  <choosy-list [config]="config" [options]="processedOptions" (optionSelected)="optionSelectionListener($event)" [template]="optionTpl"></choosy-list>
+  <choosy-footer *ngIf="config.footer.enable" [config]="config" [type]="footerType"></choosy-footer>
+</div>
