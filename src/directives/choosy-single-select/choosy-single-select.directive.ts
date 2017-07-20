@@ -17,25 +17,25 @@ import {
   TemplateRef,
   ViewChild,
   ViewContainerRef
-  } from '@angular/core';
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as merge from 'deepmerge';
 import { ChoosyResultsComponent } from '../../components/choosy-results/choosy-results.component';
-import { ChoosyRawOption } from '../../interfaces/index';
+import { ChoosyRawOption, ChoosySingleSelectConfig } from '../../interfaces';
 
 @Directive({
   selector: '[choosySingleSelect]',
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => ChoosyInputDirective),
+    useExisting: forwardRef(() => ChoosySingleSelectDirective),
     multi: true
   }]
 })
 
-export class ChoosyInputDirective implements
+export class ChoosySingleSelectDirective implements
   ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() options: Array<any>;
-  @Input() config: any = {};
+  @Input() config: ChoosySingleSelectConfig = {} as any;
   @Input() template: TemplateRef<any>;
   @Output() choosy: EventEmitter<any> = new EventEmitter<any>();
   componentRef: ComponentRef<ChoosyResultsComponent>;
@@ -46,7 +46,9 @@ export class ChoosyInputDirective implements
     private viewContainerRef: ViewContainerRef,
     private compFacResolver: ComponentFactoryResolver
   ) {
-    // this.wrapElement();
+    if (this.config.wrapInput) {
+      this.wrapInput();
+    }
     const factory = this.compFacResolver.resolveComponentFactory(ChoosyResultsComponent);
     this.componentRef = this.viewContainerRef.createComponent(factory, 0);
   }
@@ -62,7 +64,7 @@ export class ChoosyInputDirective implements
       dropdown: {
         inputWidth: this.eRef.nativeElement.offsetWidth
       }
-    });
+    } as any);
     this.componentRef.instance.options = this.options;
   }
 
@@ -140,6 +142,7 @@ export class ChoosyInputDirective implements
 
   }
   writeValue(value: any): void {
+    if (!value) return;
     this.initialValue = value;
     const val = this.config.displayValue ? value[this.config.displayValue] : value;
     if (!value) {

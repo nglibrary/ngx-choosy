@@ -6,7 +6,7 @@ import { ChoosyListComponent } from '../../components/choosy-list/choosy-list.co
 import { ChoosyResultsComponent } from '../../components/choosy-results/choosy-results.component';
 import { ChoosySearchComponent } from '../../components/choosy-search/choosy-search.component';
 import { ChoosyConfigService } from '../../services/choosy-config/choosy-config.service';
-import { ChoosyInputDirective } from './choosy-input.directive';
+import { ChoosySingleSelectDirective } from './choosy-single-select.directive';
 
 @Component({
   template: `<input type="text" [options]="['one','two']" choosySingleSelect>`
@@ -20,7 +20,7 @@ class TestComponent { }
     ChoosyResultsComponent,
     ChoosyListComponent,
     ChoosySearchComponent,
-    ChoosyInputDirective
+    ChoosySingleSelectDirective
   ],
   entryComponents: [ChoosyResultsComponent],
   providers: [ChoosyConfigService]
