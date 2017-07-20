@@ -1,3 +1,14 @@
+<a name="1.0.3"></a>
+## [1.0.3](https://github.com/nglibrary/ngx-choosy/compare/v1.0.2...v1.0.3) (2017-07-20)
+
+
+### Bug Fixes
+
+* **ChoosySingleSelectDirective:** Fixed null default value in write ([eefb853](https://github.com/nglibrary/ngx-choosy/commit/eefb853))
+* **ChoosySingleSelectDirective:** Fixed renamed issue ([0f14b81](https://github.com/nglibrary/ngx-choosy/commit/0f14b81))
+
+
+
 <a name="1.0.2"></a>
 ## [1.0.2](https://github.com/nglibrary/ngx-choosy/compare/v1.0.1...v1.0.2) (2017-07-20)
 
