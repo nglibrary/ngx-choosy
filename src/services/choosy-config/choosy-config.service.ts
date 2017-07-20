@@ -12,7 +12,7 @@ export class ChoosyConfigService {
     labels: {
       inputPlaceholder: 'Choose',
       searchPlaceholder: 'Search',
-      noResultsToDisplay: 'No results found!',
+      noResultsToDisplay: 'No results found',
       noOptionsToDisplay: 'No Options to display',
       noOptionsProvided: 'No Options provided',
       XRecordsMatches: 'Records matching',
