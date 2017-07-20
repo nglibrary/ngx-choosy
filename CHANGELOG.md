@@ -1,3 +1,13 @@
+<a name="1.0.2"></a>
+## [1.0.2](https://github.com/nglibrary/ngx-choosy/compare/v1.0.1...v1.0.2) (2017-07-20)
+
+
+### Bug Fixes
+
+* **Core:** Fixed .gitignore to allow dist dir ([133f134](https://github.com/nglibrary/ngx-choosy/commit/133f134))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/nglibrary/ngx-choosy/compare/v1.0.0...v1.0.1) (2017-07-20)
 
