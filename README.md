@@ -7,7 +7,7 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/nglibrary/ngx-choosy.svg)](https://greenkeeper.io/)
 
-Download the library from npm or yarn
+Download the library from npm or yarn,
 
 ```bash
 yarn add @nglibrary/ngx-choosy  // or
