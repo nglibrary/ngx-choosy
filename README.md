@@ -5,6 +5,8 @@
 
 ##### Installation
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/nglibrary/ngx-choosy.svg)](https://greenkeeper.io/)
+
 Download the library from npm or yarn
 
 ```bash
