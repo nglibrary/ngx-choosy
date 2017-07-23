@@ -24,6 +24,7 @@ before_install:
 after_success:
   - git checkout master
   - git config push.default current
+  - npm run build
   - npm run release
   - npm publish --access=public
   - npm run release-log
@@ -31,3 +32,5 @@ branches:
   only:
     - master
     - /^greenkeeper/.*$/
+deploy:
+  skip_cleanup: true

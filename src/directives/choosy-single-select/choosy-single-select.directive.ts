@@ -17,14 +17,14 @@ import {
   TemplateRef,
   ViewChild,
   ViewContainerRef
-} from '@angular/core';
+  } from '@angular/core';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as merge from 'deepmerge';
 import { ChoosyResultsComponent } from '../../components/choosy-results/choosy-results.component';
 import { ChoosyRawOption, ChoosySingleSelectConfig } from '../../interfaces';
 
 @Directive({
-  selector: '[choosySingleSelect]',
+  selector: 'input[choosySingleSelect]',
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => ChoosySingleSelectDirective),
@@ -38,19 +38,19 @@ export class ChoosySingleSelectDirective implements
   @Input() config: ChoosySingleSelectConfig = {} as any;
   @Input() template: TemplateRef<any>;
   @Output() choosy: EventEmitter<any> = new EventEmitter<any>();
+  @Output() isOpen: EventEmitter<any> = new EventEmitter<any>();
   componentRef: ComponentRef<ChoosyResultsComponent>;
   initialValue: any;
+  static compInstances: any = [];
   constructor(
     private eRef: ElementRef,
     private renderer: Renderer,
     private viewContainerRef: ViewContainerRef,
     private compFacResolver: ComponentFactoryResolver
   ) {
-    if (this.config.wrapInput) {
-      this.wrapInput();
-    }
     const factory = this.compFacResolver.resolveComponentFactory(ChoosyResultsComponent);
     this.componentRef = this.viewContainerRef.createComponent(factory, 0);
+    ChoosySingleSelectDirective.compInstances.push(this.componentRef.instance);
   }
 
   ngOnInit(): void {
@@ -69,6 +69,7 @@ export class ChoosySingleSelectDirective implements
   }
 
   ngAfterViewInit(): void {
+    this.config.wrapInput ? this.wrapInput() : this.makeParentNodeRelative();
     this.componentRef.instance.template = this.template;
     this.choosy.emit(this.prepareEvents(this.componentRef.instance.expose()));
     this.componentRef.instance.selections.subscribe((r: any) => {
@@ -103,8 +104,11 @@ export class ChoosySingleSelectDirective implements
   }
 
   @HostListener('click', ['$event'])
-  clickEvent($event: Event): void {
-    this.toggleDropdown($event);
+  clickEvent(event: Event): void {
+    ChoosySingleSelectDirective.compInstances.forEach((comp: any) => {
+      comp.close(new Event('click'));
+    });
+    this.toggleDropdown(event);
   }
 
   @HostListener('input', ['$event.target.value'])
@@ -123,23 +127,21 @@ export class ChoosySingleSelectDirective implements
 
   wrapInput(): void {
     const wrapper = document.createElement('div');
+    wrapper.style.position = 'relative';
+    wrapper.style.height = `${this.eRef.nativeElement.offsetHeight}px`;
     this.eRef.nativeElement.parentNode.insertBefore(wrapper, this.eRef.nativeElement);
-    wrapper.classList.add('dropdown__input-wrapper');
-    wrapper.setAttribute('style', 'position:relative');
     wrapper.appendChild(this.eRef.nativeElement);
+    wrapper.appendChild((this.componentRef as any).instance.elRef.nativeElement);
+  }
+
+  makeParentNodeRelative() {
+    this.eRef.nativeElement.parentNode.style.position = 'relative';
   }
 
   onDocumentClick(event: any): void {
-    if (
-      this.componentRef.instance.elRef.nativeElement.contains(event.target) ||
-      this.eRef.nativeElement.contains(event.target)
-    ) {
-      // this.text = "clicked inside";
-    } else {
-
-      this.componentRef.instance.close(event);
+    if (!this.componentRef.instance.elRef.nativeElement.contains(event.target)) {
+      this.closeDropdown();
     }
-
   }
   writeValue(value: any): void {
     if (!value) return;
@@ -158,14 +160,17 @@ export class ChoosySingleSelectDirective implements
 
   openDropdown(): void {
     this.componentRef.instance.open(new Event('click'));
+    this.isOpen.emit(this.componentRef.instance.isOpen);
   }
 
   closeDropdown(): void {
     this.componentRef.instance.close(new Event('click'));
+    this.isOpen.emit(this.componentRef.instance.isOpen);
   }
 
   toggleDropdown(event: Event): void {
     this.componentRef.instance.toggle(event);
+    this.isOpen.emit(this.componentRef.instance.isOpen);
   }
 
   private setValue(value: any): void {

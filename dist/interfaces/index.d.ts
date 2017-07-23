@@ -23,9 +23,14 @@ export interface ChoosyConfig {
     theme?: string;
     search?: FuseConfig;
     autocomplete?: Object;
-    dropdown?: Object;
+    dropdown?: ChoosyDropdownConfig;
     keyboardShortcuts?: Object;
     footer?: ChoosyFooterConfig;
+}
+export interface ChoosyDropdownConfig {
+    width: number;
+    height: number;
+    animation: boolean;
 }
 export interface ChoosyLablesConfig {
     inputPlaceholder?: string;
@@ -51,8 +56,8 @@ export interface ChoosyNotification {
     value: any;
 }
 export interface ChoosyDropdownExpose {
+    isOpen(): void;
     actions: {
-        isOpen: boolean;
         open(event: Event): void;
         close(event: Event): void;
         toggle(event: Event): void;

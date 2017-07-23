@@ -5,7 +5,6 @@ import {
   EventEmitter,
   HostListener,
   Input,
-  OnDestroy,
   Output,
   ViewChild
   } from '@angular/core';
@@ -22,16 +21,13 @@ import { ChoosyConfigService } from '../../services/choosy-config/choosy-config.
   `,
   styleUrls: ['./choosy-search.component.scss']
 })
-export class ChoosySearchComponent implements AfterViewInit, OnDestroy {
+export class ChoosySearchComponent implements AfterViewInit {
   @Input() config: ChoosyConfig;
   @Output('search') search: EventEmitter<any> = new EventEmitter();
   @ViewChild('inputEl') inputEl: ElementRef;
   constructor(private elRef: ElementRef) { }
   ngAfterViewInit(): void {
     if (this.config && this.config.search.autoFocus) this.inputEl.nativeElement.focus();
-  }
-  ngOnDestroy(): void {
-    this.inputEl.nativeElement.removeEventListener('input');
   }
   onChange(keyword: string): void {
     this.search.emit(keyword);

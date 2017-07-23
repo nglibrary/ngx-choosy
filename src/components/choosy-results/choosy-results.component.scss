@@ -1,14 +1,16 @@
 :host() {
     display: block;
     >div {
-        margin-top: 1px;
         border: 1px solid #cad8d8;
         border-radius: 0;
+        background-color: #fff;
         overflow: hidden;
         position: absolute;
         width: 100%;
         z-index: 9;
-        background-color: #fff;
+        margin-top: 1px;
+        left: 0;
+        top: 100%;
     }
 }
 

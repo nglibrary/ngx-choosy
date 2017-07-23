@@ -1,12 +1,11 @@
-import { AfterViewInit, ElementRef, EventEmitter, OnDestroy } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter } from '@angular/core';
 import { ChoosyConfig } from '../../interfaces';
-export declare class ChoosySearchComponent implements AfterViewInit, OnDestroy {
+export declare class ChoosySearchComponent implements AfterViewInit {
     private elRef;
     config: ChoosyConfig;
     search: EventEmitter<any>;
     inputEl: ElementRef;
     constructor(elRef: ElementRef);
     ngAfterViewInit(): void;
-    ngOnDestroy(): void;
     onChange(keyword: string): void;
 }

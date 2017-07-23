@@ -178,9 +178,10 @@ var ChoosyResultsComponent = (function () {
         this.notifications.next({ action: C.OPTIONS_RESET, value: null });
     };
     ChoosyResultsComponent.prototype.expose = function () {
+        var _this = this;
         return {
+            isOpen: function () { return _this.isOpen; },
             actions: {
-                isOpen: this.isOpen,
                 open: this.open.bind(this),
                 close: this.close.bind(this),
                 toggle: this.toggle.bind(this),
@@ -207,8 +208,8 @@ export { ChoosyResultsComponent };
 ChoosyResultsComponent.decorators = [
     { type: Component, args: [{
                 selector: 'choosy-results',
-                template: "\n    <div *ngIf=\"isOpen\" class=\"{{config.theme}}\" [ngClass]=\"{'animate':config.dropdown.animation}\" [ngStyle]=\"{'width.px':config.dropdown.width}\">\n      <choosy-search [config]=\"config\" (search)=\"filterOptions($event)\" *ngIf=\"config.search.enable && originalOptions.length>0\"></choosy-search>\n      <choosy-list [config]=\"config\" [options]=\"processedOptions\" (optionSelected)=\"optionSelectionListener($event)\" [template]=\"optionTpl\"></choosy-list>\n      <choosy-footer *ngIf=\"config.footer.enable\" [config]=\"config\" [type]=\"footerType\"></choosy-footer>\n    </div>\n  ",
-                styles: ["\n    :host(){display:block}:host()>div{margin-top:1px;border:1px solid #cad8d8;border-radius:0;overflow:hidden;position:absolute;width:100%;z-index:9;background-color:#fff}.animate{animation-name:zoomed;animation-duration:0.2s;animation-iteration-count:1;animation-direction:normal;animation-timing-function:cubic-bezier(0.5, 0, 0, 1.25);animation-fill-mode:forwards;animation-delay:0;transition:opacity 0.15s ease-out}@keyframes zoomed{0%{transform:scale(0.9) translateY(-21px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}\n  "]
+                template: "\n    <div *ngIf=\"isOpen\" class=\"{{config.theme}}\" [ngClass]=\"{'animate':config.dropdown.animation}\">\n      <choosy-search [config]=\"config\" (search)=\"filterOptions($event)\" *ngIf=\"config.search.enable && originalOptions.length>0\"></choosy-search>\n      <choosy-list [config]=\"config\" [options]=\"processedOptions\" (optionSelected)=\"optionSelectionListener($event)\" [template]=\"optionTpl\"></choosy-list>\n      <choosy-footer *ngIf=\"config.footer.enable\" [config]=\"config\" [type]=\"footerType\"></choosy-footer>\n    </div>\n  ",
+                styles: ["\n    :host(){display:block}:host()>div{border:1px solid #cad8d8;border-radius:0;background-color:#fff;overflow:hidden;position:absolute;width:100%;z-index:9;margin-top:1px;left:0;top:100%}.animate{animation-name:zoomed;animation-duration:0.2s;animation-iteration-count:1;animation-direction:normal;animation-timing-function:cubic-bezier(0.5, 0, 0, 1.25);animation-fill-mode:forwards;animation-delay:0;transition:opacity 0.15s ease-out}@keyframes zoomed{0%{transform:scale(0.9) translateY(-21px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}\n  "]
             },] },
 ];
 /** @nocollapse */

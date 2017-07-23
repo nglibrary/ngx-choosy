@@ -2,44 +2,53 @@ import { CommonModule } from '@angular/common';
 import { Component, DebugElement, NgModule } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ChoosyListComponent } from '../../components/choosy-list/choosy-list.component';
-import { ChoosyResultsComponent } from '../../components/choosy-results/choosy-results.component';
-import { ChoosySearchComponent } from '../../components/choosy-search/choosy-search.component';
+import {
+  ChoosyFooterComponent,
+  ChoosyListComponent,
+  ChoosyResultsComponent,
+  ChoosySearchComponent
+  } from '../../components';
 import { ChoosyConfigService } from '../../services/choosy-config/choosy-config.service';
 import { ChoosySingleSelectDirective } from './choosy-single-select.directive';
 
 @Component({
   template: `<input type="text" [options]="['one','two']" choosySingleSelect>`
 })
-class TestComponent { }
+class ChoosySingleSelectComponent { }
 
 @NgModule({
   imports: [CommonModule],
   declarations: [
-    TestComponent,
+    ChoosySingleSelectComponent,
     ChoosyResultsComponent,
     ChoosyListComponent,
     ChoosySearchComponent,
+    ChoosyFooterComponent,
     ChoosySingleSelectDirective
   ],
   entryComponents: [ChoosyResultsComponent],
   providers: [ChoosyConfigService]
 })
-export class TestModule { }
+export class ChoosySingleSelectModule { }
 
-describe('Directive: ChoosySingleInput', () => {
+describe('ChoosySingleSelectDirective', () => {
 
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
+  let component: ChoosySingleSelectComponent;
+  let fixture: ComponentFixture<ChoosySingleSelectComponent>;
   let inputEl: DebugElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TestModule]
+      imports: [ChoosySingleSelectModule]
     });
-    fixture = TestBed.createComponent(TestComponent);
+    fixture = TestBed.createComponent(ChoosySingleSelectComponent);
     component = fixture.componentInstance;
     inputEl = fixture.debugElement.query(By.css('input'));
+    fixture.detectChanges();
+  });
+
+  it('target input', () => {
+    expect(inputEl.nativeElement.tagName).toBe('INPUT');
   });
 
   // it('target input', () => {
