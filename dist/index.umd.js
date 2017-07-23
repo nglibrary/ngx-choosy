@@ -541,9 +541,7 @@ var ChoosyResultsComponent = (function () {
         this.notifications.next({ action: C.OPTIONS_RESET, value: null });
     };
     ChoosyResultsComponent.prototype.expose = function () {
-        var _this = this;
         return {
-            isOpen: function () { return _this.isOpen; },
             actions: {
                 open: this.open.bind(this),
                 close: this.close.bind(this),

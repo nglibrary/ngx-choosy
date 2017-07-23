@@ -206,7 +206,6 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
 
   expose(): ChoosyDropdownExpose {
     return {
-      isOpen: () => this.isOpen,
       actions: {
         open: this.open.bind(this),
         close: this.close.bind(this),
