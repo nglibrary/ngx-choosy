@@ -1,3 +1,14 @@
+<a name="1.0.5"></a>
+## [1.0.5](https://github.com/nglibrary/ngx-choosy/compare/v1.0.4...v1.0.5) (2017-07-23)
+
+
+### Bug Fixes
+
+* **ChoosyResultsComponent:** Fixed invalid exposed events ([56f78f5](https://github.com/nglibrary/ngx-choosy/commit/56f78f5))
+* **ChoosySingleSelectDirective:** Muliple instances and styling issue in dropdown relative to parent ([a35e210](https://github.com/nglibrary/ngx-choosy/commit/a35e210))
+
+
+
 <a name="1.0.4"></a>
 ## [1.0.4](https://github.com/nglibrary/ngx-choosy/compare/v1.0.3...v1.0.4) (2017-07-20)
 
