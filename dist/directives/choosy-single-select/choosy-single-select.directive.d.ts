@@ -1,6 +1,6 @@
 import { AfterViewInit, ComponentFactoryResolver, ComponentRef, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, Renderer, TemplateRef, ViewContainerRef } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
-import { ChoosyResultsComponent } from '../../components/choosy-results/choosy-results.component';
+import { ChoosyResultsComponent } from '../../components';
 import { ChoosySingleSelectConfig } from '../../interfaces';
 export declare class ChoosySingleSelectDirective implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
     private eRef;
@@ -14,6 +14,7 @@ export declare class ChoosySingleSelectDirective implements ControlValueAccessor
     isOpen: EventEmitter<any>;
     componentRef: ComponentRef<ChoosyResultsComponent>;
     initialValue: any;
+    INOOPTS: string;
     static compInstances: any;
     constructor(eRef: ElementRef, renderer: Renderer, viewContainerRef: ViewContainerRef, compFacResolver: ComponentFactoryResolver);
     ngOnInit(): void;

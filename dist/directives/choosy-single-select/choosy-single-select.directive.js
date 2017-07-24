@@ -8,17 +8,18 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 import { ComponentFactoryResolver, Directive, ElementRef, EventEmitter, forwardRef, HostListener, Input, Output, Renderer, ViewContainerRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import * as merge from 'deepmerge';
-import { ChoosyResultsComponent } from '../../components/choosy-results/choosy-results.component';
+import { ChoosyResultsComponent } from '../../components';
 var ChoosySingleSelectDirective = (function () {
     function ChoosySingleSelectDirective(eRef, renderer, viewContainerRef, compFacResolver) {
         this.eRef = eRef;
         this.renderer = renderer;
         this.viewContainerRef = viewContainerRef;
         this.compFacResolver = compFacResolver;
+        this.options = [];
         this.config = {};
         this.choosy = new EventEmitter();
         this.isOpen = new EventEmitter();
+        this.INOOPTS = 'No options provided';
         this.onChange = function (_) { };
         this.onTouched = function (_) { };
         var factory = this.compFacResolver.resolveComponentFactory(ChoosyResultsComponent);
@@ -26,16 +27,11 @@ var ChoosySingleSelectDirective = (function () {
         ChoosySingleSelectDirective.compInstances.push(this.componentRef.instance);
     }
     ChoosySingleSelectDirective.prototype.ngOnInit = function () {
-        if (!this.options)
-            throw new Error('Options not found!');
-        else if (typeof this.options[0] === 'object' && !this.config.displayValue)
-            throw new Error('"displayValue" config is manadatory of object options!');
+        if (typeof this.options[0] === 'object' && !this.config.displayValue) {
+            this.config.displayValue = Object.keys(this.options[0])[0];
+        }
         this.eRef.nativeElement.readOnly = true;
-        this.componentRef.instance.config = merge(this.config, {
-            dropdown: {
-                inputWidth: this.eRef.nativeElement.offsetWidth
-            }
-        });
+        this.componentRef.instance.config = this.config;
         this.componentRef.instance.options = this.options;
     };
     ChoosySingleSelectDirective.prototype.ngAfterViewInit = function () {

@@ -20,7 +20,7 @@ import {
   } from '@angular/core';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as merge from 'deepmerge';
-import { ChoosyResultsComponent } from '../../components/choosy-results/choosy-results.component';
+import { ChoosyResultsComponent } from '../../components';
 import { ChoosyRawOption, ChoosySingleSelectConfig } from '../../interfaces';
 
 @Directive({
@@ -34,14 +34,20 @@ import { ChoosyRawOption, ChoosySingleSelectConfig } from '../../interfaces';
 
 export class ChoosySingleSelectDirective implements
   ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
-  @Input() options: Array<any>;
+
+  @Input() options: Array<any> = [];
   @Input() config: ChoosySingleSelectConfig = {} as any;
   @Input() template: TemplateRef<any>;
+
   @Output() choosy: EventEmitter<any> = new EventEmitter<any>();
   @Output() isOpen: EventEmitter<any> = new EventEmitter<any>();
+
   componentRef: ComponentRef<ChoosyResultsComponent>;
   initialValue: any;
+  INOOPTS = 'No options provided';
+
   static compInstances: any = [];
+
   constructor(
     private eRef: ElementRef,
     private renderer: Renderer,
@@ -54,17 +60,11 @@ export class ChoosySingleSelectDirective implements
   }
 
   ngOnInit(): void {
-    if (!this.options)
-      throw new Error('Options not found!');
-    else if (typeof this.options[0] === 'object' && !this.config.displayValue)
-      throw new Error('"displayValue" config is manadatory of object options!');
-
+    if (typeof this.options[0] === 'object' && !this.config.displayValue) {
+      this.config.displayValue = Object.keys(this.options[0])[0];
+    }
     this.eRef.nativeElement.readOnly = true;
-    this.componentRef.instance.config = merge(this.config, {
-      dropdown: {
-        inputWidth: this.eRef.nativeElement.offsetWidth
-      }
-    } as any);
+    this.componentRef.instance.config = this.config;
     this.componentRef.instance.options = this.options;
   }
 
@@ -112,10 +112,10 @@ export class ChoosySingleSelectDirective implements
   }
 
   @HostListener('input', ['$event.target.value'])
-  onChange = (_: any): void => { /*empty*/ }
+  onChange = (_: any): void => { }
 
   @HostListener('blur', [])
-  onTouched = (_: any): void => { /*empty*/ }
+  onTouched = (_: any): void => { }
 
   prepareEvents(componentEvent: any): void {
     return {
