@@ -1,3 +1,13 @@
+<a name="1.0.6"></a>
+## [1.0.6](https://github.com/nglibrary/ngx-choosy/compare/v1.0.5...v1.0.6) (2017-07-24)
+
+
+### Bug Fixes
+
+* **Single Select Directive:** Removed exceptions when no options provided. Set empty array as default. \n Removed exceptions when no displayValue is not provided. Set first key as default display value. ([8441a77](https://github.com/nglibrary/ngx-choosy/commit/8441a77))
+
+
+
 <a name="1.0.5"></a>
 ## [1.0.5](https://github.com/nglibrary/ngx-choosy/compare/v1.0.4...v1.0.5) (2017-07-23)
 
