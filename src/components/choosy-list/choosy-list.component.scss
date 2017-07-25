@@ -26,10 +26,9 @@
 .c-list-option {
     padding: 7px 10px;
     cursor: pointer;
-    line-height: 1;
+    text-align: left;
     &:hover {
         background: #f6f8fa;
-        outline: 1px solid #e3e6e8;
     }
     &.selected {
         background: #00cbe2;

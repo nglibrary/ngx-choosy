@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { ChoosyFooterComponent, ChoosyListComponent, ChoosyResultsComponent, ChoosySearchComponent } from './components';
-import { ChoosySingleSelectDirective } from './directives/choosy-single-select/choosy-single-select.directive';
+import { ChoosyButtonSelectDirective, ChoosySingleSelectDirective } from './directives';
 import { ChoosyConfigService } from './services/choosy-config/choosy-config.service';
 export function ChoosyConfigLoader(globalConfig) {
     return new ChoosyConfigService(globalConfig);
@@ -33,14 +33,16 @@ NgxChoosyModule.decorators = [
                     ChoosyListComponent,
                     ChoosyResultsComponent,
                     ChoosyFooterComponent,
-                    ChoosySingleSelectDirective
+                    ChoosySingleSelectDirective,
+                    ChoosyButtonSelectDirective
                 ],
                 exports: [
                     ChoosySearchComponent,
                     ChoosyListComponent,
                     ChoosyResultsComponent,
                     ChoosyFooterComponent,
-                    ChoosySingleSelectDirective
+                    ChoosySingleSelectDirective,
+                    ChoosyButtonSelectDirective
                 ],
                 providers: [ChoosyConfigService]
             },] },

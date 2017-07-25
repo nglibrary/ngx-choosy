@@ -11,7 +11,7 @@ import {
   ChoosyResultsComponent,
   ChoosySearchComponent
   } from './components';
-import { ChoosySingleSelectDirective } from './directives/choosy-single-select/choosy-single-select.directive';
+import { ChoosyButtonSelectDirective, ChoosySingleSelectDirective } from './directives';
 import { ChoosyConfigService, GlobalConfigData } from './services/choosy-config/choosy-config.service';
 
 export function ChoosyConfigLoader(globalConfig: any): ChoosyConfigService {
@@ -28,14 +28,16 @@ export function ChoosyConfigLoader(globalConfig: any): ChoosyConfigService {
     ChoosyListComponent,
     ChoosyResultsComponent,
     ChoosyFooterComponent,
-    ChoosySingleSelectDirective
+    ChoosySingleSelectDirective,
+    ChoosyButtonSelectDirective
   ],
   exports: [
     ChoosySearchComponent,
     ChoosyListComponent,
     ChoosyResultsComponent,
     ChoosyFooterComponent,
-    ChoosySingleSelectDirective
+    ChoosySingleSelectDirective,
+    ChoosyButtonSelectDirective
   ],
   providers: [ChoosyConfigService]
 })
