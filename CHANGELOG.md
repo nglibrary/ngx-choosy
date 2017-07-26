@@ -1,3 +1,13 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/nglibrary/ngx-choosy/compare/v1.0.6...v1.1.0) (2017-07-26)
+
+
+### Features
+
+* Button dropdown directive added ([6e742f4](https://github.com/nglibrary/ngx-choosy/commit/6e742f4))
+
+
+
 <a name="1.0.6"></a>
 ## [1.0.6](https://github.com/nglibrary/ngx-choosy/compare/v1.0.5...v1.0.6) (2017-07-24)
 
