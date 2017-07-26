@@ -1,0 +1,21 @@
+.choosy-jerk-animation {
+    animation-name: jerk;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-timing-function: cubic-bezier(0.5, 0, 0, 1.25);
+    animation-fill-mode: forwards;
+    animation-delay: 0;
+    transition: opacity 0.15s ease-out;
+}
+
+@keyframes jerk {
+    0% {
+        transform: scale(0.9) translateY(-21px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}

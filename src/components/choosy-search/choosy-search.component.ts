@@ -14,8 +14,8 @@ import { ChoosyConfigService } from '../../services/choosy-config/choosy-config.
 @Component({
   selector: 'choosy-search',
   template: `
-    <div class="c-search-wrapper">
-      <input type="text" (input)="onChange($event.target.value)" [placeholder]="config?.labels?.searchPlaceholder" #inputEl class="c-search-input">
+    <div class="choosy-search-wrapper">
+      <input type="text" (input)="onChange($event.target.value)" [placeholder]="config?.labels?.searchPlaceholder" #inputEl class="choosy-search-input">
       <i></i>
     </div>
   `,

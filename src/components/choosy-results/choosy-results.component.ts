@@ -77,6 +77,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.results.next(this.originalOptions);
     this.choosy.emit(this.expose());
   }
+
   ngOnDestroy(): void {
     if (this.resultsSubscription)
       this.resultsSubscription.unsubscribe();
@@ -90,22 +91,24 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.notifications.next({ action: C.DROPDOWN_OPENED, value: null });
     if (event) event.stopPropagation();
   }
+
   close(event?: Event): void {
     if (!this.isOpen) return;
     this.isOpen = false;
     this.notifications.next({ action: C.DROPDOWN_CLOSED, value: null });
     if (event) event.stopPropagation();
   }
+
   toggle(event?: Event): void {
     if (this.isOpen) this.close(event);
     else this.open(event);
     if (event) event.stopPropagation();
   }
+
   optionSelectionListener(res: { event: Event, option: ChoosyOption }): void {
     this.optionClicked(res.event);
     this.selectOption(res.option.value);
   }
-
 
   selectOption(option: ChoosyRawOption): void {
     this.processedOptions = this.originalOptions.map((o: ChoosyOption) => {
@@ -117,6 +120,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.selections.next(option);
     this.notifications.next({ action: C.OPTION_SELECTED, value: option });
   }
+
   disableOption(fn: (option: ChoosyRawOption) => boolean): void {
     this.processedOptions = this.originalOptions.filter((o: ChoosyOption) => {
       o.props.disabled = fn(o.value);
@@ -125,6 +129,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.results.next(this.processedOptions);
     this.notifications.next({ action: C.OPTION_DISABLED, value: null });
   }
+
   clearDisabledOption(option: ChoosyRawOption): void {
     this.processedOptions = this.processedOptions.map((o: ChoosyOption) => {
       if (o.value === option)
@@ -134,6 +139,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.results.next(this.processedOptions);
     this.notifications.next({ action: C.CLEARED_DISABLED_OPTION, value: option });
   }
+
   clearDisabledOptions(): void {
     this.processedOptions = this.processedOptions.map(o => {
       o.props.disabled = false;
@@ -142,6 +148,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.results.next(this.processedOptions);
     this.notifications.next({ action: C.CLEARED_DISABLED_OPTIONS, value: null });
   }
+
   addOption(options: ChoosyRawOption | Array<ChoosyRawOption>): void {
     if (!Array.isArray(options)) options = [options];
     options = (options as Array<ChoosyRawOption>).map(option => formatRawOption(option));
@@ -149,11 +156,13 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.results.next(this.originalOptions);
     this.notifications.next({ action: C.NEW_OPTION_ADDED, value: options });
   }
+
   removeOption(fn: (option: ChoosyRawOption) => boolean): void {
     this.originalOptions = this.originalOptions.filter((o: ChoosyOption) => !fn(o.value));
     this.results.next(this.originalOptions);
     this.notifications.next({ action: C.OPTION_REMOVED, value: null });
   }
+
   filterOptions(keyword: string): void {
     this.fuseSearch = new FuseSearch(this.originalOptions, this.config.search);
     this.processedOptions = (keyword.length > 0)
@@ -162,6 +171,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.footerType = { type: C.FOOTER_FILTER, data: this.processedOptions.length };
     this.notifications.next({ action: C.OPTION_FILTERED, value: keyword });
   }
+
   clearSelectedOption(option: ChoosyRawOption): void {
     this.processedOptions = this.processedOptions.map((o: ChoosyOption) => {
       if (o.value === option)
@@ -171,6 +181,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.results.next(this.processedOptions);
     this.notifications.next({ action: C.SELECTED_OPTION_CLEARED, value: option });
   }
+
   clearSelectedOptions(): void {
     this.processedOptions = this.processedOptions.map((o: ChoosyOption) => {
       o.props.selected = false;
@@ -179,14 +190,17 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.results.next(this.processedOptions);
     this.notifications.next({ action: C.SELECTED_OPTIONS_CLEARED, value: null });
   }
+
   optionClicked(event: Event): void {
     this.notifications.next({ action: C.OPTION_CLICKED, value: event });
   }
+
   getSelectedOptions(): Array<ChoosyRawOption> {
     return this.processedOptions
       .filter((o: ChoosyOption) => o.props.selected)
       .map((o: ChoosyOption) => o.value);
   }
+
   reloadOptions(options: Array<ChoosyRawOption>): void {
     const newOptions = options.map(option => formatRawOption(option));
     this.originalOptions = newOptions;
@@ -197,6 +211,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
   updateConfig(config: {}): void {
     this.config = merge(this.config, config);
   }
+
   resetOptions(): void {
     this.processedOptions = this.originalOptions = this.options
       .map((option: ChoosyRawOption): ChoosyOption => formatRawOption(option));

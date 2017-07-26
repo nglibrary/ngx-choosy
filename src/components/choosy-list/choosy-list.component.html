@@ -1,5 +1,5 @@
-<div class="c-list-wrapper" [style.maxHeight]="config.dropdown.height+'px'">
-  <div class="c-list-option" [ngClass]="{
+<div class="choosy-list-wrapper" [style.maxHeight]="config.dropdown.height+'px'">
+  <div class="choosy-list-item" [ngClass]="{
     'disabled':option.props.disabled ,
     'selected':option.props.selected
     }" *ngFor="let option of options" (click)="!option.props.disabled && optionClicked($event,option)" #itemelem [tabIndex]="i+2">

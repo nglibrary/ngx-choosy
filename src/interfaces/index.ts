@@ -95,3 +95,6 @@ export interface ChoosySingleSelectConfig extends ChoosyConfig {
   displayValue: any;
   wrapInput?: boolean;
 }
+export interface ChoosyButtonSelectConfig extends ChoosyConfig {
+
+}
