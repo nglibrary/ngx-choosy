@@ -1,5 +1,7 @@
 ### ngx-choosy
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/nglibrary/ngx-choosy.svg)](https://greenkeeper.io/)
+
 > A dropdown/ selectbox for Angular 4+
 
 #### Features
