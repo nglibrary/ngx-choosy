@@ -95,7 +95,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
 Object.defineProperty(exports, "__esModule", { value: true });
 var choosy_list_component_1 = __webpack_require__(11);
 exports.ChoosyListComponent = choosy_list_component_1.ChoosyListComponent;
-var choosy_results_component_1 = __webpack_require__(4);
+var choosy_results_component_1 = __webpack_require__(5);
 exports.ChoosyResultsComponent = choosy_results_component_1.ChoosyResultsComponent;
 var choosy_search_component_1 = __webpack_require__(22);
 exports.ChoosySearchComponent = choosy_search_component_1.ChoosySearchComponent;
@@ -191,6 +191,96 @@ function toComment(sourceMap) {
 
 "use strict";
 
+
+var index$2 = function isMergeableObject(value) {
+	return isNonNullObject(value) && isNotSpecial(value)
+};
+
+function isNonNullObject(value) {
+	return !!value && typeof value === 'object'
+}
+
+function isNotSpecial(value) {
+	var stringValue = Object.prototype.toString.call(value);
+
+	return stringValue !== '[object RegExp]'
+		&& stringValue !== '[object Date]'
+}
+
+function emptyTarget(val) {
+    return Array.isArray(val) ? [] : {}
+}
+
+function cloneIfNecessary(value, optionsArgument) {
+    var clone = optionsArgument && optionsArgument.clone === true;
+    return (clone && index$2(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+}
+
+function defaultArrayMerge(target, source, optionsArgument) {
+    var destination = target.slice();
+    source.forEach(function(e, i) {
+        if (typeof destination[i] === 'undefined') {
+            destination[i] = cloneIfNecessary(e, optionsArgument);
+        } else if (index$2(e)) {
+            destination[i] = deepmerge(target[i], e, optionsArgument);
+        } else if (target.indexOf(e) === -1) {
+            destination.push(cloneIfNecessary(e, optionsArgument));
+        }
+    });
+    return destination
+}
+
+function mergeObject(target, source, optionsArgument) {
+    var destination = {};
+    if (index$2(target)) {
+        Object.keys(target).forEach(function(key) {
+            destination[key] = cloneIfNecessary(target[key], optionsArgument);
+        });
+    }
+    Object.keys(source).forEach(function(key) {
+        if (!index$2(source[key]) || !target[key]) {
+            destination[key] = cloneIfNecessary(source[key], optionsArgument);
+        } else {
+            destination[key] = deepmerge(target[key], source[key], optionsArgument);
+        }
+    });
+    return destination
+}
+
+function deepmerge(target, source, optionsArgument) {
+    var array = Array.isArray(source);
+    var options = optionsArgument || { arrayMerge: defaultArrayMerge };
+    var arrayMerge = options.arrayMerge || defaultArrayMerge;
+
+    if (array) {
+        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
+    } else {
+        return mergeObject(target, source, optionsArgument)
+    }
+}
+
+deepmerge.all = function deepmergeAll(array, optionsArgument) {
+    if (!Array.isArray(array) || array.length < 2) {
+        throw new Error('first argument should be an array with at least two elements')
+    }
+
+    // we are sure there are at least 2 values, so it is safe to have no initial value
+    return array.reduce(function(prev, next) {
+        return deepmerge(prev, next, optionsArgument)
+    })
+};
+
+var index = deepmerge;
+
+module.exports = index;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -205,7 +295,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(0);
-var merge = __webpack_require__(5);
+var merge = __webpack_require__(3);
 var GlobalConfigData = (function () {
     function GlobalConfigData() {
     }
@@ -273,7 +363,7 @@ exports.ChoosyConfigService = ChoosyConfigService;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -289,11 +379,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(0);
-var merge = __webpack_require__(5);
+var merge = __webpack_require__(3);
 var FuseSearch = __webpack_require__(15);
 __webpack_require__(16);
 var Subject_1 = __webpack_require__(17);
-var choosy_config_service_1 = __webpack_require__(3);
+var choosy_config_service_1 = __webpack_require__(4);
 var C = __webpack_require__(6);
 var helpers_1 = __webpack_require__(18);
 var ChoosyResultsComponent = (function () {
@@ -523,96 +613,6 @@ exports.ChoosyResultsComponent = ChoosyResultsComponent;
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var index$2 = function isMergeableObject(value) {
-	return isNonNullObject(value) && isNotSpecial(value)
-};
-
-function isNonNullObject(value) {
-	return !!value && typeof value === 'object'
-}
-
-function isNotSpecial(value) {
-	var stringValue = Object.prototype.toString.call(value);
-
-	return stringValue !== '[object RegExp]'
-		&& stringValue !== '[object Date]'
-}
-
-function emptyTarget(val) {
-    return Array.isArray(val) ? [] : {}
-}
-
-function cloneIfNecessary(value, optionsArgument) {
-    var clone = optionsArgument && optionsArgument.clone === true;
-    return (clone && index$2(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
-}
-
-function defaultArrayMerge(target, source, optionsArgument) {
-    var destination = target.slice();
-    source.forEach(function(e, i) {
-        if (typeof destination[i] === 'undefined') {
-            destination[i] = cloneIfNecessary(e, optionsArgument);
-        } else if (index$2(e)) {
-            destination[i] = deepmerge(target[i], e, optionsArgument);
-        } else if (target.indexOf(e) === -1) {
-            destination.push(cloneIfNecessary(e, optionsArgument));
-        }
-    });
-    return destination
-}
-
-function mergeObject(target, source, optionsArgument) {
-    var destination = {};
-    if (index$2(target)) {
-        Object.keys(target).forEach(function(key) {
-            destination[key] = cloneIfNecessary(target[key], optionsArgument);
-        });
-    }
-    Object.keys(source).forEach(function(key) {
-        if (!index$2(source[key]) || !target[key]) {
-            destination[key] = cloneIfNecessary(source[key], optionsArgument);
-        } else {
-            destination[key] = deepmerge(target[key], source[key], optionsArgument);
-        }
-    });
-    return destination
-}
-
-function deepmerge(target, source, optionsArgument) {
-    var array = Array.isArray(source);
-    var options = optionsArgument || { arrayMerge: defaultArrayMerge };
-    var arrayMerge = options.arrayMerge || defaultArrayMerge;
-
-    if (array) {
-        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
-    } else {
-        return mergeObject(target, source, optionsArgument)
-    }
-}
-
-deepmerge.all = function deepmergeAll(array, optionsArgument) {
-    if (!Array.isArray(array) || array.length < 2) {
-        throw new Error('first argument should be an array with at least two elements')
-    }
-
-    // we are sure there are at least 2 values, so it is safe to have no initial value
-    return array.reduce(function(prev, next) {
-        return deepmerge(prev, next, optionsArgument)
-    })
-};
-
-var index = deepmerge;
-
-module.exports = index;
-
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -669,7 +669,7 @@ exports.ChoosyListComponent = components_1.ChoosyListComponent;
 exports.ChoosyResultsComponent = components_1.ChoosyResultsComponent;
 var directives_1 = __webpack_require__(7);
 exports.ChoosySingleSelectDirective = directives_1.ChoosySingleSelectDirective;
-var choosy_config_service_1 = __webpack_require__(3);
+var choosy_config_service_1 = __webpack_require__(4);
 exports.ChoosyConfigService = choosy_config_service_1.ChoosyConfigService;
 
 
@@ -696,7 +696,7 @@ var common_1 = __webpack_require__(10);
 var core_1 = __webpack_require__(0);
 var components_1 = __webpack_require__(1);
 var directives_1 = __webpack_require__(7);
-var choosy_config_service_1 = __webpack_require__(3);
+var choosy_config_service_1 = __webpack_require__(4);
 function ChoosyConfigLoader(globalConfig) {
     return new choosy_config_service_1.ChoosyConfigService(globalConfig);
 }
@@ -807,7 +807,7 @@ var ChoosyListComponent = (function () {
     };
     ChoosyListComponent.prototype.scrollToSelected = function () {
         var elem = this.elRef.nativeElement.querySelector('.selected');
-        var parentElem = this.elRef.nativeElement.querySelector('.c-list-wrapper');
+        var parentElem = this.elRef.nativeElement.querySelector('.choosy-list-wrapper');
         if (elem && parentElem)
             parentElem.scrollTop = elem.offsetTop;
         this.scrolledToTop = true;
@@ -851,7 +851,7 @@ exports.ChoosyListComponent = ChoosyListComponent;
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"c-list-wrapper\" [style.maxHeight]=\"config.dropdown.height+'px'\">\n  <div class=\"c-list-option\" [ngClass]=\"{\n    'disabled':option.props.disabled ,\n    'selected':option.props.selected\n    }\" *ngFor=\"let option of options\" (click)=\"!option.props.disabled && optionClicked($event,option)\" #itemelem [tabIndex]=\"i+2\">\n    <ng-template #itemHolder></ng-template>\n    <ng-container *ngIf=\"!template\"> {{option.value}}</ng-container>\n  </div>\n</div>\n"
+module.exports = "<div class=\"choosy-list-wrapper\" [style.maxHeight]=\"config.dropdown.height+'px'\">\n  <div class=\"choosy-list-item\" [ngClass]=\"{\n    'disabled':option.props.disabled ,\n    'selected':option.props.selected\n    }\" *ngFor=\"let option of options\" (click)=\"!option.props.disabled && optionClicked($event,option)\" #itemelem [tabIndex]=\"i+2\">\n    <ng-template #itemHolder></ng-template>\n    <ng-container *ngIf=\"!template\"> {{option.value}}</ng-container>\n  </div>\n</div>\n"
 
 /***/ }),
 /* 13 */
@@ -876,7 +876,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, ":host() {\n  display: block; }\n\n.c-list-wrapper {\n  overflow-x: auto;\n  position: relative; }\n  .c-list-wrapper::-webkit-scrollbar {\n    width: 7px; }\n  .c-list-wrapper::-webkit-scrollbar-track {\n    -webkit-box-shadow: inset 0 0 2px #cad8d8; }\n  .c-list-wrapper::-webkit-scrollbar-thumb {\n    background-color: #dadfe9;\n    outline: 1px solid #2dd80e; }\n  .c-list-wrapper:hover::-webkit-scrollbar {\n    width: 10px; }\n\n.c-list-option {\n  padding: 7px 10px;\n  cursor: pointer;\n  text-align: left; }\n  .c-list-option:hover {\n    background: #f6f8fa; }\n  .c-list-option.selected {\n    background: #00cbe2;\n    color: #fff; }\n  .c-list-option.disabled, .c-list-option.selected.disabled {\n    background: #f5f8f9;\n    opacity: 0.5;\n    cursor: not-allowed; }\n", ""]);
+exports.push([module.i, ":host() {\n  display: block; }\n", ""]);
 
 // exports
 
@@ -1904,7 +1904,7 @@ exports.formatRawOption = function (option) {
 /* 19 */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isOpen\" class=\"{{config.theme}}\" [ngClass]=\"{'animate':config.dropdown.animation}\">\n  <choosy-search [config]=\"config\" (search)=\"filterOptions($event)\" *ngIf=\"config.search.enable && originalOptions.length>0\"></choosy-search>\n  <choosy-list [config]=\"config\" [options]=\"processedOptions\" (optionSelected)=\"optionSelectionListener($event)\" [template]=\"optionTpl\"></choosy-list>\n  <choosy-footer *ngIf=\"config.footer.enable\" [config]=\"config\" [type]=\"footerType\"></choosy-footer>\n</div>\n"
+module.exports = "<div *ngIf=\"isOpen\" class=\"{{config.theme}}\" [ngClass]=\"{'jerk':config.dropdown.animation}\">\n  <choosy-search [config]=\"config\" (search)=\"filterOptions($event)\" *ngIf=\"config.search.enable && originalOptions.length>0\"></choosy-search>\n  <choosy-list [config]=\"config\" [options]=\"processedOptions\" (optionSelected)=\"optionSelectionListener($event)\" [template]=\"optionTpl\"></choosy-list>\n  <choosy-footer *ngIf=\"config.footer.enable\" [config]=\"config\" [type]=\"footerType\"></choosy-footer>\n</div>\n"
 
 /***/ }),
 /* 20 */
@@ -1929,7 +1929,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, ":host() {\n  display: block; }\n  :host() > div {\n    border: 1px solid #cad8d8;\n    border-radius: 0;\n    background-color: #fff;\n    overflow: hidden;\n    position: absolute;\n    width: 100%;\n    z-index: 9;\n    margin-top: 1px;\n    left: 0;\n    top: 100%; }\n\n.animate {\n  animation-name: zoomed;\n  animation-duration: 0.2s;\n  animation-iteration-count: 1;\n  animation-direction: normal;\n  animation-timing-function: cubic-bezier(0.5, 0, 0, 1.25);\n  animation-fill-mode: forwards;\n  animation-delay: 0;\n  transition: opacity 0.15s ease-out; }\n\n@keyframes zoomed {\n  0% {\n    transform: scale(0.9) translateY(-21px);\n    opacity: 0; }\n  100% {\n    transform: scale(1) translateY(0);\n    opacity: 1; } }\n", ""]);
+exports.push([module.i, ".choosy-jerk-animation, #choosy-frame.jerk, :host > div.jerk {\n  animation-name: jerk;\n  animation-duration: 0.2s;\n  animation-iteration-count: 1;\n  animation-direction: normal;\n  animation-timing-function: cubic-bezier(0.5, 0, 0, 1.25);\n  animation-fill-mode: forwards;\n  animation-delay: 0;\n  transition: opacity 0.15s ease-out; }\n\n@keyframes jerk {\n  0% {\n    transform: scale(0.9) translateY(-21px);\n    opacity: 0; }\n  100% {\n    transform: scale(1) translateY(0);\n    opacity: 1; } }\n\n.scrollbar, :host /deep/ .choosy-list-wrapper {\n  overflow-x: auto;\n  position: relative; }\n  .scrollbar::-webkit-scrollbar, :host /deep/ .choosy-list-wrapper::-webkit-scrollbar {\n    width: 7px; }\n  .scrollbar::-webkit-scrollbar-track, :host /deep/ .choosy-list-wrapper::-webkit-scrollbar-track {\n    -webkit-box-shadow: inset 0 0 2px #cad8d8; }\n  .scrollbar::-webkit-scrollbar-thumb, :host /deep/ .choosy-list-wrapper::-webkit-scrollbar-thumb {\n    background-color: #dadfe9;\n    outline: 1px solid #2dd80e; }\n  .scrollbar:hover::-webkit-scrollbar, :host /deep/ .choosy-list-wrapper:hover::-webkit-scrollbar {\n    width: 10px; }\n\n#choosy-frame, :host > div {\n  border: 1px solid #dadfe9;\n  border-radius: 3px;\n  background-color: #ffffff;\n  margin-top: 3px;\n  box-shadow: 0px 17px 10px -10px rgba(0, 0, 0, 0.1);\n  padding: 10px;\n  overflow: hidden;\n  position: absolute;\n  width: 100%;\n  z-index: 9;\n  left: 0;\n  top: 100%; }\n\n:host /deep/ .choosy-search-wrapper {\n  display: flex;\n  align-items: center;\n  padding-bottom: 10px; }\n  :host /deep/ .choosy-search-wrapper input.choosy-search-input {\n    border-radius: 3px;\n    border: 1px solid #dadfe9;\n    background: transparent;\n    padding: 5px 8px;\n    flex: 1;\n    font-family: inherit;\n    font-size: inherit;\n    outline: none; }\n\n:host /deep/ .choosy-list-wrapper {\n  overflow-x: auto;\n  position: relative;\n  padding: 0 3px; }\n  :host /deep/ .choosy-list-wrapper .choosy-list-item {\n    padding: 7px 10px;\n    cursor: pointer;\n    text-align: left;\n    border-radius: 3px;\n    outline: none;\n    margin-bottom: 2px; }\n    :host /deep/ .choosy-list-wrapper .choosy-list-item:last-child {\n      margin-bottom: 0; }\n  :host /deep/ .choosy-list-wrapper .choosy-list-item:hover,\n  :host /deep/ .choosy-list-wrapper .choosy-list-item:focus {\n    background: #f6f8fa;\n    outline: none; }\n  :host /deep/ .choosy-list-wrapper .choosy-list-item.selected,\n  :host /deep/ .choosy-list-wrapper .choosy-list-item.selected:hover,\n  :host /deep/ .choosy-list-wrapper .choosy-list-item.selected:focus {\n    background: #00cbe2;\n    color: #fff; }\n\n:host /deep/ .choosy-footer-wrapper {\n  text-align: center;\n  padding-top: 10px;\n  margin-top: 10px;\n  border-top: 1px solid rgba(218, 223, 233, 0.7);\n  font-size: 80%;\n  opacity: 0.7; }\n\n:host {\n  display: block; }\n", ""]);
 
 // exports
 
@@ -1980,7 +1980,7 @@ __decorate([
 ChoosySearchComponent = __decorate([
     core_1.Component({
         selector: 'choosy-search',
-        template: "\n    <div class=\"c-search-wrapper\">\n      <input type=\"text\" (input)=\"onChange($event.target.value)\" [placeholder]=\"config?.labels?.searchPlaceholder\" #inputEl class=\"c-search-input\">\n      <i></i>\n    </div>\n  ",
+        template: "\n    <div class=\"choosy-search-wrapper\">\n      <input type=\"text\" (input)=\"onChange($event.target.value)\" [placeholder]=\"config?.labels?.searchPlaceholder\" #inputEl class=\"choosy-search-input\">\n      <i></i>\n    </div>\n  ",
         styles: [__webpack_require__(23)]
     }),
     __metadata("design:paramtypes", [core_1.ElementRef])
@@ -2011,7 +2011,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, ":host() {\n  display: block;\n  border: 1px solid #cad8d8;\n  border-radius: 0;\n  border-width: 0 0 1px 0;\n  background: #fbfbfb; }\n\n.c-search-wrapper {\n  display: flex;\n  align-items: center; }\n  .c-search-wrapper input {\n    border: 0;\n    background: transparent;\n    padding: 5px 8px;\n    flex: 1;\n    font-family: inherit;\n    font-size: inherit; }\n    .c-search-wrapper input:focus {\n      outline: none; }\n  .c-search-wrapper i {\n    padding: 10px;\n    color: rgba(0, 0, 0, 0.38); }\n", ""]);
+exports.push([module.i, ":host() {\n  display: block; }\n", ""]);
 
 // exports
 
@@ -2078,9 +2078,9 @@ __decorate([
 ChoosyFooterComponent = __decorate([
     core_1.Component({
         selector: 'choosy-footer',
-        template: "\n    <div class=\"c-footer-wrapper\" *ngIf=\"show\" [ngClass]=\"className\">\n     <div class=\"c-footer\">{{message}}</div>\n    </div>\n  ",
+        template: "\n    <div class=\"choosy-footer-wrapper\" *ngIf=\"show\" [ngClass]=\"className\">\n     <div class=\"choosy-footer\">{{message}}</div>\n    </div>\n  ",
         styles: [
-            ":host(){\n      display:block;\n    }\n    .c-footer{\n      padding: 7px;\n    }\n    .c-footer-wrapper.has-data{\n     border-top: 1px solid #cad8d8;\n     background: #f5f8f9;\n    }"
+            ":host(){\n      display:block;\n    }"
         ]
     }),
     __metadata("design:paramtypes", [core_1.ElementRef])
@@ -2319,8 +2319,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(0);
-var merge = __webpack_require__(5);
-var choosy_results_component_1 = __webpack_require__(4);
+var merge = __webpack_require__(3);
+var choosy_results_component_1 = __webpack_require__(5);
 var ChoosyButtonSelectDirective = ChoosyButtonSelectDirective_1 = (function () {
     function ChoosyButtonSelectDirective(eRef, renderer, viewContainerRef, compFacResolver) {
         this.eRef = eRef;

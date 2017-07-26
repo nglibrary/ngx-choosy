@@ -37,9 +37,9 @@ export { ChoosyFooterComponent };
 ChoosyFooterComponent.decorators = [
     { type: Component, args: [{
                 selector: 'choosy-footer',
-                template: "\n    <div class=\"c-footer-wrapper\" *ngIf=\"show\" [ngClass]=\"className\">\n     <div class=\"c-footer\">{{message}}</div>\n    </div>\n  ",
+                template: "\n    <div class=\"choosy-footer-wrapper\" *ngIf=\"show\" [ngClass]=\"className\">\n     <div class=\"choosy-footer\">{{message}}</div>\n    </div>\n  ",
                 styles: [
-                    ":host(){\n      display:block;\n    }\n    .c-footer{\n      padding: 7px;\n    }\n    .c-footer-wrapper.has-data{\n     border-top: 1px solid #cad8d8;\n     background: #f5f8f9;\n    }"
+                    ":host(){\n      display:block;\n    }"
                 ]
             },] },
 ];

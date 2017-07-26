@@ -11,20 +11,13 @@ import * as C from '../../utils/constants';
 @Component({
   selector: 'choosy-footer',
   template: `
-    <div class="c-footer-wrapper" *ngIf="show" [ngClass]="className">
-     <div class="c-footer">{{message}}</div>
+    <div class="choosy-footer-wrapper" *ngIf="show" [ngClass]="className">
+     <div class="choosy-footer">{{message}}</div>
     </div>
   `,
   styles: [
     `:host(){
       display:block;
-    }
-    .c-footer{
-      padding: 7px;
-    }
-    .c-footer-wrapper.has-data{
-     border-top: 1px solid #cad8d8;
-     background: #f5f8f9;
     }`
   ]
 })

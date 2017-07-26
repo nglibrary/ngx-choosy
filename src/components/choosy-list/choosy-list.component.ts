@@ -55,7 +55,7 @@ export class ChoosyListComponent implements DoCheck {
   }
   private scrollToSelected(): void {
     const elem = this.elRef.nativeElement.querySelector('.selected');
-    const parentElem = this.elRef.nativeElement.querySelector('.c-list-wrapper');
+    const parentElem = this.elRef.nativeElement.querySelector('.choosy-list-wrapper');
     if (elem && parentElem) parentElem.scrollTop = elem.offsetTop;
     this.scrolledToTop = true;
   }
