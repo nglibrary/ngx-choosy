@@ -11,14 +11,12 @@ export declare class ChoosyResultsComponent implements OnInit, OnDestroy {
     config: ChoosyConfig;
     options: Array<ChoosyRawOption>;
     template: TemplateRef<any>;
-    ENOOPT: string;
-    EINVOPT: string;
     originalOptions: Array<ChoosyOption>;
     processedOptions: Array<ChoosyOption>;
-    isOpen: boolean;
     selections: Subject<ChoosyRawOption>;
     footerType: ChoosyFooterType;
     optionTpl: TemplateRef<any>;
+    isOpen: boolean;
     private results;
     private notifications;
     private resultsSubscription;
@@ -26,9 +24,9 @@ export declare class ChoosyResultsComponent implements OnInit, OnDestroy {
     constructor(elRef: ElementRef, configService: ChoosyConfigService, cdRef: ChangeDetectorRef);
     ngOnInit(): void;
     ngOnDestroy(): void;
-    open(event?: Event): void;
-    close(event?: Event): void;
-    toggle(event?: Event): void;
+    open(): void;
+    close(): void;
+    toggle(): void;
     optionSelectionListener(res: {
         event: Event;
         option: ChoosyOption;

@@ -13,12 +13,10 @@ var ChoosyResultsComponent = (function () {
         this.cdRef = cdRef;
         this.choosy = new EventEmitter();
         this.config = {};
-        this.ENOOPT = 'No Options provided';
-        this.EINVOPT = 'Invalid Options provided';
         this.originalOptions = [];
         this.processedOptions = [];
-        this.isOpen = false;
         this.selections = new Subject();
+        this.isOpen = false;
         this.results = new Subject();
         this.notifications = new Subject();
     }
@@ -33,9 +31,9 @@ var ChoosyResultsComponent = (function () {
     ChoosyResultsComponent.prototype.ngOnInit = function () {
         var _this = this;
         if (!this.options)
-            throw new Error(this.ENOOPT);
+            throw new Error(C.MSG_NO_OPTIONS);
         if (!Array.isArray(this.options))
-            throw new Error(this.EINVOPT);
+            throw new Error(C.ERR_INVALID_OPTIONS);
         this.config = this.configService.getConfig(this.config);
         this.originalOptions = this.options
             .map(function (option) { return formatRawOption(option); });
@@ -50,31 +48,25 @@ var ChoosyResultsComponent = (function () {
         if (this.resultsSubscription)
             this.resultsSubscription.unsubscribe();
     };
-    ChoosyResultsComponent.prototype.open = function (event) {
+    ChoosyResultsComponent.prototype.open = function () {
         if (this.isOpen)
             return;
         this.isOpen = true;
         this.processedOptions = merge([], this.originalOptions);
         this.footerType = { type: C.FOOTER_DEFAULT, data: this.processedOptions.length };
         this.notifications.next({ action: C.DROPDOWN_OPENED, value: null });
-        if (event)
-            event.stopPropagation();
     };
-    ChoosyResultsComponent.prototype.close = function (event) {
+    ChoosyResultsComponent.prototype.close = function () {
         if (!this.isOpen)
             return;
         this.isOpen = false;
         this.notifications.next({ action: C.DROPDOWN_CLOSED, value: null });
-        if (event)
-            event.stopPropagation();
     };
-    ChoosyResultsComponent.prototype.toggle = function (event) {
+    ChoosyResultsComponent.prototype.toggle = function () {
         if (this.isOpen)
-            this.close(event);
+            this.close();
         else
-            this.open(event);
-        if (event)
-            event.stopPropagation();
+            this.open();
     };
     ChoosyResultsComponent.prototype.optionSelectionListener = function (res) {
         this.optionClicked(res.event);

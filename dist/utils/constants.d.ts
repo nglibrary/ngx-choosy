@@ -17,3 +17,5 @@ export declare const OPTIONS_RELOADED = "OPTIONS_RELOADED";
 export declare const FOOTER_DEFAULT = "FOOTER_DEFAULT";
 export declare const FOOTER_FILTER = "FOOTER_FILTER";
 export declare const FOOTER_INITIAL = "FOOTER_INITIAL";
+export declare const MSG_NO_OPTIONS = "No options provided!";
+export declare const ERR_INVALID_OPTIONS = "No options provided!";

@@ -45,14 +45,12 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
   }
 
-  ENOOPT = 'No Options provided';
-  EINVOPT = 'Invalid Options provided';
   originalOptions: Array<ChoosyOption> = [];
   processedOptions: Array<ChoosyOption> = [];
-  isOpen = false;
   selections = new Subject<ChoosyRawOption>();
   footerType: ChoosyFooterType;
   optionTpl: TemplateRef<any>;
+  isOpen = false;
 
   private results = new Subject<Array<ChoosyOption>>();
   private notifications = new Subject<ChoosyNotification>();
@@ -65,8 +63,8 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    if (!this.options) throw new Error(this.ENOOPT);
-    if (!Array.isArray(this.options)) throw new Error(this.EINVOPT);
+    if (!this.options) throw new Error(C.MSG_NO_OPTIONS);
+    if (!Array.isArray(this.options)) throw new Error(C.ERR_INVALID_OPTIONS);
     this.config = this.configService.getConfig(this.config);
     this.originalOptions = this.options
       .map((option: ChoosyRawOption): ChoosyOption => formatRawOption(option));
@@ -83,26 +81,23 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
       this.resultsSubscription.unsubscribe();
   }
 
-  open(event?: Event): void {
+  open(): void {
     if (this.isOpen) return;
     this.isOpen = true;
     this.processedOptions = merge([], this.originalOptions);
     this.footerType = { type: C.FOOTER_DEFAULT, data: this.processedOptions.length };
     this.notifications.next({ action: C.DROPDOWN_OPENED, value: null });
-    if (event) event.stopPropagation();
   }
 
-  close(event?: Event): void {
+  close(): void {
     if (!this.isOpen) return;
     this.isOpen = false;
     this.notifications.next({ action: C.DROPDOWN_CLOSED, value: null });
-    if (event) event.stopPropagation();
   }
 
-  toggle(event?: Event): void {
-    if (this.isOpen) this.close(event);
-    else this.open(event);
-    if (event) event.stopPropagation();
+  toggle(): void {
+    if (this.isOpen) this.close();
+    else this.open();
   }
 
   optionSelectionListener(res: { event: Event, option: ChoosyOption }): void {

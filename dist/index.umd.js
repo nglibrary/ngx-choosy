@@ -1,6 +1,6 @@
 /**
  * @nglibrary/ngx-choosy - Selectbox/ dropdown for Angular 4+
- * @version v1.0.6
+ * @version v1.1.0
  * @author Lokesh Rajendran
  * @link https://github.com/nglibrary/ngx-choosy#readme
  * @license MIT
@@ -393,12 +393,10 @@ var ChoosyResultsComponent = (function () {
         this.cdRef = cdRef;
         this.choosy = new core_1.EventEmitter();
         this.config = {};
-        this.ENOOPT = 'No Options provided';
-        this.EINVOPT = 'Invalid Options provided';
         this.originalOptions = [];
         this.processedOptions = [];
-        this.isOpen = false;
         this.selections = new Subject_1.Subject();
+        this.isOpen = false;
         this.results = new Subject_1.Subject();
         this.notifications = new Subject_1.Subject();
     }
@@ -413,9 +411,9 @@ var ChoosyResultsComponent = (function () {
     ChoosyResultsComponent.prototype.ngOnInit = function () {
         var _this = this;
         if (!this.options)
-            throw new Error(this.ENOOPT);
+            throw new Error(C.MSG_NO_OPTIONS);
         if (!Array.isArray(this.options))
-            throw new Error(this.EINVOPT);
+            throw new Error(C.ERR_INVALID_OPTIONS);
         this.config = this.configService.getConfig(this.config);
         this.originalOptions = this.options
             .map(function (option) { return helpers_1.formatRawOption(option); });
@@ -430,31 +428,25 @@ var ChoosyResultsComponent = (function () {
         if (this.resultsSubscription)
             this.resultsSubscription.unsubscribe();
     };
-    ChoosyResultsComponent.prototype.open = function (event) {
+    ChoosyResultsComponent.prototype.open = function () {
         if (this.isOpen)
             return;
         this.isOpen = true;
         this.processedOptions = merge([], this.originalOptions);
         this.footerType = { type: C.FOOTER_DEFAULT, data: this.processedOptions.length };
         this.notifications.next({ action: C.DROPDOWN_OPENED, value: null });
-        if (event)
-            event.stopPropagation();
     };
-    ChoosyResultsComponent.prototype.close = function (event) {
+    ChoosyResultsComponent.prototype.close = function () {
         if (!this.isOpen)
             return;
         this.isOpen = false;
         this.notifications.next({ action: C.DROPDOWN_CLOSED, value: null });
-        if (event)
-            event.stopPropagation();
     };
-    ChoosyResultsComponent.prototype.toggle = function (event) {
+    ChoosyResultsComponent.prototype.toggle = function () {
         if (this.isOpen)
-            this.close(event);
+            this.close();
         else
-            this.open(event);
-        if (event)
-            event.stopPropagation();
+            this.open();
     };
     ChoosyResultsComponent.prototype.optionSelectionListener = function (res) {
         this.optionClicked(res.event);
@@ -638,6 +630,8 @@ exports.OPTIONS_RELOADED = 'OPTIONS_RELOADED';
 exports.FOOTER_DEFAULT = 'FOOTER_DEFAULT';
 exports.FOOTER_FILTER = 'FOOTER_FILTER';
 exports.FOOTER_INITIAL = 'FOOTER_INITIAL';
+exports.MSG_NO_OPTIONS = 'No options provided!';
+exports.ERR_INVALID_OPTIONS = 'No options provided!';
 
 
 /***/ }),
@@ -2124,32 +2118,32 @@ var ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = (function () {
         this.options = [];
         this.config = {};
         this.choosy = new core_1.EventEmitter();
-        this.isOpen = new core_1.EventEmitter();
-        this.INOOPTS = 'No options provided';
         this.onChange = function (_) { };
         this.onTouched = function (_) { };
         var factory = this.compFacResolver.resolveComponentFactory(components_1.ChoosyResultsComponent);
         this.componentRef = this.viewContainerRef.createComponent(factory, 0);
-        ChoosySingleSelectDirective_1.compInstances.push(this.componentRef.instance);
+        this.compInstance = this.componentRef.instance;
+        ChoosySingleSelectDirective_1.compInstances.push(this.compInstance);
     }
     ChoosySingleSelectDirective.prototype.ngOnInit = function () {
         if (typeof this.options[0] === 'object' && !this.config.displayValue) {
             this.config.displayValue = Object.keys(this.options[0])[0];
         }
         this.eRef.nativeElement.readOnly = true;
-        this.componentRef.instance.config = this.config;
-        this.componentRef.instance.options = this.options;
+        this.compInstance.config = this.config;
+        this.compInstance.options = this.options;
+        this.isOpen = this.compInstance.isOpen;
     };
     ChoosySingleSelectDirective.prototype.ngAfterViewInit = function () {
         var _this = this;
         this.config.wrapInput ? this.wrapInput() : this.makeParentNodeRelative();
-        this.componentRef.instance.template = this.template;
-        this.choosy.emit(this.prepareEvents(this.componentRef.instance.expose()));
-        this.componentRef.instance.selections.subscribe(function (r) {
+        this.compInstance.template = this.template;
+        this.choosy.emit(this.prepareEvents(this.compInstance.expose()));
+        this.compInstance.selections.subscribe(function (r) {
             var val = _this.config.displayValue ? r[_this.config.displayValue] : r;
             _this.setValue(val);
             _this.onChange(r);
-            _this.componentRef.instance.isOpen = false;
+            _this.compInstance.close();
         });
         if (this.initialValue) {
             var val = this.config.displayValue
@@ -2163,19 +2157,16 @@ var ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = (function () {
     ChoosySingleSelectDirective.prototype.ngOnChanges = function (change) {
         if (change.options && !change.options.firstChange) {
             this.options = change.options.currentValue;
-            this.componentRef.instance.reloadOptions(this.options);
+            this.compInstance.reloadOptions(this.options);
         }
         if (change.config)
-            this.componentRef.instance.config = change.config.currentValue;
+            this.compInstance.config = change.config.currentValue;
     };
     ChoosySingleSelectDirective.prototype.documentClickEvent = function (event) {
         this.onDocumentClick(event);
     };
     ChoosySingleSelectDirective.prototype.clickEvent = function (event) {
-        ChoosySingleSelectDirective_1.compInstances.forEach(function (comp) {
-            comp.close(new Event('click'));
-        });
-        this.toggleDropdown(event);
+        this.compInstance.toggle();
     };
     ChoosySingleSelectDirective.prototype.prepareEvents = function (componentEvent) {
         return __assign({}, componentEvent, { clear: this.clear.bind(this), selectItem: this.selectItem.bind(this) });
@@ -2192,8 +2183,10 @@ var ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = (function () {
         this.eRef.nativeElement.parentNode.style.position = 'relative';
     };
     ChoosySingleSelectDirective.prototype.onDocumentClick = function (event) {
-        if (!this.componentRef.instance.elRef.nativeElement.contains(event.target)) {
-            this.closeDropdown();
+        if (event.target != this.eRef.nativeElement &&
+            event.target != this.compInstance.elRef.nativeElement &&
+            !this.compInstance.elRef.nativeElement.contains(event.target)) {
+            this.close();
         }
     };
     ChoosySingleSelectDirective.prototype.writeValue = function (value) {
@@ -2210,17 +2203,17 @@ var ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = (function () {
     };
     ChoosySingleSelectDirective.prototype.registerOnChange = function (fn) { this.onChange = fn; };
     ChoosySingleSelectDirective.prototype.registerOnTouched = function (fn) { this.onTouched = fn; };
-    ChoosySingleSelectDirective.prototype.openDropdown = function () {
-        this.componentRef.instance.open(new Event('click'));
-        this.isOpen.emit(this.componentRef.instance.isOpen);
+    ChoosySingleSelectDirective.prototype.open = function () {
+        this.compInstance.open();
+        this.stopPropagation();
     };
-    ChoosySingleSelectDirective.prototype.closeDropdown = function () {
-        this.componentRef.instance.close(new Event('click'));
-        this.isOpen.emit(this.componentRef.instance.isOpen);
+    ChoosySingleSelectDirective.prototype.close = function () {
+        this.compInstance.close();
+        this.stopPropagation();
     };
-    ChoosySingleSelectDirective.prototype.toggleDropdown = function (event) {
-        this.componentRef.instance.toggle(event);
-        this.isOpen.emit(this.componentRef.instance.isOpen);
+    ChoosySingleSelectDirective.prototype.toggle = function () {
+        this.compInstance.toggle();
+        this.stopPropagation();
     };
     ChoosySingleSelectDirective.prototype.setValue = function (value) {
         this.renderer.setElementProperty(this.eRef.nativeElement, 'value', value);
@@ -2228,12 +2221,18 @@ var ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = (function () {
     ChoosySingleSelectDirective.prototype.clear = function () {
         this.setValue(null);
         this.onChange(null);
-        this.componentRef.instance.clearSelectedOptions();
+        this.compInstance.clearSelectedOptions();
     };
     ChoosySingleSelectDirective.prototype.selectItem = function (option) {
         this.setValue(option);
         this.onChange(option);
-        this.componentRef.instance.selectOption(option);
+        this.compInstance.selectOption(option);
+    };
+    ChoosySingleSelectDirective.prototype.stopPropagation = function () {
+        var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation)
+            e.stopPropagation();
     };
     return ChoosySingleSelectDirective;
 }());
@@ -2254,10 +2253,6 @@ __decorate([
     core_1.Output(),
     __metadata("design:type", core_1.EventEmitter)
 ], ChoosySingleSelectDirective.prototype, "choosy", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], ChoosySingleSelectDirective.prototype, "isOpen", void 0);
 __decorate([
     core_1.HostListener('document:click', ['$event']),
     __metadata("design:type", Function),
@@ -2281,6 +2276,7 @@ __decorate([
 ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = __decorate([
     core_1.Directive({
         selector: 'input[choosySingleSelect]',
+        exportAs: 'choosy',
         providers: [{
                 provide: forms_1.NG_VALUE_ACCESSOR,
                 useExisting: core_1.forwardRef(function () { return ChoosySingleSelectDirective_1; }),
@@ -2358,10 +2354,10 @@ var ChoosyButtonSelectDirective = ChoosyButtonSelectDirective_1 = (function () {
         });
     };
     ChoosyButtonSelectDirective.prototype.closeDropdown = function () {
-        this.componentRef.instance.close(new Event('click'));
+        this.componentRef.instance.close();
     };
     ChoosyButtonSelectDirective.prototype.toggleDropdown = function (event) {
-        this.componentRef.instance.toggle(event);
+        this.componentRef.instance.toggle();
     };
     ChoosyButtonSelectDirective.prototype.onDocumentClick = function (event) {
         if (!this.componentRef.instance.elRef.nativeElement.contains(event.target)) {

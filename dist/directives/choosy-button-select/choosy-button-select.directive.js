@@ -38,10 +38,10 @@ var ChoosyButtonSelectDirective = (function () {
         });
     };
     ChoosyButtonSelectDirective.prototype.closeDropdown = function () {
-        this.componentRef.instance.close(new Event('click'));
+        this.componentRef.instance.close();
     };
     ChoosyButtonSelectDirective.prototype.toggleDropdown = function (event) {
-        this.componentRef.instance.toggle(event);
+        this.componentRef.instance.toggle();
     };
     ChoosyButtonSelectDirective.prototype.onDocumentClick = function (event) {
         if (!this.componentRef.instance.elRef.nativeElement.contains(event.target)) {

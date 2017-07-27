@@ -61,11 +61,11 @@ export class ChoosyButtonSelectDirective {
   }
 
   closeDropdown(): void {
-    this.componentRef.instance.close(new Event('click'));
+    this.componentRef.instance.close();
   }
 
   toggleDropdown(event: Event): void {
-    this.componentRef.instance.toggle(event);
+    this.componentRef.instance.toggle();
   }
   onDocumentClick(event: any): void {
     if (!this.componentRef.instance.elRef.nativeElement.contains(event.target)) {
