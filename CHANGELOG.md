@@ -1,3 +1,18 @@
+<a name="1.1.1"></a>
+## [1.1.1](https://github.com/nglibrary/ngx-choosy/compare/v1.1.0...v1.1.1) (2017-07-28)
+
+
+### Bug Fixes
+
+* **button-select:** selected template fix ([2751a4a](https://github.com/nglibrary/ngx-choosy/commit/2751a4a))
+* **single-select:** removed (isOpen) emitter and updated with 'choosy' export ([01e9aa0](https://github.com/nglibrary/ngx-choosy/commit/01e9aa0))
+* added dist to .gitignore ([87381cb](https://github.com/nglibrary/ngx-choosy/commit/87381cb))
+* Another constants typo fix ([d37203c](https://github.com/nglibrary/ngx-choosy/commit/d37203c))
+* Constants fix ([1d65cd2](https://github.com/nglibrary/ngx-choosy/commit/1d65cd2))
+* typo ([c7b0892](https://github.com/nglibrary/ngx-choosy/commit/c7b0892))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/nglibrary/ngx-choosy/compare/v1.0.6...v1.1.0) (2017-07-26)
 
