@@ -21,4 +21,4 @@ export const FOOTER_INITIAL = 'FOOTER_INITIAL';
 
 
 export const MSG_NO_OPTIONS = 'No options provided';
-export const ERR_INVALID_OPTIONS = 'Invalid Options provided';
+export const ERR_INVALID_OPTIONS = 'Invalid options provided';
