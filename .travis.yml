@@ -27,6 +27,7 @@ before_script:
   fi'
 after_success:
   - 'if [ ${TRAVIS_PULL_REQUEST} = "false" ]; then
+      npm run git-build;
       npm run release;
       npm publish --access=public;
       npm run release-log;

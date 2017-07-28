@@ -30,6 +30,7 @@
   "homepage": "https://github.com/nglibrary/ngx-choosy#readme",
   "scripts": {
     "build": "npm run build:esm && npm run build:umd",
+    "git-build": "npm run build && git add dist -f && git commit -m \"build(release): auto build [ci skip]\"",
     "build:esm": "gulp inline-templates && npm run ngcompile",
     "build:esm:watch": "gulp build:esm:watch",
     "build:umd": "webpack --config webpack-umd.config.ts",
