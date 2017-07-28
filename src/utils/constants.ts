@@ -20,5 +20,5 @@ export const FOOTER_FILTER = 'FOOTER_FILTER';
 export const FOOTER_INITIAL = 'FOOTER_INITIAL';
 
 
-export const MSG_NO_OPTIONS = 'No options provided!';
+export const MSG_NO_OPTIONS = 'No options provided';
 export const ERR_INVALID_OPTIONS = 'Invalid Options provided';
