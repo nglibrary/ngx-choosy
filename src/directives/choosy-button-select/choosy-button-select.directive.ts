@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   ComponentFactoryResolver,
   ComponentRef,
   Directive,
@@ -9,9 +8,9 @@ import {
   Renderer,
   TemplateRef,
   ViewContainerRef
-  } from '@angular/core';
+} from '@angular/core';
 import * as merge from 'deepmerge';
-import { ChoosyResultsComponent } from './../../components/choosy-results/choosy-results.component';
+import { ChoosyResultsComponent } from './../../components';
 import { ChoosyButtonSelectConfig } from './../../interfaces';
 
 @Directive({ selector: '[choosyButtonSelect]' })
@@ -41,8 +40,7 @@ export class ChoosyButtonSelectDirective {
     private eRef: ElementRef,
     private renderer: Renderer,
     private viewContainerRef: ViewContainerRef,
-    private compFacResolver: ComponentFactoryResolver,
-    private cdRef: ChangeDetectorRef
+    private compFacResolver: ComponentFactoryResolver
   ) {
     const factory = this.compFacResolver.resolveComponentFactory(ChoosyResultsComponent);
     this.componentRef = this.viewContainerRef.createComponent(factory, 0);
@@ -58,15 +56,11 @@ export class ChoosyButtonSelectDirective {
     this.wrapInput();
     this.componentRef.instance.template = this.itemTemplate;
     this.componentRef.instance.selections.subscribe((r: any) => {
-      console.log('selected wo dc', this.eRef.nativeElement);
       const fooby = this.viewContainerRef.createEmbeddedView(this.selectedItemTemplate, {
         $implicit: r
       }, 0);
-      console.log('fooby nextSibling o>', fooby.rootNodes[0].nextSibling);
       this.eRef.nativeElement.innerHTML = '';
       this.eRef.nativeElement.appendChild(fooby.rootNodes[0].nextSibling);
-      // this.cdRef.detectChanges();
-      console.log('closing');
       this.componentRef.instance.close();
     });
   }
