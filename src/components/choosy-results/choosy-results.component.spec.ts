@@ -62,7 +62,7 @@ describe('ChoosyResultsComponent', () => {
     });
     it('input options is in invalid format? - should throw error', () => {
       comp.options = (123 as any);
-      expect(() => { comp.ngOnInit() }).toThrowError('Invalid Options provided');
+      expect(() => { comp.ngOnInit() }).toThrowError('Invalid options provided');
     });
     it('input has invalid option? - should defaults to "-"', () => {
       comp.options = ['Mobile', 'Computer', null, undefined, {}, '', false, 0, NaN];
@@ -95,7 +95,7 @@ describe('ChoosyResultsComponent', () => {
 
   describe('ngOnInit', () => {
     it('throw error when no option is provided', () => {
-      expect(() => { comp.ngOnInit(); }).toThrowError('No Options provided');
+      expect(() => { comp.ngOnInit(); }).toThrowError('No options provided');
     });
     it('makes expected calls', () => {
       comp.options = simpleOptions;

@@ -4,13 +4,13 @@ import {
   NgModule,
   Optional,
   SkipSelf
-  } from '@angular/core';
+} from '@angular/core';
 import {
   ChoosyFooterComponent,
   ChoosyListComponent,
   ChoosyResultsComponent,
   ChoosySearchComponent
-  } from './components';
+} from './components';
 import { ChoosyButtonSelectDirective, ChoosySingleSelectDirective } from './directives';
 import { ChoosyConfigService, GlobalConfigData } from './services/choosy-config/choosy-config.service';
 
