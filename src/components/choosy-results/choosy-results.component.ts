@@ -13,6 +13,8 @@ import {
 import * as merge from 'deepmerge';
 import * as FuseSearch from 'fuse.js';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/share';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
@@ -51,9 +53,9 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
   footerType: ChoosyFooterType;
   optionTpl: TemplateRef<any>;
   isOpen = false;
+  notifications = new BehaviorSubject<ChoosyNotification>({ action: 'Initated', value: null });
 
   private results = new Subject<Array<ChoosyOption>>();
-  private notifications = new Subject<ChoosyNotification>();
   private resultsSubscription: Subscription;
   private fuseSearch: FuseSearch;
   constructor(
@@ -81,23 +83,30 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
       this.resultsSubscription.unsubscribe();
   }
 
+  isOpened(): boolean {
+    return this.isOpen;
+  }
+
   open(): void {
     if (this.isOpen) return;
     this.isOpen = true;
     this.processedOptions = merge([], this.originalOptions);
     this.footerType = { type: C.FOOTER_DEFAULT, data: this.processedOptions.length };
     this.notifications.next({ action: C.DROPDOWN_OPENED, value: null });
+    this.stopPropagation();
   }
 
   close(): void {
     if (!this.isOpen) return;
     this.isOpen = false;
     this.notifications.next({ action: C.DROPDOWN_CLOSED, value: null });
+    this.stopPropagation();
   }
 
   toggle(): void {
     if (this.isOpen) this.close();
     else this.open();
+    this.stopPropagation();
   }
 
   optionSelectionListener(res: { event: Event, option: ChoosyOption }): void {
@@ -217,6 +226,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
   expose(): ChoosyDropdownExpose {
     return {
       actions: {
+        isOpened: this.isOpened.bind(this),
         open: this.open.bind(this),
         close: this.close.bind(this),
         toggle: this.toggle.bind(this),
@@ -236,5 +246,11 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
       notifications: this.notifications,
       selections: this.selections
     };
+  }
+
+  private stopPropagation() {
+    const e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
   }
 }

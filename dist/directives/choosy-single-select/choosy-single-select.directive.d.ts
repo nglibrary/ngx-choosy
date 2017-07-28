@@ -14,7 +14,6 @@ export declare class ChoosySingleSelectDirective implements ControlValueAccessor
     private initialValue;
     private compInstance;
     private static compInstances;
-    isOpen: boolean;
     constructor(eRef: ElementRef, renderer: Renderer, viewContainerRef: ViewContainerRef, compFacResolver: ComponentFactoryResolver);
     ngOnInit(): void;
     ngAfterViewInit(): void;
@@ -31,11 +30,10 @@ export declare class ChoosySingleSelectDirective implements ControlValueAccessor
     writeValue(value: any): void;
     registerOnChange(fn: (_: any) => void): void;
     registerOnTouched(fn: () => void): void;
+    isOpen(): boolean;
     open(): void;
     close(): void;
     toggle(): void;
     private setValue(value);
     private clear();
-    private selectItem(option);
-    private stopPropagation();
 }

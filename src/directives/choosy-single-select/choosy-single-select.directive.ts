@@ -47,8 +47,6 @@ export class ChoosySingleSelectDirective implements
   private compInstance: ChoosyResultsComponent;
   private static compInstances: any = [];
 
-  isOpen: boolean;
-
   constructor(
     private eRef: ElementRef,
     private renderer: Renderer,
@@ -68,7 +66,6 @@ export class ChoosySingleSelectDirective implements
     this.eRef.nativeElement.readOnly = true;
     this.compInstance.config = this.config;
     this.compInstance.options = this.options;
-    this.isOpen = this.compInstance.isOpen;
   }
 
   ngAfterViewInit(): void {
@@ -120,8 +117,7 @@ export class ChoosySingleSelectDirective implements
   prepareEvents(componentEvent: any): void {
     return {
       ...componentEvent,
-      clear: this.clear.bind(this),
-      selectItem: this.selectItem.bind(this)
+      clear: this.clear.bind(this)
     };
   }
 
@@ -161,19 +157,18 @@ export class ChoosySingleSelectDirective implements
   registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
 
   registerOnTouched(fn: () => void): void { this.onTouched = fn; }
-
+  isOpen(): boolean {
+    return this.compInstance.isOpened();
+  }
   open(): void {
     this.compInstance.open();
-    this.stopPropagation();
   }
   close(): void {
     this.compInstance.close();
-    this.stopPropagation();
   }
 
   toggle(): void {
     this.compInstance.toggle();
-    this.stopPropagation();
   }
 
   private setValue(value: any): void {
@@ -184,17 +179,5 @@ export class ChoosySingleSelectDirective implements
     this.setValue(null);
     this.onChange(null);
     this.compInstance.clearSelectedOptions();
-  }
-
-  private selectItem(option: ChoosyRawOption): void {
-    this.setValue(option);
-    this.onChange(option);
-    this.compInstance.selectOption(option);
-  }
-
-  private stopPropagation() {
-    const e = window.event;
-    e.cancelBubble = true;
-    if (e.stopPropagation) e.stopPropagation();
   }
 }

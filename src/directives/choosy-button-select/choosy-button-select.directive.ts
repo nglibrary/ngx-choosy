@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   ComponentFactoryResolver,
   ComponentRef,
   Directive,
@@ -40,7 +41,8 @@ export class ChoosyButtonSelectDirective {
     private eRef: ElementRef,
     private renderer: Renderer,
     private viewContainerRef: ViewContainerRef,
-    private compFacResolver: ComponentFactoryResolver
+    private compFacResolver: ComponentFactoryResolver,
+    private cdRef: ChangeDetectorRef
   ) {
     const factory = this.compFacResolver.resolveComponentFactory(ChoosyResultsComponent);
     this.componentRef = this.viewContainerRef.createComponent(factory, 0);
@@ -56,7 +58,16 @@ export class ChoosyButtonSelectDirective {
     this.wrapInput();
     this.componentRef.instance.template = this.itemTemplate;
     this.componentRef.instance.selections.subscribe((r: any) => {
-      this.componentRef.instance.isOpen = false;
+      console.log('selected wo dc', this.eRef.nativeElement);
+      const fooby = this.viewContainerRef.createEmbeddedView(this.selectedItemTemplate, {
+        $implicit: r
+      }, 0);
+      console.log('fooby nextSibling o>', fooby.rootNodes[0].nextSibling);
+      this.eRef.nativeElement.innerHTML = '';
+      this.eRef.nativeElement.appendChild(fooby.rootNodes[0].nextSibling);
+      // this.cdRef.detectChanges();
+      console.log('closing');
+      this.componentRef.instance.close();
     });
   }
 

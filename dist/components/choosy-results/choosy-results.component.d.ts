@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, ElementRef, EventEmitter, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/share';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
-import { ChoosyConfig, ChoosyDropdownExpose, ChoosyFooterType, ChoosyOption, ChoosyRawOption } from './../../interfaces';
+import { ChoosyConfig, ChoosyDropdownExpose, ChoosyFooterType, ChoosyNotification, ChoosyOption, ChoosyRawOption } from './../../interfaces';
 import { ChoosyConfigService } from './../../services/choosy-config/choosy-config.service';
 export declare class ChoosyResultsComponent implements OnInit, OnDestroy {
     elRef: ElementRef;
@@ -17,13 +19,14 @@ export declare class ChoosyResultsComponent implements OnInit, OnDestroy {
     footerType: ChoosyFooterType;
     optionTpl: TemplateRef<any>;
     isOpen: boolean;
+    notifications: BehaviorSubject<ChoosyNotification>;
     private results;
-    private notifications;
     private resultsSubscription;
     private fuseSearch;
     constructor(elRef: ElementRef, configService: ChoosyConfigService, cdRef: ChangeDetectorRef);
     ngOnInit(): void;
     ngOnDestroy(): void;
+    isOpened(): boolean;
     open(): void;
     close(): void;
     toggle(): void;
@@ -46,4 +49,5 @@ export declare class ChoosyResultsComponent implements OnInit, OnDestroy {
     updateConfig(config: {}): void;
     resetOptions(): void;
     expose(): ChoosyDropdownExpose;
+    private stopPropagation();
 }

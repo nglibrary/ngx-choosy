@@ -32,7 +32,6 @@ var ChoosySingleSelectDirective = (function () {
         this.eRef.nativeElement.readOnly = true;
         this.compInstance.config = this.config;
         this.compInstance.options = this.options;
-        this.isOpen = this.compInstance.isOpen;
     };
     ChoosySingleSelectDirective.prototype.ngAfterViewInit = function () {
         var _this = this;
@@ -69,7 +68,7 @@ var ChoosySingleSelectDirective = (function () {
         this.compInstance.toggle();
     };
     ChoosySingleSelectDirective.prototype.prepareEvents = function (componentEvent) {
-        return __assign({}, componentEvent, { clear: this.clear.bind(this), selectItem: this.selectItem.bind(this) });
+        return __assign({}, componentEvent, { clear: this.clear.bind(this) });
     };
     ChoosySingleSelectDirective.prototype.wrapInput = function () {
         var wrapper = document.createElement('div');
@@ -103,17 +102,17 @@ var ChoosySingleSelectDirective = (function () {
     };
     ChoosySingleSelectDirective.prototype.registerOnChange = function (fn) { this.onChange = fn; };
     ChoosySingleSelectDirective.prototype.registerOnTouched = function (fn) { this.onTouched = fn; };
+    ChoosySingleSelectDirective.prototype.isOpen = function () {
+        return this.compInstance.isOpened();
+    };
     ChoosySingleSelectDirective.prototype.open = function () {
         this.compInstance.open();
-        this.stopPropagation();
     };
     ChoosySingleSelectDirective.prototype.close = function () {
         this.compInstance.close();
-        this.stopPropagation();
     };
     ChoosySingleSelectDirective.prototype.toggle = function () {
         this.compInstance.toggle();
-        this.stopPropagation();
     };
     ChoosySingleSelectDirective.prototype.setValue = function (value) {
         this.renderer.setElementProperty(this.eRef.nativeElement, 'value', value);
@@ -122,17 +121,6 @@ var ChoosySingleSelectDirective = (function () {
         this.setValue(null);
         this.onChange(null);
         this.compInstance.clearSelectedOptions();
-    };
-    ChoosySingleSelectDirective.prototype.selectItem = function (option) {
-        this.setValue(option);
-        this.onChange(option);
-        this.compInstance.selectOption(option);
-    };
-    ChoosySingleSelectDirective.prototype.stopPropagation = function () {
-        var e = window.event;
-        e.cancelBubble = true;
-        if (e.stopPropagation)
-            e.stopPropagation();
     };
     return ChoosySingleSelectDirective;
 }());

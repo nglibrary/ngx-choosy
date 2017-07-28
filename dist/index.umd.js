@@ -7,14 +7,14 @@
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("@angular/core"), require("@angular/common"), require("rxjs/add/operator/map"), require("rxjs/Subject"), require("@angular/forms"));
+		module.exports = factory(require("@angular/core"), require("@angular/common"), require("rxjs/add/operator/map"), require("rxjs/add/operator/share"), require("rxjs/BehaviorSubject"), require("rxjs/Subject"), require("@angular/forms"));
 	else if(typeof define === 'function' && define.amd)
-		define(["@angular/core", "@angular/common", "rxjs/add/operator/map", "rxjs/Subject", "@angular/forms"], factory);
+		define(["@angular/core", "@angular/common", "rxjs/add/operator/map", "rxjs/add/operator/share", "rxjs/BehaviorSubject", "rxjs/Subject", "@angular/forms"], factory);
 	else if(typeof exports === 'object')
-		exports["ticktock"] = factory(require("@angular/core"), require("@angular/common"), require("rxjs/add/operator/map"), require("rxjs/Subject"), require("@angular/forms"));
+		exports["ticktock"] = factory(require("@angular/core"), require("@angular/common"), require("rxjs/add/operator/map"), require("rxjs/add/operator/share"), require("rxjs/BehaviorSubject"), require("rxjs/Subject"), require("@angular/forms"));
 	else
-		root["ticktock"] = factory(root["ng"]["core"], root["ng"]["common"], root["Rx"], root["Rx"], root["ng"]["forms"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_16__, __WEBPACK_EXTERNAL_MODULE_17__, __WEBPACK_EXTERNAL_MODULE_27__) {
+		root["ticktock"] = factory(root["ng"]["core"], root["ng"]["common"], root["Rx"], root["Rx"], root["Rx"], root["Rx"], root["ng"]["forms"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_16__, __WEBPACK_EXTERNAL_MODULE_17__, __WEBPACK_EXTERNAL_MODULE_18__, __WEBPACK_EXTERNAL_MODULE_19__, __WEBPACK_EXTERNAL_MODULE_29__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -97,9 +97,9 @@ var choosy_list_component_1 = __webpack_require__(11);
 exports.ChoosyListComponent = choosy_list_component_1.ChoosyListComponent;
 var choosy_results_component_1 = __webpack_require__(5);
 exports.ChoosyResultsComponent = choosy_results_component_1.ChoosyResultsComponent;
-var choosy_search_component_1 = __webpack_require__(22);
+var choosy_search_component_1 = __webpack_require__(24);
 exports.ChoosySearchComponent = choosy_search_component_1.ChoosySearchComponent;
-var choosy_footer_component_1 = __webpack_require__(25);
+var choosy_footer_component_1 = __webpack_require__(27);
 exports.ChoosyFooterComponent = choosy_footer_component_1.ChoosyFooterComponent;
 
 
@@ -382,10 +382,12 @@ var core_1 = __webpack_require__(0);
 var merge = __webpack_require__(3);
 var FuseSearch = __webpack_require__(15);
 __webpack_require__(16);
-var Subject_1 = __webpack_require__(17);
+__webpack_require__(17);
+var BehaviorSubject_1 = __webpack_require__(18);
+var Subject_1 = __webpack_require__(19);
 var choosy_config_service_1 = __webpack_require__(4);
 var C = __webpack_require__(6);
-var helpers_1 = __webpack_require__(18);
+var helpers_1 = __webpack_require__(20);
 var ChoosyResultsComponent = (function () {
     function ChoosyResultsComponent(elRef, configService, cdRef) {
         this.elRef = elRef;
@@ -397,8 +399,8 @@ var ChoosyResultsComponent = (function () {
         this.processedOptions = [];
         this.selections = new Subject_1.Subject();
         this.isOpen = false;
+        this.notifications = new BehaviorSubject_1.BehaviorSubject({ action: 'Initated', value: null });
         this.results = new Subject_1.Subject();
-        this.notifications = new Subject_1.Subject();
     }
     Object.defineProperty(ChoosyResultsComponent.prototype, "template", {
         set: function (template) {
@@ -428,6 +430,9 @@ var ChoosyResultsComponent = (function () {
         if (this.resultsSubscription)
             this.resultsSubscription.unsubscribe();
     };
+    ChoosyResultsComponent.prototype.isOpened = function () {
+        return this.isOpen;
+    };
     ChoosyResultsComponent.prototype.open = function () {
         if (this.isOpen)
             return;
@@ -435,18 +440,21 @@ var ChoosyResultsComponent = (function () {
         this.processedOptions = merge([], this.originalOptions);
         this.footerType = { type: C.FOOTER_DEFAULT, data: this.processedOptions.length };
         this.notifications.next({ action: C.DROPDOWN_OPENED, value: null });
+        this.stopPropagation();
     };
     ChoosyResultsComponent.prototype.close = function () {
         if (!this.isOpen)
             return;
         this.isOpen = false;
         this.notifications.next({ action: C.DROPDOWN_CLOSED, value: null });
+        this.stopPropagation();
     };
     ChoosyResultsComponent.prototype.toggle = function () {
         if (this.isOpen)
             this.close();
         else
             this.open();
+        this.stopPropagation();
     };
     ChoosyResultsComponent.prototype.optionSelectionListener = function (res) {
         this.optionClicked(res.event);
@@ -552,6 +560,7 @@ var ChoosyResultsComponent = (function () {
     ChoosyResultsComponent.prototype.expose = function () {
         return {
             actions: {
+                isOpened: this.isOpened.bind(this),
                 open: this.open.bind(this),
                 close: this.close.bind(this),
                 toggle: this.toggle.bind(this),
@@ -571,6 +580,12 @@ var ChoosyResultsComponent = (function () {
             notifications: this.notifications,
             selections: this.selections
         };
+    };
+    ChoosyResultsComponent.prototype.stopPropagation = function () {
+        var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation)
+            e.stopPropagation();
     };
     return ChoosyResultsComponent;
 }());
@@ -594,8 +609,8 @@ __decorate([
 ChoosyResultsComponent = __decorate([
     core_1.Component({
         selector: 'choosy-results',
-        template: __webpack_require__(19),
-        styles: [__webpack_require__(20)]
+        template: __webpack_require__(21),
+        styles: [__webpack_require__(22)]
     }),
     __metadata("design:paramtypes", [core_1.ElementRef,
         choosy_config_service_1.ChoosyConfigService,
@@ -641,9 +656,9 @@ exports.ERR_INVALID_OPTIONS = 'No options provided!';
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var choosy_single_select_directive_1 = __webpack_require__(26);
+var choosy_single_select_directive_1 = __webpack_require__(28);
 exports.ChoosySingleSelectDirective = choosy_single_select_directive_1.ChoosySingleSelectDirective;
-var choosy_button_select_directive_1 = __webpack_require__(28);
+var choosy_button_select_directive_1 = __webpack_require__(30);
 exports.ChoosyButtonSelectDirective = choosy_button_select_directive_1.ChoosyButtonSelectDirective;
 
 
@@ -1875,6 +1890,18 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_17__;
 
 /***/ }),
 /* 18 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_18__;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_19__;
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1895,17 +1922,17 @@ exports.formatRawOption = function (option) {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = "<div *ngIf=\"isOpen\" class=\"{{config.theme}}\" [ngClass]=\"{'jerk':config.dropdown.animation}\">\n  <choosy-search [config]=\"config\" (search)=\"filterOptions($event)\" *ngIf=\"config.search.enable && originalOptions.length>0\"></choosy-search>\n  <choosy-list [config]=\"config\" [options]=\"processedOptions\" (optionSelected)=\"optionSelectionListener($event)\" [template]=\"optionTpl\"></choosy-list>\n  <choosy-footer *ngIf=\"config.footer.enable\" [config]=\"config\" [type]=\"footerType\"></choosy-footer>\n</div>\n"
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-        var result = __webpack_require__(21);
+        var result = __webpack_require__(23);
 
         if (typeof result === "string") {
             module.exports = result;
@@ -1915,7 +1942,7 @@ module.exports = "<div *ngIf=\"isOpen\" class=\"{{config.theme}}\" [ngClass]=\"{
     
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(undefined);
@@ -1929,7 +1956,7 @@ exports.push([module.i, ".choosy-jerk-animation, #choosy-frame.jerk, :host > div
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1975,7 +2002,7 @@ ChoosySearchComponent = __decorate([
     core_1.Component({
         selector: 'choosy-search',
         template: "\n    <div class=\"choosy-search-wrapper\">\n      <input type=\"text\" (input)=\"onChange($event.target.value)\" [placeholder]=\"config?.labels?.searchPlaceholder\" #inputEl class=\"choosy-search-input\">\n      <i></i>\n    </div>\n  ",
-        styles: [__webpack_require__(23)]
+        styles: [__webpack_require__(25)]
     }),
     __metadata("design:paramtypes", [core_1.ElementRef])
 ], ChoosySearchComponent);
@@ -1983,11 +2010,11 @@ exports.ChoosySearchComponent = ChoosySearchComponent;
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-        var result = __webpack_require__(24);
+        var result = __webpack_require__(26);
 
         if (typeof result === "string") {
             module.exports = result;
@@ -1997,7 +2024,7 @@ exports.ChoosySearchComponent = ChoosySearchComponent;
     
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(undefined);
@@ -2011,7 +2038,7 @@ exports.push([module.i, ":host() {\n  display: block; }\n", ""]);
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2083,7 +2110,7 @@ exports.ChoosyFooterComponent = ChoosyFooterComponent;
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2107,7 +2134,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(0);
-var forms_1 = __webpack_require__(27);
+var forms_1 = __webpack_require__(29);
 var components_1 = __webpack_require__(1);
 var ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = (function () {
     function ChoosySingleSelectDirective(eRef, renderer, viewContainerRef, compFacResolver) {
@@ -2132,7 +2159,6 @@ var ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = (function () {
         this.eRef.nativeElement.readOnly = true;
         this.compInstance.config = this.config;
         this.compInstance.options = this.options;
-        this.isOpen = this.compInstance.isOpen;
     };
     ChoosySingleSelectDirective.prototype.ngAfterViewInit = function () {
         var _this = this;
@@ -2169,7 +2195,7 @@ var ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = (function () {
         this.compInstance.toggle();
     };
     ChoosySingleSelectDirective.prototype.prepareEvents = function (componentEvent) {
-        return __assign({}, componentEvent, { clear: this.clear.bind(this), selectItem: this.selectItem.bind(this) });
+        return __assign({}, componentEvent, { clear: this.clear.bind(this) });
     };
     ChoosySingleSelectDirective.prototype.wrapInput = function () {
         var wrapper = document.createElement('div');
@@ -2203,17 +2229,17 @@ var ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = (function () {
     };
     ChoosySingleSelectDirective.prototype.registerOnChange = function (fn) { this.onChange = fn; };
     ChoosySingleSelectDirective.prototype.registerOnTouched = function (fn) { this.onTouched = fn; };
+    ChoosySingleSelectDirective.prototype.isOpen = function () {
+        return this.compInstance.isOpened();
+    };
     ChoosySingleSelectDirective.prototype.open = function () {
         this.compInstance.open();
-        this.stopPropagation();
     };
     ChoosySingleSelectDirective.prototype.close = function () {
         this.compInstance.close();
-        this.stopPropagation();
     };
     ChoosySingleSelectDirective.prototype.toggle = function () {
         this.compInstance.toggle();
-        this.stopPropagation();
     };
     ChoosySingleSelectDirective.prototype.setValue = function (value) {
         this.renderer.setElementProperty(this.eRef.nativeElement, 'value', value);
@@ -2222,17 +2248,6 @@ var ChoosySingleSelectDirective = ChoosySingleSelectDirective_1 = (function () {
         this.setValue(null);
         this.onChange(null);
         this.compInstance.clearSelectedOptions();
-    };
-    ChoosySingleSelectDirective.prototype.selectItem = function (option) {
-        this.setValue(option);
-        this.onChange(option);
-        this.compInstance.selectOption(option);
-    };
-    ChoosySingleSelectDirective.prototype.stopPropagation = function () {
-        var e = window.event;
-        e.cancelBubble = true;
-        if (e.stopPropagation)
-            e.stopPropagation();
     };
     return ChoosySingleSelectDirective;
 }());
@@ -2293,13 +2308,13 @@ var ChoosySingleSelectDirective_1;
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_27__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_29__;
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2318,11 +2333,12 @@ var core_1 = __webpack_require__(0);
 var merge = __webpack_require__(3);
 var choosy_results_component_1 = __webpack_require__(5);
 var ChoosyButtonSelectDirective = ChoosyButtonSelectDirective_1 = (function () {
-    function ChoosyButtonSelectDirective(eRef, renderer, viewContainerRef, compFacResolver) {
+    function ChoosyButtonSelectDirective(eRef, renderer, viewContainerRef, compFacResolver, cdRef) {
         this.eRef = eRef;
         this.renderer = renderer;
         this.viewContainerRef = viewContainerRef;
         this.compFacResolver = compFacResolver;
+        this.cdRef = cdRef;
         this.options = [];
         this.config = {};
         this.localConfig = {
@@ -2350,7 +2366,16 @@ var ChoosyButtonSelectDirective = ChoosyButtonSelectDirective_1 = (function () {
         this.wrapInput();
         this.componentRef.instance.template = this.itemTemplate;
         this.componentRef.instance.selections.subscribe(function (r) {
-            _this.componentRef.instance.isOpen = false;
+            console.log('selected wo dc', _this.eRef.nativeElement);
+            var fooby = _this.viewContainerRef.createEmbeddedView(_this.selectedItemTemplate, {
+                $implicit: r
+            }, 0);
+            console.log('fooby nextSibling o>', fooby.rootNodes[0].nextSibling);
+            _this.eRef.nativeElement.innerHTML = '';
+            _this.eRef.nativeElement.appendChild(fooby.rootNodes[0].nextSibling);
+            // this.cdRef.detectChanges();
+            console.log('closing');
+            _this.componentRef.instance.close();
         });
     };
     ChoosyButtonSelectDirective.prototype.closeDropdown = function () {
@@ -2417,7 +2442,8 @@ ChoosyButtonSelectDirective = ChoosyButtonSelectDirective_1 = __decorate([
     __metadata("design:paramtypes", [core_1.ElementRef,
         core_1.Renderer,
         core_1.ViewContainerRef,
-        core_1.ComponentFactoryResolver])
+        core_1.ComponentFactoryResolver,
+        core_1.ChangeDetectorRef])
 ], ChoosyButtonSelectDirective);
 exports.ChoosyButtonSelectDirective = ChoosyButtonSelectDirective;
 var ChoosyButtonSelectDirective_1;
