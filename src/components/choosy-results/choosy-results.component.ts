@@ -13,6 +13,8 @@ import {
 import * as merge from 'deepmerge';
 import * as FuseSearch from 'fuse.js';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/share';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
@@ -45,17 +47,15 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
   }
 
-  ENOOPT = 'No Options provided';
-  EINVOPT = 'Invalid Options provided';
   originalOptions: Array<ChoosyOption> = [];
   processedOptions: Array<ChoosyOption> = [];
-  isOpen = false;
   selections = new Subject<ChoosyRawOption>();
   footerType: ChoosyFooterType;
   optionTpl: TemplateRef<any>;
+  isOpen = false;
+  notifications = new BehaviorSubject<ChoosyNotification>({ action: 'Initated', value: null });
 
   private results = new Subject<Array<ChoosyOption>>();
-  private notifications = new Subject<ChoosyNotification>();
   private resultsSubscription: Subscription;
   private fuseSearch: FuseSearch;
   constructor(
@@ -65,8 +65,8 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    if (!this.options) throw new Error(this.ENOOPT);
-    if (!Array.isArray(this.options)) throw new Error(this.EINVOPT);
+    if (!this.options) throw new Error(C.MSG_NO_OPTIONS);
+    if (!Array.isArray(this.options)) throw new Error(C.ERR_INVALID_OPTIONS);
     this.config = this.configService.getConfig(this.config);
     this.originalOptions = this.options
       .map((option: ChoosyRawOption): ChoosyOption => formatRawOption(option));
@@ -83,26 +83,30 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
       this.resultsSubscription.unsubscribe();
   }
 
-  open(event?: Event): void {
+  isOpened(): boolean {
+    return this.isOpen;
+  }
+
+  open(): void {
     if (this.isOpen) return;
     this.isOpen = true;
     this.processedOptions = merge([], this.originalOptions);
     this.footerType = { type: C.FOOTER_DEFAULT, data: this.processedOptions.length };
     this.notifications.next({ action: C.DROPDOWN_OPENED, value: null });
-    if (event) event.stopPropagation();
+    this.stopPropagation();
   }
 
-  close(event?: Event): void {
+  close(): void {
     if (!this.isOpen) return;
     this.isOpen = false;
     this.notifications.next({ action: C.DROPDOWN_CLOSED, value: null });
-    if (event) event.stopPropagation();
+    this.stopPropagation();
   }
 
-  toggle(event?: Event): void {
-    if (this.isOpen) this.close(event);
-    else this.open(event);
-    if (event) event.stopPropagation();
+  toggle(): void {
+    if (this.isOpen) this.close();
+    else this.open();
+    this.stopPropagation();
   }
 
   optionSelectionListener(res: { event: Event, option: ChoosyOption }): void {
@@ -222,6 +226,7 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
   expose(): ChoosyDropdownExpose {
     return {
       actions: {
+        isOpened: this.isOpened.bind(this),
         open: this.open.bind(this),
         close: this.close.bind(this),
         toggle: this.toggle.bind(this),
@@ -241,5 +246,11 @@ export class ChoosyResultsComponent implements OnInit, OnDestroy {
       notifications: this.notifications,
       selections: this.selections
     };
+  }
+
+  private stopPropagation() {
+    const e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
   }
 }

@@ -1,12 +1,13 @@
-import { ComponentFactoryResolver, Directive, ElementRef, HostListener, Input, Renderer, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, ComponentFactoryResolver, Directive, ElementRef, HostListener, Input, Renderer, ViewContainerRef } from '@angular/core';
 import * as merge from 'deepmerge';
 import { ChoosyResultsComponent } from './../../components/choosy-results/choosy-results.component';
 var ChoosyButtonSelectDirective = (function () {
-    function ChoosyButtonSelectDirective(eRef, renderer, viewContainerRef, compFacResolver) {
+    function ChoosyButtonSelectDirective(eRef, renderer, viewContainerRef, compFacResolver, cdRef) {
         this.eRef = eRef;
         this.renderer = renderer;
         this.viewContainerRef = viewContainerRef;
         this.compFacResolver = compFacResolver;
+        this.cdRef = cdRef;
         this.options = [];
         this.config = {};
         this.localConfig = {
@@ -34,14 +35,23 @@ var ChoosyButtonSelectDirective = (function () {
         this.wrapInput();
         this.componentRef.instance.template = this.itemTemplate;
         this.componentRef.instance.selections.subscribe(function (r) {
-            _this.componentRef.instance.isOpen = false;
+            console.log('selected wo dc', _this.eRef.nativeElement);
+            var fooby = _this.viewContainerRef.createEmbeddedView(_this.selectedItemTemplate, {
+                $implicit: r
+            }, 0);
+            console.log('fooby nextSibling o>', fooby.rootNodes[0].nextSibling);
+            _this.eRef.nativeElement.innerHTML = '';
+            _this.eRef.nativeElement.appendChild(fooby.rootNodes[0].nextSibling);
+            // this.cdRef.detectChanges();
+            console.log('closing');
+            _this.componentRef.instance.close();
         });
     };
     ChoosyButtonSelectDirective.prototype.closeDropdown = function () {
-        this.componentRef.instance.close(new Event('click'));
+        this.componentRef.instance.close();
     };
     ChoosyButtonSelectDirective.prototype.toggleDropdown = function (event) {
-        this.componentRef.instance.toggle(event);
+        this.componentRef.instance.toggle();
     };
     ChoosyButtonSelectDirective.prototype.onDocumentClick = function (event) {
         if (!this.componentRef.instance.elRef.nativeElement.contains(event.target)) {
@@ -78,6 +88,7 @@ ChoosyButtonSelectDirective.ctorParameters = function () { return [
     { type: Renderer, },
     { type: ViewContainerRef, },
     { type: ComponentFactoryResolver, },
+    { type: ChangeDetectorRef, },
 ]; };
 ChoosyButtonSelectDirective.propDecorators = {
     'options': [{ type: Input },],

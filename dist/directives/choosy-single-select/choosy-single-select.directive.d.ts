@@ -1,6 +1,5 @@
-import { AfterViewInit, ComponentFactoryResolver, ComponentRef, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, Renderer, TemplateRef, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ComponentFactoryResolver, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, Renderer, TemplateRef, ViewContainerRef } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
-import { ChoosyResultsComponent } from '../../components';
 import { ChoosySingleSelectConfig } from '../../interfaces';
 export declare class ChoosySingleSelectDirective implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
     private eRef;
@@ -11,11 +10,10 @@ export declare class ChoosySingleSelectDirective implements ControlValueAccessor
     config: ChoosySingleSelectConfig;
     template: TemplateRef<any>;
     choosy: EventEmitter<any>;
-    isOpen: EventEmitter<any>;
-    componentRef: ComponentRef<ChoosyResultsComponent>;
-    initialValue: any;
-    INOOPTS: string;
-    static compInstances: any;
+    private componentRef;
+    private initialValue;
+    private compInstance;
+    private static compInstances;
     constructor(eRef: ElementRef, renderer: Renderer, viewContainerRef: ViewContainerRef, compFacResolver: ComponentFactoryResolver);
     ngOnInit(): void;
     ngAfterViewInit(): void;
@@ -32,10 +30,10 @@ export declare class ChoosySingleSelectDirective implements ControlValueAccessor
     writeValue(value: any): void;
     registerOnChange(fn: (_: any) => void): void;
     registerOnTouched(fn: () => void): void;
-    openDropdown(): void;
-    closeDropdown(): void;
-    toggleDropdown(event: Event): void;
+    isOpen(): boolean;
+    open(): void;
+    close(): void;
+    toggle(): void;
     private setValue(value);
     private clear();
-    private selectItem(option);
 }

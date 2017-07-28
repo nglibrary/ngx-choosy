@@ -17,4 +17,6 @@ export var OPTIONS_RELOADED = 'OPTIONS_RELOADED';
 export var FOOTER_DEFAULT = 'FOOTER_DEFAULT';
 export var FOOTER_FILTER = 'FOOTER_FILTER';
 export var FOOTER_INITIAL = 'FOOTER_INITIAL';
+export var MSG_NO_OPTIONS = 'No options provided';
+export var ERR_INVALID_OPTIONS = 'Invalid options provided';
 //# sourceMappingURL=constants.js.map

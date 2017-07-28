@@ -57,6 +57,7 @@ export interface ChoosyNotification {
 }
 export interface ChoosyDropdownExpose {
     actions: {
+        isOpened(): boolean;
         open(event: Event): void;
         close(event: Event): void;
         toggle(event: Event): void;

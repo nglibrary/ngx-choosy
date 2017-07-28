@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output }
 import * as merge from 'deepmerge';
 import * as FuseSearch from 'fuse.js';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/share';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { ChoosyConfigService } from './../../services/choosy-config/choosy-config.service';
 import * as C from './../../utils/constants';
@@ -13,14 +15,12 @@ var ChoosyResultsComponent = (function () {
         this.cdRef = cdRef;
         this.choosy = new EventEmitter();
         this.config = {};
-        this.ENOOPT = 'No Options provided';
-        this.EINVOPT = 'Invalid Options provided';
         this.originalOptions = [];
         this.processedOptions = [];
-        this.isOpen = false;
         this.selections = new Subject();
+        this.isOpen = false;
+        this.notifications = new BehaviorSubject({ action: 'Initated', value: null });
         this.results = new Subject();
-        this.notifications = new Subject();
     }
     Object.defineProperty(ChoosyResultsComponent.prototype, "template", {
         set: function (template) {
@@ -33,9 +33,9 @@ var ChoosyResultsComponent = (function () {
     ChoosyResultsComponent.prototype.ngOnInit = function () {
         var _this = this;
         if (!this.options)
-            throw new Error(this.ENOOPT);
+            throw new Error(C.MSG_NO_OPTIONS);
         if (!Array.isArray(this.options))
-            throw new Error(this.EINVOPT);
+            throw new Error(C.ERR_INVALID_OPTIONS);
         this.config = this.configService.getConfig(this.config);
         this.originalOptions = this.options
             .map(function (option) { return formatRawOption(option); });
@@ -50,31 +50,31 @@ var ChoosyResultsComponent = (function () {
         if (this.resultsSubscription)
             this.resultsSubscription.unsubscribe();
     };
-    ChoosyResultsComponent.prototype.open = function (event) {
+    ChoosyResultsComponent.prototype.isOpened = function () {
+        return this.isOpen;
+    };
+    ChoosyResultsComponent.prototype.open = function () {
         if (this.isOpen)
             return;
         this.isOpen = true;
         this.processedOptions = merge([], this.originalOptions);
         this.footerType = { type: C.FOOTER_DEFAULT, data: this.processedOptions.length };
         this.notifications.next({ action: C.DROPDOWN_OPENED, value: null });
-        if (event)
-            event.stopPropagation();
+        this.stopPropagation();
     };
-    ChoosyResultsComponent.prototype.close = function (event) {
+    ChoosyResultsComponent.prototype.close = function () {
         if (!this.isOpen)
             return;
         this.isOpen = false;
         this.notifications.next({ action: C.DROPDOWN_CLOSED, value: null });
-        if (event)
-            event.stopPropagation();
+        this.stopPropagation();
     };
-    ChoosyResultsComponent.prototype.toggle = function (event) {
+    ChoosyResultsComponent.prototype.toggle = function () {
         if (this.isOpen)
-            this.close(event);
+            this.close();
         else
-            this.open(event);
-        if (event)
-            event.stopPropagation();
+            this.open();
+        this.stopPropagation();
     };
     ChoosyResultsComponent.prototype.optionSelectionListener = function (res) {
         this.optionClicked(res.event);
@@ -180,6 +180,7 @@ var ChoosyResultsComponent = (function () {
     ChoosyResultsComponent.prototype.expose = function () {
         return {
             actions: {
+                isOpened: this.isOpened.bind(this),
                 open: this.open.bind(this),
                 close: this.close.bind(this),
                 toggle: this.toggle.bind(this),
@@ -199,6 +200,12 @@ var ChoosyResultsComponent = (function () {
             notifications: this.notifications,
             selections: this.selections
         };
+    };
+    ChoosyResultsComponent.prototype.stopPropagation = function () {
+        var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation)
+            e.stopPropagation();
     };
     return ChoosyResultsComponent;
 }());
