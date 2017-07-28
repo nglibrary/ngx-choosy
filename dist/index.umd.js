@@ -860,7 +860,7 @@ exports.ChoosyListComponent = ChoosyListComponent;
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"choosy-list-wrapper\" [style.maxHeight]=\"config.dropdown.height+'px'\">\r\n  <div class=\"choosy-list-item\" [ngClass]=\"{\r\n    'disabled':option.props.disabled ,\r\n    'selected':option.props.selected\r\n    }\" *ngFor=\"let option of options\" (click)=\"!option.props.disabled && optionClicked($event,option)\" #itemelem [tabIndex]=\"i+2\">\r\n    <ng-template #itemHolder></ng-template>\r\n    <ng-container *ngIf=\"!template\"> {{option.value}}</ng-container>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"choosy-list-wrapper\" [style.maxHeight]=\"config.dropdown.height+'px'\">\n  <div class=\"choosy-list-item\" [ngClass]=\"{\n    'disabled':option.props.disabled ,\n    'selected':option.props.selected\n    }\" *ngFor=\"let option of options\" (click)=\"!option.props.disabled && optionClicked($event,option)\" #itemelem [tabIndex]=\"i+2\">\n    <ng-template #itemHolder></ng-template>\n    <ng-container *ngIf=\"!template\"> {{option.value}}</ng-container>\n  </div>\n</div>\n"
 
 /***/ }),
 /* 13 */
@@ -1925,7 +1925,7 @@ exports.formatRawOption = function (option) {
 /* 21 */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isOpen\" class=\"{{config.theme}}\" [ngClass]=\"{'jerk':config.dropdown.animation}\">\r\n  <choosy-search [config]=\"config\" (search)=\"filterOptions($event)\" *ngIf=\"config.search.enable && originalOptions.length>0\"></choosy-search>\r\n  <choosy-list [config]=\"config\" [options]=\"processedOptions\" (optionSelected)=\"optionSelectionListener($event)\" [template]=\"optionTpl\"></choosy-list>\r\n  <choosy-footer *ngIf=\"config.footer.enable\" [config]=\"config\" [type]=\"footerType\"></choosy-footer>\r\n</div>\r\n"
+module.exports = "<div *ngIf=\"isOpen\" class=\"{{config.theme}}\" [ngClass]=\"{'jerk':config.dropdown.animation}\">\n  <choosy-search [config]=\"config\" (search)=\"filterOptions($event)\" *ngIf=\"config.search.enable && originalOptions.length>0\"></choosy-search>\n  <choosy-list [config]=\"config\" [options]=\"processedOptions\" (optionSelected)=\"optionSelectionListener($event)\" [template]=\"optionTpl\"></choosy-list>\n  <choosy-footer *ngIf=\"config.footer.enable\" [config]=\"config\" [type]=\"footerType\"></choosy-footer>\n</div>\n"
 
 /***/ }),
 /* 22 */
