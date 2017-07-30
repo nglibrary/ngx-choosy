@@ -8,13 +8,15 @@ import {
   Renderer,
   TemplateRef,
   ViewContainerRef
-} from '@angular/core';
+  } from '@angular/core';
 import * as merge from 'deepmerge';
+import { ChoosyDirective } from '../../classes';
+import { ChoosyManagerService } from '../../services';
 import { ChoosyResultsComponent } from './../../components';
 import { ChoosyButtonSelectConfig } from './../../interfaces';
 
 @Directive({ selector: '[choosyButtonSelect]' })
-export class ChoosyButtonSelectDirective {
+export class ChoosyButtonSelectDirective extends ChoosyDirective {
 
   @Input() options: Array<any> = [];
   @Input() config: ChoosyButtonSelectConfig = {} as any;
@@ -30,72 +32,54 @@ export class ChoosyButtonSelectDirective {
     },
     dropdown: {
       width: 300,
+      height: 'none',
       animation: true
     }
   }
-  componentRef: ComponentRef<ChoosyResultsComponent>;
-  static compInstances: any = [];
 
   constructor(
-    private eRef: ElementRef,
-    private renderer: Renderer,
-    private viewContainerRef: ViewContainerRef,
-    private compFacResolver: ComponentFactoryResolver
+    public elRef: ElementRef,
+    public renderer: Renderer,
+    public viewContainerRef: ViewContainerRef,
+    public compFacResolver: ComponentFactoryResolver,
+    public choosyManager: ChoosyManagerService
   ) {
-    const factory = this.compFacResolver.resolveComponentFactory(ChoosyResultsComponent);
-    this.componentRef = this.viewContainerRef.createComponent(factory, 0);
-    ChoosyButtonSelectDirective.compInstances.push(this.componentRef.instance);
+    super();
+    this.createChoosyInstance();
   }
 
   ngOnInit(): void {
-    this.componentRef.instance.config = this.config = merge(this.config, this.localConfig);
-    this.componentRef.instance.options = this.options;
+    this.compRef.instance.config = this.config = merge(this.localConfig, this.config);
+    this.compRef.instance.options = this.options;
   }
 
   ngAfterViewInit() {
-    this.wrapInput();
-    this.componentRef.instance.template = this.itemTemplate;
-    this.componentRef.instance.selections.subscribe((r: any) => {
-      const fooby = this.viewContainerRef.createEmbeddedView(this.selectedItemTemplate, {
+    this.renderer.listen(this.elRef.nativeElement, 'focus', (e: any) => {
+      this.applyDropdownSpan(
+        this.config.dropdown.size,
+        e.target,
+        this.config.dropdown.width
+      );
+    });
+
+    this.compRef.instance.template = this.itemTemplate;
+    this.compRef.instance.selections.subscribe((r: any) => {
+      const view = this.viewContainerRef.createEmbeddedView(this.selectedItemTemplate, {
         $implicit: r
       }, 0);
-      this.eRef.nativeElement.innerHTML = '';
-      this.eRef.nativeElement.appendChild(fooby.rootNodes[0].nextSibling);
-      this.componentRef.instance.close();
+      this.renderer.setElementProperty(this.elRef.nativeElement, 'innerHTML', '');
+      this.renderer.invokeElementMethod(this.elRef.nativeElement, 'appendChild', [view.rootNodes[0].nextSibling]);
+      console.log('button', this.elRef.nativeElement.offsetWidth);
+      this.compRef.instance.close();
     });
   }
 
-  closeDropdown(): void {
-    this.componentRef.instance.close();
-  }
-
-  toggleDropdown(event: Event): void {
-    this.componentRef.instance.toggle();
-  }
-  onDocumentClick(event: any): void {
-    if (!this.componentRef.instance.elRef.nativeElement.contains(event.target)) {
-      this.closeDropdown();
-    }
-  }
-
-  wrapInput(): void {
-    const wrapper = document.createElement('div');
-    wrapper.setAttribute('style', 'position: relative;display: inline-block;text-align: left;')
-    wrapper.style.width = `${this.config.dropdown.width}px`;
-    this.eRef.nativeElement.parentNode.insertBefore(wrapper, this.eRef.nativeElement);
-    wrapper.appendChild(this.eRef.nativeElement);
-    wrapper.appendChild((this.componentRef as any).instance.elRef.nativeElement);
-  }
-
-  @HostListener('click', ['$event'])
-  clickEvent(event: Event): void {
-    ChoosyButtonSelectDirective.compInstances.forEach((comp: any) => {
-      comp.close(new Event('click'));
-    });
-    this.toggleDropdown(event);
+  @HostListener('click', [])
+  clickEvent(): void {
+    this.closeOthersToggleThis();
   }
   @HostListener('document:click', ['$event'])
   documentClickEvent(event: Event): void {
-    this.onDocumentClick(event);
+    this.closeOnOutsideClick(this.elRef.nativeElement, event);
   }
 }

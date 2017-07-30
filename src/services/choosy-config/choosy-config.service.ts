@@ -33,6 +33,7 @@ export class ChoosyConfigService {
       hasClearBtn: true
     },
     dropdown: {
+      size: "AUTO",
       width: 300,
       height: 200,
       animation: false

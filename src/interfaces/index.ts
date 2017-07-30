@@ -31,9 +31,10 @@ export interface ChoosyConfig {
 }
 
 export interface ChoosyDropdownConfig {
-  width: number;
-  height: number;
-  animation: boolean;
+  width?: number;
+  height?: number;
+  size?: 'FIXED' | 'AUTO' | 'WRAP' | 'PARENT';
+  animation?: boolean;
 }
 
 export interface ChoosyLablesConfig {
