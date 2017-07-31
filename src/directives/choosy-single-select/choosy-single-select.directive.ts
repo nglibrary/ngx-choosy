@@ -20,9 +20,10 @@ import {
   } from '@angular/core';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as merge from 'deepmerge';
+import { ChoosyDirective } from '../../classes';
 import { ChoosyResultsComponent } from '../../components';
 import { ChoosyRawOption, ChoosySingleSelectConfig } from '../../interfaces';
-import { ChoosyConfigService } from '../../services';
+import { ChoosyConfigService, ChoosyManagerService } from '../../services';
 
 @Directive({
   selector: 'input[choosySingleSelect]',
@@ -34,7 +35,7 @@ import { ChoosyConfigService } from '../../services';
   }]
 })
 
-export class ChoosySingleSelectDirective implements
+export class ChoosySingleSelectDirective extends ChoosyDirective implements
   ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
 
   @Input() options: Array<any> = [];
@@ -43,26 +44,17 @@ export class ChoosySingleSelectDirective implements
 
   @Output() choosy: EventEmitter<any> = new EventEmitter<any>();
 
-  private id: string;
-  private componentRef: ComponentRef<ChoosyResultsComponent>;
   private initialValue: any;
-  private compInstance: ChoosyResultsComponent;
-  private compEl: HTMLElement;
-  private static compInstances: any = [];
-
   constructor(
-    private globalConfig: ChoosyConfigService,
-    private eRef: ElementRef,
-    private renderer: Renderer,
-    private viewContainerRef: ViewContainerRef,
-    private compFacResolver: ComponentFactoryResolver
+    public globalConfig: ChoosyConfigService,
+    public elRef: ElementRef,
+    public renderer: Renderer,
+    public viewContainerRef: ViewContainerRef,
+    public compFacResolver: ComponentFactoryResolver,
+    public choosyManager: ChoosyManagerService
   ) {
-    const factory = this.compFacResolver.resolveComponentFactory(ChoosyResultsComponent);
-    this.componentRef = this.viewContainerRef.createComponent(factory, 0);
-    this.compInstance = this.componentRef.instance;
-    this.compEl = this.componentRef.instance.elRef.nativeElement;
-    this.id = Math.random().toString(36).substr(2, 5);
-    ChoosySingleSelectDirective.compInstances.push({ comp: this.compInstance, id: this.id });
+    super();
+    this.createChoosyInstance();
   }
 
   ngOnInit(): void {
@@ -70,20 +62,24 @@ export class ChoosySingleSelectDirective implements
       this.config.displayValue = Object.keys(this.options[0])[0];
     }
     this.config = this.globalConfig.getConfig(this.config) as any;
-    this.eRef.nativeElement.readOnly = true;
-    this.compInstance.config = this.config;
-    this.compInstance.options = this.options;
+    this.elRef.nativeElement.readOnly = true;
+    this.compIns.config = this.config;
+    this.compIns.options = this.options;
   }
 
   ngAfterViewInit(): void {
-    this.setSize(this.config.dropdown.size);
-    this.compInstance.template = this.template;
-    this.choosy.emit(this.prepareEvents(this.compInstance.expose()));
-    this.compInstance.selections.subscribe((r: any) => {
+    this.applyDropdownSpan(
+      this.config.dropdown.size,
+      this.elRef.nativeElement,
+      this.config.dropdown.width
+    );
+    this.compIns.template = this.template;
+    this.choosy.emit(this.prepareEvents(this.compIns.expose()));
+    this.compIns.selections.subscribe((r: any) => {
       const val = this.config.displayValue ? r[this.config.displayValue] : r;
       this.setValue(val);
       this.onChange(r);
-      this.compInstance.close();
+      this.compIns.close();
     });
     if (this.initialValue) {
       const val = this.config.displayValue
@@ -93,35 +89,39 @@ export class ChoosySingleSelectDirective implements
   }
 
   ngOnDestroy(): void {
-    this.componentRef.destroy();
+    this.destroyComp();
   }
 
   ngOnChanges(change: any): void {
     if (change.options && !change.options.firstChange) {
       this.options = change.options.currentValue;
-      this.compInstance.reloadOptions(this.options);
+      this.compIns.reloadOptions(this.options);
     }
-    if (change.config)
-      this.compInstance.config = change.config.currentValue;
+    if (change.config) {
+      this.config = this.compIns.config = this.globalConfig.getConfig(change.config.currentValue) as any;
+    }
+    // TODO merge original and dynamic config
   }
 
   @HostListener('document:click', ['$event'])
   documentClickEvent(event: Event): void {
-    this.onDocumentClick(event);
+    this.closeOnOutsideClick(this.elRef.nativeElement, event);
   }
 
   @HostListener('click', ['$event'])
   clickEvent(event: Event): void {
-    ChoosySingleSelectDirective.compInstances.forEach((ins: any) => {
-      if (ins.id != this.id) ins.comp.close();
-      else ins.comp.toggle();
-    });
+    this.closeOthersToggleThis();
   }
 
   @HostListener('window:resize', ['$event'])
   windowResize(event: Event): void {
-    if (this.config.dropdown.size == 'AUTO') {
-      this.setSize('AUTO');
+    const { size, width } = this.config.dropdown;
+    if (size == 'AUTO') {
+      this.applyDropdownSpan(
+        'AUTO',
+        this.elRef.nativeElement,
+        width
+      );
     }
   }
 
@@ -136,35 +136,6 @@ export class ChoosySingleSelectDirective implements
       ...componentEvent,
       clear: this.clear.bind(this)
     };
-  }
-
-  setSize(mode: string) {
-    const fixedWidth = this.config.dropdown.width;
-    const { offsetWidth, offsetHeight } = this.eRef.nativeElement;
-    const compEl = this.compEl;
-
-    if (mode == 'AUTO') {
-      const style = `width:${offsetWidth}px;top:${offsetHeight}px`;
-      this.renderer.setElementProperty(this.compEl, 'style', style);
-    }
-    else if (mode == 'FIXED') {
-      const style = `width:${fixedWidth}px;top:${offsetHeight}px`;
-      this.renderer.setElementProperty(this.compEl, 'style', style);
-    }
-    else if (mode == 'PARENT') {
-      this.renderer.setElementStyle(this.eRef.nativeElement.parentNode, 'position', 'relative');
-    }
-    else if (mode == 'WRAP') { }
-  }
-
-  onDocumentClick(event: any): void {
-    if (
-      event.target != this.eRef.nativeElement &&
-      event.target != this.compEl &&
-      !this.compEl.contains(event.target)
-    ) {
-      this.close();
-    }
   }
   writeValue(value: any): void {
     if (!value) return;
@@ -181,26 +152,15 @@ export class ChoosySingleSelectDirective implements
 
   registerOnTouched(fn: () => void): void { this.onTouched = fn; }
   isOpen(): boolean {
-    return this.compInstance.isOpened();
+    return this.compIns.isOpened();
   }
-  open(): void {
-    this.compInstance.open();
-  }
-  close(): void {
-    this.compInstance.close();
-  }
-
-  toggle(): void {
-    this.compInstance.toggle();
-  }
-
   private setValue(value: any): void {
-    this.renderer.setElementProperty(this.eRef.nativeElement, 'value', value);
+    this.renderer.setElementProperty(this.elRef.nativeElement, 'value', value);
   }
 
   private clear(): void {
     this.setValue(null);
     this.onChange(null);
-    this.compInstance.clearSelectedOptions();
+    this.compIns.clearSelectedOptions();
   }
 }
