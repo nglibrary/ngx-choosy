@@ -61,6 +61,7 @@ export abstract class ChoosyDirective {
     }
     else if (mode == 'PARENT') {
       this.renderer.setElementStyle(el.parentNode, 'position', 'relative');
+      this.renderer.setElementStyle(this.compEl, 'left', '0px');
     }
     else if (mode == 'WRAP') { }
   };
