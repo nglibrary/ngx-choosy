@@ -1,10 +1,13 @@
 import {
+  AfterViewInit,
   ComponentFactoryResolver,
   ComponentRef,
   Directive,
   ElementRef,
   HostListener,
   Input,
+  OnDestroy,
+  OnInit,
   Renderer,
   TemplateRef,
   ViewContainerRef
@@ -16,7 +19,8 @@ import { ChoosyResultsComponent } from './../../components';
 import { ChoosyButtonSelectConfig } from './../../interfaces';
 
 @Directive({ selector: '[choosyButtonSelect]' })
-export class ChoosyButtonSelectDirective extends ChoosyDirective {
+export class ChoosyButtonSelectDirective extends ChoosyDirective implements
+  OnInit, AfterViewInit, OnDestroy {
 
   @Input() options: Array<any> = [];
   @Input() config: ChoosyButtonSelectConfig = {} as any;
@@ -49,8 +53,8 @@ export class ChoosyButtonSelectDirective extends ChoosyDirective {
   }
 
   ngOnInit(): void {
-    this.compRef.instance.config = this.config = merge(this.localConfig, this.config);
-    this.compRef.instance.options = this.options;
+    this.compIns.config = this.config = merge(this.localConfig, this.config);
+    this.compIns.options = this.options;
   }
 
   ngAfterViewInit() {
@@ -62,16 +66,19 @@ export class ChoosyButtonSelectDirective extends ChoosyDirective {
       );
     });
 
-    this.compRef.instance.template = this.itemTemplate;
-    this.compRef.instance.selections.subscribe((r: any) => {
+    this.compIns.template = this.itemTemplate;
+    this.compIns.selections.subscribe((r: any) => {
       const view = this.viewContainerRef.createEmbeddedView(this.selectedItemTemplate, {
         $implicit: r
       }, 0);
       this.renderer.setElementProperty(this.elRef.nativeElement, 'innerHTML', '');
       this.renderer.invokeElementMethod(this.elRef.nativeElement, 'appendChild', [view.rootNodes[0].nextSibling]);
-      console.log('button', this.elRef.nativeElement.offsetWidth);
-      this.compRef.instance.close();
+      this.compIns.close();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyComp();
   }
 
   @HostListener('click', [])
