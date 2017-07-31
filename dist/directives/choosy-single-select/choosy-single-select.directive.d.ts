@@ -1,0 +1,35 @@
+import { AfterViewInit, ComponentFactoryResolver, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, Renderer, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ControlValueAccessor } from '@angular/forms';
+import { ChoosyDirective } from '../../classes';
+import { ChoosySingleSelectConfig } from '../../interfaces';
+import { ChoosyConfigService, ChoosyManagerService } from '../../services';
+export declare class ChoosySingleSelectDirective extends ChoosyDirective implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
+    globalConfig: ChoosyConfigService;
+    elRef: ElementRef;
+    renderer: Renderer;
+    viewContainerRef: ViewContainerRef;
+    compFacResolver: ComponentFactoryResolver;
+    choosyManager: ChoosyManagerService;
+    options: Array<any>;
+    config: ChoosySingleSelectConfig;
+    template: TemplateRef<any>;
+    choosy: EventEmitter<any>;
+    private initialValue;
+    constructor(globalConfig: ChoosyConfigService, elRef: ElementRef, renderer: Renderer, viewContainerRef: ViewContainerRef, compFacResolver: ComponentFactoryResolver, choosyManager: ChoosyManagerService);
+    ngOnInit(): void;
+    ngAfterViewInit(): void;
+    ngOnDestroy(): void;
+    ngOnChanges(change: any): void;
+    documentClickEvent(event: Event): void;
+    clickEvent(event: Event): void;
+    windowResize(event: Event): void;
+    onChange: (_: any) => void;
+    onTouched: (_: any) => void;
+    prepareEvents(componentEvent: any): void;
+    writeValue(value: any): void;
+    registerOnChange(fn: (_: any) => void): void;
+    registerOnTouched(fn: () => void): void;
+    isOpen(): boolean;
+    private setValue(value);
+    private clear();
+}
