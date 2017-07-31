@@ -64,6 +64,9 @@ export abstract class ChoosyDirective {
     }
     else if (mode == 'WRAP') { }
   };
+  protected destroyComp() {
+    this.compRef.destroy();
+  }
   open(): void {
     this.compIns.open();
   }
