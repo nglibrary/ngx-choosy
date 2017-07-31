@@ -1,3 +1,14 @@
+<a name="1.1.2"></a>
+## [1.1.2](https://github.com/nglibrary/ngx-choosy/compare/v1.1.1...v1.1.2) (2017-07-31)
+
+
+### Bug Fixes
+
+* **core:** Added choosy manager ([8964cb0](https://github.com/nglibrary/ngx-choosy/commit/8964cb0))
+* **directive-class:** left alignment issue ([b565f8b](https://github.com/nglibrary/ngx-choosy/commit/b565f8b))
+
+
+
 <a name="1.1.1"></a>
 ## [1.1.1](https://github.com/nglibrary/ngx-choosy/compare/v1.1.0...v1.1.1) (2017-07-28)
 
