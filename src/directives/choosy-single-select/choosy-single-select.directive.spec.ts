@@ -14,7 +14,7 @@ import {
   ChoosyResultsComponent,
   ChoosySearchComponent
   } from '../../components';
-import { ChoosyConfigService } from '../../services/choosy-config/choosy-config.service';
+import { ChoosyConfigService, ChoosyManagerService } from '../../services';
 import { ChoosySingleSelectDirective } from './choosy-single-select.directive';
 
 @Component({
@@ -55,7 +55,10 @@ class ChoosySingleSelectComponent {
     ChoosySingleSelectDirective
   ],
   entryComponents: [ChoosyResultsComponent],
-  providers: [ChoosyConfigService]
+  providers: [
+    ChoosyConfigService,
+    ChoosyManagerService
+  ]
 })
 export class ChoosySingleSelectModule { }
 

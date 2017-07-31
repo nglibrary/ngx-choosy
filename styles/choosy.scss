@@ -1,6 +1,13 @@
 @import './variables';
 @import './animations/jerk';
 @import './components/scrollbar';
+#choosy {
+    position: absolute;
+    z-index: 9;
+    width: 100%;
+    top: 100%;
+}
+
 #choosy-frame {
     border: 1px solid $choosy--col-border;
     border-radius: $choosy--border-rad;
@@ -9,11 +16,7 @@
     box-shadow: 0px 17px 10px -10px rgba(0, 0, 0, 0.1);
     padding: 10px;
     overflow: hidden;
-    position: absolute;
     width: 100%;
-    z-index: 9;
-    left: 0;
-    top: 100%;
 }
 
 #choosy-frame.jerk {
@@ -33,6 +36,7 @@
         font-family: inherit;
         font-size: inherit;
         outline: none;
+        width: 100%;
     }
 }
 
