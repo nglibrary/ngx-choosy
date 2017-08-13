@@ -1,20 +1,23 @@
 import {
   AfterViewInit,
+  ApplicationRef,
   ComponentFactoryResolver,
   ComponentRef,
   Directive,
   ElementRef,
   HostListener,
+  Injector,
   Input,
   OnDestroy,
   OnInit,
-  Renderer,
+  Renderer2,
   TemplateRef,
   ViewContainerRef
   } from '@angular/core';
 import * as merge from 'deepmerge';
 import { ChoosyDirective } from '../../classes';
-import { ChoosyManagerService } from '../../services';
+import { ChoosyDomService, ChoosyManagerService } from '../../services';
+import { ChoosyComponentBuilderService } from '../../services/choosy-component-builder/choosy-component-builder.service';
 import { ChoosyResultsComponent } from './../../components';
 import { ChoosyButtonSelectConfig } from './../../interfaces';
 
@@ -43,42 +46,49 @@ export class ChoosyButtonSelectDirective extends ChoosyDirective implements
 
   constructor(
     public elRef: ElementRef,
-    public renderer: Renderer,
-    public viewContainerRef: ViewContainerRef,
-    public compFacResolver: ComponentFactoryResolver,
-    public choosyManager: ChoosyManagerService
+    public renderer: Renderer2,
+    public choosyManager: ChoosyManagerService,
+    public vcRef: ViewContainerRef,
+    public domService: ChoosyDomService,
+    public builder: ChoosyComponentBuilderService
   ) {
     super();
-    this.createChoosyInstance();
+    builder.vcRef = this.vcRef;
+    this.builder.initiateComponent();
+    domService.renderer = this.renderer;
   }
 
   ngOnInit(): void {
-    this.compIns.config = this.config = merge(this.localConfig, this.config);
-    this.compIns.options = this.options;
+    this.config = merge(this.localConfig, this.config);
+    this.builder.setComponentInputs({ config: this.config, options: this.options });
+    this.builder.attachComponent();
+    this.compIns = this.builder.getComponentIns();
   }
 
   ngAfterViewInit() {
-    this.renderer.listen(this.elRef.nativeElement, 'focus', (e: any) => {
-      this.applyDropdownSpan(
-        this.config.dropdown.size,
+    this.renderer.listen(this.elRef.nativeElement, 'click', (e: any) => {
+      this.domService.setPosition(
         e.target,
+        this.compEl,
+        this.config.dropdown.size,
         this.config.dropdown.width
       );
     });
-
     this.compIns.template = this.itemTemplate;
     this.compIns.selections.subscribe((r: any) => {
-      const view = this.viewContainerRef.createEmbeddedView(this.selectedItemTemplate, {
+      const view = this.vcRef.createEmbeddedView(this.selectedItemTemplate, {
         $implicit: r
       }, 0);
-      this.renderer.setElementProperty(this.elRef.nativeElement, 'innerHTML', '');
-      this.renderer.invokeElementMethod(this.elRef.nativeElement, 'appendChild', [view.rootNodes[0].nextSibling]);
+      this.renderer.setProperty(this.elRef.nativeElement, 'innerHTML', '');
+      const node = view.rootNodes.length == 1 ? view.rootNodes[0] : view.rootNodes[0].nextSibling;
+      this.elRef.nativeElement.appendChild(node)
+
       this.compIns.close();
     });
   }
 
   ngOnDestroy(): void {
-    this.destroyComp();
+    this.builder.destroyComponent();
   }
 
   @HostListener('click', [])
@@ -88,5 +98,15 @@ export class ChoosyButtonSelectDirective extends ChoosyDirective implements
   @HostListener('document:click', ['$event'])
   documentClickEvent(event: Event): void {
     this.closeOnOutsideClick(this.elRef.nativeElement, event);
+  }
+  @HostListener('window:resize', ['$event'])
+  windowScroll(event: Event): void {
+    console.log('window:resize');
+    this.domService.setPosition(
+      this.elRef.nativeElement,
+      this.compEl,
+      this.config.dropdown.size,
+      this.config.dropdown.width
+    );
   }
 }

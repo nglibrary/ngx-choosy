@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ApplicationRef,
   ComponentFactory,
   ComponentFactoryResolver,
   ComponentRef,
@@ -8,12 +9,13 @@ import {
   EventEmitter,
   forwardRef,
   HostListener,
+  Injector,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  Renderer,
+  Renderer2,
   TemplateRef,
   ViewChild,
   ViewContainerRef
@@ -23,7 +25,8 @@ import * as merge from 'deepmerge';
 import { ChoosyDirective } from '../../classes';
 import { ChoosyResultsComponent } from '../../components';
 import { ChoosyRawOption, ChoosySingleSelectConfig } from '../../interfaces';
-import { ChoosyConfigService, ChoosyManagerService } from '../../services';
+import { ChoosyConfigService, ChoosyDomService, ChoosyManagerService } from '../../services';
+import { ChoosyComponentBuilderService } from '../../services/choosy-component-builder/choosy-component-builder.service';
 
 @Directive({
   selector: 'input[choosySingleSelect]',
@@ -48,13 +51,17 @@ export class ChoosySingleSelectDirective extends ChoosyDirective implements
   constructor(
     public globalConfig: ChoosyConfigService,
     public elRef: ElementRef,
-    public renderer: Renderer,
-    public viewContainerRef: ViewContainerRef,
-    public compFacResolver: ComponentFactoryResolver,
-    public choosyManager: ChoosyManagerService
+    public renderer: Renderer2,
+    public vcRef: ViewContainerRef,
+    public choosyManager: ChoosyManagerService,
+    public domService: ChoosyDomService,
+    public builder: ChoosyComponentBuilderService
   ) {
     super();
-    this.createChoosyInstance();
+    builder.vcRef = this.vcRef;
+    this.insID = this.generateInsID();
+    this.builder.initiateComponent(this.insID);
+    domService.renderer = this.renderer;
   }
 
   ngOnInit(): void {
@@ -63,16 +70,29 @@ export class ChoosySingleSelectDirective extends ChoosyDirective implements
     }
     this.config = this.globalConfig.getConfig(this.config) as any;
     this.elRef.nativeElement.readOnly = true;
-    this.compIns.config = this.config;
-    this.compIns.options = this.options;
+    // this.compIns.config = this.config;
+    // this.compIns.options = this.options;
+    this.builder.setComponentInputs({ config: this.config, options: this.options });
+    this.builder.attachComponent();
+    this.compIns = this.builder.getComponentIns();
+    this.compEl = this.builder.getComponentView();
   }
 
   ngAfterViewInit(): void {
-    this.applyDropdownSpan(
-      this.config.dropdown.size,
+    this.domService.setPosition(
       this.elRef.nativeElement,
+      this.compEl,
+      this.config.dropdown.size,
       this.config.dropdown.width
     );
+    this.renderer.listen(this.elRef.nativeElement, 'click', (e: any) => {
+      this.domService.setPosition(
+        e.target,
+        this.compEl,
+        this.config.dropdown.size,
+        this.config.dropdown.width
+      );
+    });
     this.compIns.template = this.template;
     this.choosy.emit(this.prepareEvents(this.compIns.expose()));
     this.compIns.selections.subscribe((r: any) => {
@@ -89,7 +109,7 @@ export class ChoosySingleSelectDirective extends ChoosyDirective implements
   }
 
   ngOnDestroy(): void {
-    this.destroyComp();
+    this.builder.destroyComponent();
   }
 
   ngOnChanges(change: any): void {
@@ -116,13 +136,12 @@ export class ChoosySingleSelectDirective extends ChoosyDirective implements
   @HostListener('window:resize', ['$event'])
   windowResize(event: Event): void {
     const { size, width } = this.config.dropdown;
-    if (size == 'AUTO') {
-      this.applyDropdownSpan(
-        'AUTO',
-        this.elRef.nativeElement,
-        width
-      );
-    }
+    this.domService.setPosition(
+      this.elRef.nativeElement,
+      this.compEl,
+      this.config.dropdown.size,
+      this.config.dropdown.width
+    );
   }
 
   @HostListener('input', ['$event.target.value'])
@@ -155,7 +174,7 @@ export class ChoosySingleSelectDirective extends ChoosyDirective implements
     return this.compIns.isOpened();
   }
   private setValue(value: any): void {
-    this.renderer.setElementProperty(this.elRef.nativeElement, 'value', value);
+    this.renderer.setAttribute(this.elRef.nativeElement, 'value', value);
   }
 
   private clear(): void {

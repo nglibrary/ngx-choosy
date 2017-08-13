@@ -11,8 +11,17 @@ import {
   ChoosyResultsComponent,
   ChoosySearchComponent
   } from './components';
-import { ChoosyButtonSelectDirective, ChoosySingleSelectDirective } from './directives';
-import { ChoosyConfigService, ChoosyManagerService, GlobalConfigData } from './services';
+import {
+  ChoosyComponentBuilderService,
+  ChoosyConfigService,
+  ChoosyDomService,
+  ChoosyManagerService,
+  GlobalConfigData
+  } from './services';
+import {
+  ChoosyButtonSelectDirective,
+  ChoosySingleSelectDirective,
+} from './directives';
 
 export function ChoosyConfigLoader(globalConfig: any): ChoosyConfigService {
   return new ChoosyConfigService(globalConfig);
@@ -29,7 +38,7 @@ export function ChoosyConfigLoader(globalConfig: any): ChoosyConfigService {
     ChoosyResultsComponent,
     ChoosyFooterComponent,
     ChoosySingleSelectDirective,
-    ChoosyButtonSelectDirective
+    // ChoosyButtonSelectDirective
   ],
   exports: [
     ChoosySearchComponent,
@@ -37,9 +46,14 @@ export function ChoosyConfigLoader(globalConfig: any): ChoosyConfigService {
     ChoosyResultsComponent,
     ChoosyFooterComponent,
     ChoosySingleSelectDirective,
-    ChoosyButtonSelectDirective
+    // ChoosyButtonSelectDirective
   ],
-  providers: [ChoosyConfigService, ChoosyManagerService]
+  providers: [
+    ChoosyConfigService,
+    ChoosyManagerService,
+    ChoosyDomService,
+    ChoosyComponentBuilderService
+  ]
 })
 export class NgxChoosyModule {
   static forRoot(globalConfig: any): ModuleWithProviders {
