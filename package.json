@@ -54,7 +54,7 @@
     "tslint": "tslint"
   },
   "dependencies": {
-    "deepmerge": "^1.4.4",
+    "deepmerge": "^2.0.0",
     "fuse.js": "^3.0.5",
     "global": "^4.3.2"
   },
