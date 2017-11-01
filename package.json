@@ -84,7 +84,7 @@
     "codecov": "^2.2.0",
     "codelyzer": "^3.0.1",
     "concurrently": "^3.4.0",
-    "conventional-github-releaser": "^1.1.12",
+    "conventional-github-releaser": "^2.0.0",
     "corp-semantic-release": "^6.1.0",
     "css-loader": "^0.28.1",
     "file-loader": "^0.11.2",
