@@ -8,12 +8,15 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
+    "module": "esnext",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
       "es2017",
-      "dom"
+      "dom",
+      "scripthost",
+      "es2015.promise"
     ]
   }
 }

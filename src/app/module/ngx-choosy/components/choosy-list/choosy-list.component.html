@@ -1,0 +1,8 @@
+<ng-container *ngFor="let option of options">
+  <div *ngTemplateOutlet="tpl; context: { $implicit: option.value }">
+  </div>
+</ng-container>
+
+<ng-template #defaultOptionTpl let-option>
+  == {{option.email}} ==
+</ng-template>

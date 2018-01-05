@@ -1,0 +1,12 @@
+<p>
+  x1-simple-array works!
+</p>
+
+<choosy [options]="items" [optionTpl]="itemsTpl" [config]="{foobar:'baz'}"></choosy>
+
+<ng-template let-item #itemsTpl>
+  <div>
+    <strong>{{item.email}}</strong>
+  </div>
+  <div>{{item.name.first}} - {{item.tags.join('-')}}</div>
+</ng-template>
