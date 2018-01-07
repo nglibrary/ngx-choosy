@@ -11,27 +11,20 @@
   [config]="" 
   [options]="" 
   [optionTplRef]=""
-  [width]=""
-  [height]=""
-  (optionSelected)=""
-  (filtered)=""
+  (selected)=""
   (loading)=""
   #choosyRef
 >
 </choosy>
 
 <choosy-header
-  [enable]=""
-  [hasSearch]=""
   (searching)=""
-  (searchCleared)=""
 >
 </choosy-header>
 
 <choosy-options
   [options]=""
   [optionTplRef]=""
-  (optionSelected)=""
 >
 </choosy-options>
 
@@ -41,3 +34,5 @@
 >
 </choosy-footer>
 /////////////
+
+https://joshuajohnson.co.uk/Choices/

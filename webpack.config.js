@@ -1,48 +1,48 @@
-const fs = require("fs");
-const path = require("path");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const ProgressPlugin = require("webpack/lib/ProgressPlugin");
-const CircularDependencyPlugin = require("circular-dependency-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const rxPaths = require("rxjs/_esm5/path-mapping");
-const autoprefixer = require("autoprefixer");
-const postcssUrl = require("postcss-url");
-const cssnano = require("cssnano");
-const customProperties = require("postcss-custom-properties");
+const fs = require('fs');
+const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ProgressPlugin = require('webpack/lib/ProgressPlugin');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const rxPaths = require('rxjs/_esm5/path-mapping');
+const autoprefixer = require('autoprefixer');
+const postcssUrl = require('postcss-url');
+const cssnano = require('cssnano');
+const customProperties = require('postcss-custom-properties');
 
 const {
   NoEmitOnErrorsPlugin,
   SourceMapDevToolPlugin,
   NamedModulesPlugin
-} = require("webpack");
+} = require('webpack');
 const {
   NamedLazyChunksWebpackPlugin,
   BaseHrefWebpackPlugin
-} = require("@angular/cli/plugins/webpack");
-const { CommonsChunkPlugin } = require("webpack").optimize;
-const { AngularCompilerPlugin } = require("@ngtools/webpack");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+} = require('@angular/cli/plugins/webpack');
+const { CommonsChunkPlugin } = require('webpack').optimize;
+const { AngularCompilerPlugin } = require('@ngtools/webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
-const nodeModules = path.join(process.cwd(), "node_modules");
+const nodeModules = path.join(process.cwd(), 'node_modules');
 const realNodeModules = fs.realpathSync(nodeModules);
 const genDirNodeModules = path.join(
   process.cwd(),
-  "src",
-  "$$_gendir",
-  "node_modules"
+  'src',
+  '$$_gendir',
+  'node_modules'
 );
 const entryPoints = [
-  "inline",
-  "polyfills",
-  "sw-register",
-  "styles",
-  "vendor",
-  "main"
+  'inline',
+  'polyfills',
+  'sw-register',
+  'styles',
+  'vendor',
+  'main'
 ];
 const minimizeCss = false;
-const baseHref = "";
-const deployUrl = "";
-const projectRoot = "F:\\repo\\choosy-doc-app";
+const baseHref = '';
+const deployUrl = '';
+const projectRoot = 'F:\\repo\\choosy-doc-app';
 const postcssPlugins = function() {
   // safe settings based on: https://github.com/ben-eb/cssnano/issues/358#issuecomment-283696193
   const importantCommentRe = /@preserve|@licen[cs]e|[@#]\s*source(?:Mapping)?URL|^!/i;
@@ -54,34 +54,34 @@ const postcssPlugins = function() {
   };
   return [
     postcssUrl({
-      filter: ({ url }) => url.startsWith("~"),
-      url: ({ url }) => path.join(projectRoot, "node_modules", url.substr(1))
+      filter: ({ url }) => url.startsWith('~'),
+      url: ({ url }) => path.join(projectRoot, 'node_modules', url.substr(1))
     }),
     postcssUrl([
       {
         // Only convert root relative URLs, which CSS-Loader won't process into require().
-        filter: ({ url }) => url.startsWith("/") && !url.startsWith("//"),
+        filter: ({ url }) => url.startsWith('/') && !url.startsWith('//'),
         url: ({ url }) => {
-          if (deployUrl.match(/:\/\//) || deployUrl.startsWith("/")) {
+          if (deployUrl.match(/:\/\//) || deployUrl.startsWith('/')) {
             // If deployUrl is absolute or root relative, ignore baseHref & use deployUrl as is.
-            return `${deployUrl.replace(/\/$/, "")}${url}`;
+            return `${deployUrl.replace(/\/$/, '')}${url}`;
           } else if (baseHref.match(/:\/\//)) {
             // If baseHref contains a scheme, include it as is.
             return (
-              baseHref.replace(/\/$/, "") +
-              `/${deployUrl}/${url}`.replace(/\/\/+/g, "/")
+              baseHref.replace(/\/$/, '') +
+              `/${deployUrl}/${url}`.replace(/\/\/+/g, '/')
             );
           } else {
             // Join together base-href, deploy-url and the original URL.
             // Also dedupe multiple slashes into single ones.
-            return `/${baseHref}/${deployUrl}/${url}`.replace(/\/\/+/g, "/");
+            return `/${baseHref}/${deployUrl}/${url}`.replace(/\/\/+/g, '/');
           }
         }
       },
       {
         // TODO: inline .cur if not supporting IE (use browserslist to check)
-        filter: asset => !asset.hash && !asset.absolutePath.endsWith(".cur"),
-        url: "inline",
+        filter: asset => !asset.hash && !asset.absolutePath.endsWith('.cur'),
+        url: 'inline',
         // NOTE: maxSize is in KB
         maxSize: 10
       }
@@ -93,65 +93,65 @@ const postcssPlugins = function() {
 
 module.exports = {
   resolve: {
-    extensions: [".ts", ".js"],
-    modules: ["./node_modules", "./node_modules"],
+    extensions: ['.ts', '.js'],
+    modules: ['./node_modules', './node_modules'],
     symlinks: true,
     alias: rxPaths(),
-    mainFields: ["browser", "module", "main"]
+    mainFields: ['browser', 'module', 'main']
   },
   resolveLoader: {
-    modules: ["./node_modules", "./node_modules"],
+    modules: ['./node_modules', './node_modules'],
     alias: rxPaths()
   },
   entry: {
-    main: ["./src\\main.ts"],
-    polyfills: ["./src\\polyfills.ts"],
-    styles: ["./src\\styles.css"]
+    main: ['./src\\main.ts'],
+    polyfills: ['./src\\polyfills.ts'],
+    styles: ['./src\\styles.scss']
   },
   output: {
-    path: path.join(process.cwd(), "dist"),
-    filename: "[name].bundle.js",
-    chunkFilename: "[id].chunk.js",
+    path: path.join(process.cwd(), 'dist'),
+    filename: '[name].bundle.js',
+    chunkFilename: '[id].chunk.js',
     crossOriginLoading: false
   },
   module: {
     rules: [
       {
         test: /\.html$/,
-        loader: "raw-loader"
+        loader: 'raw-loader'
       },
       {
         test: /\.(eot|svg|cur)$/,
-        loader: "file-loader",
+        loader: 'file-loader',
         options: {
-          name: "[name].[hash:20].[ext]",
+          name: '[name].[hash:20].[ext]',
           limit: 10000
         }
       },
       {
         test: /\.(jpg|png|webp|gif|otf|ttf|woff|woff2|ani)$/,
-        loader: "url-loader",
+        loader: 'url-loader',
         options: {
-          name: "[name].[hash:20].[ext]",
+          name: '[name].[hash:20].[ext]',
           limit: 10000
         }
       },
       {
-        exclude: [path.join(process.cwd(), "src\\styles.css")],
+        exclude: [path.join(process.cwd(), 'src\\styles.scss')],
         test: /\.css$/,
         use: [
-          "exports-loader?module.exports.toString()",
+          'exports-loader?module.exports.toString()',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               sourceMap: false,
               importLoaders: 1
             }
           },
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
-              ident: "postcss",
+              ident: 'postcss',
               plugins: postcssPlugins,
               sourceMap: false
             }
@@ -159,27 +159,27 @@ module.exports = {
         ]
       },
       {
-        exclude: [path.join(process.cwd(), "src\\styles.css")],
+        exclude: [path.join(process.cwd(), 'src\\styles.scss')],
         test: /\.scss$|\.sass$/,
         use: [
-          "exports-loader?module.exports.toString()",
+          'exports-loader?module.exports.toString()',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               sourceMap: false,
               importLoaders: 1
             }
           },
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
-              ident: "postcss",
+              ident: 'postcss',
               plugins: postcssPlugins,
               sourceMap: false
             }
           },
           {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
               sourceMap: false,
               precision: 8,
@@ -189,27 +189,27 @@ module.exports = {
         ]
       },
       {
-        exclude: [path.join(process.cwd(), "src\\styles.css")],
+        exclude: [path.join(process.cwd(), 'src\\styles.scss')],
         test: /\.less$/,
         use: [
-          "exports-loader?module.exports.toString()",
+          'exports-loader?module.exports.toString()',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               sourceMap: false,
               importLoaders: 1
             }
           },
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
-              ident: "postcss",
+              ident: 'postcss',
               plugins: postcssPlugins,
               sourceMap: false
             }
           },
           {
-            loader: "less-loader",
+            loader: 'less-loader',
             options: {
               sourceMap: false
             }
@@ -217,27 +217,27 @@ module.exports = {
         ]
       },
       {
-        exclude: [path.join(process.cwd(), "src\\styles.css")],
+        exclude: [path.join(process.cwd(), 'src\\styles.scss')],
         test: /\.styl$/,
         use: [
-          "exports-loader?module.exports.toString()",
+          'exports-loader?module.exports.toString()',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               sourceMap: false,
               importLoaders: 1
             }
           },
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
-              ident: "postcss",
+              ident: 'postcss',
               plugins: postcssPlugins,
               sourceMap: false
             }
           },
           {
-            loader: "stylus-loader",
+            loader: 'stylus-loader',
             options: {
               sourceMap: false,
               paths: []
@@ -246,21 +246,21 @@ module.exports = {
         ]
       },
       {
-        include: [path.join(process.cwd(), "src\\styles.css")],
+        include: [path.join(process.cwd(), 'src\\styles.scss')],
         test: /\.css$/,
         use: [
-          "style-loader",
+          'style-loader',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               sourceMap: false,
               importLoaders: 1
             }
           },
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
-              ident: "postcss",
+              ident: 'postcss',
               plugins: postcssPlugins,
               sourceMap: false
             }
@@ -268,27 +268,27 @@ module.exports = {
         ]
       },
       {
-        include: [path.join(process.cwd(), "src\\styles.css")],
+        include: [path.join(process.cwd(), 'src\\styles.scss')],
         test: /\.scss$|\.sass$/,
         use: [
-          "style-loader",
+          'style-loader',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               sourceMap: false,
               importLoaders: 1
             }
           },
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
-              ident: "postcss",
+              ident: 'postcss',
               plugins: postcssPlugins,
               sourceMap: false
             }
           },
           {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
               sourceMap: false,
               precision: 8,
@@ -298,27 +298,27 @@ module.exports = {
         ]
       },
       {
-        include: [path.join(process.cwd(), "src\\styles.css")],
+        include: [path.join(process.cwd(), 'src\\styles.scss')],
         test: /\.less$/,
         use: [
-          "style-loader",
+          'style-loader',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               sourceMap: false,
               importLoaders: 1
             }
           },
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
-              ident: "postcss",
+              ident: 'postcss',
               plugins: postcssPlugins,
               sourceMap: false
             }
           },
           {
-            loader: "less-loader",
+            loader: 'less-loader',
             options: {
               sourceMap: false
             }
@@ -326,27 +326,27 @@ module.exports = {
         ]
       },
       {
-        include: [path.join(process.cwd(), "src\\styles.css")],
+        include: [path.join(process.cwd(), 'src\\styles.scss')],
         test: /\.styl$/,
         use: [
-          "style-loader",
+          'style-loader',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               sourceMap: false,
               importLoaders: 1
             }
           },
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
-              ident: "postcss",
+              ident: 'postcss',
               plugins: postcssPlugins,
               sourceMap: false
             }
           },
           {
-            loader: "stylus-loader",
+            loader: 'stylus-loader',
             options: {
               sourceMap: false,
               paths: []
@@ -356,7 +356,7 @@ module.exports = {
       },
       {
         test: /\.ts$/,
-        loader: "@ngtools/webpack"
+        loader: '@ngtools/webpack'
       }
     ]
   },
@@ -365,25 +365,25 @@ module.exports = {
     new CopyWebpackPlugin(
       [
         {
-          context: "src",
-          to: "",
+          context: 'src',
+          to: '',
           from: {
-            glob: "assets/**/*",
+            glob: 'assets/**/*',
             dot: true
           }
         },
         {
-          context: "src",
-          to: "",
+          context: 'src',
+          to: '',
           from: {
-            glob: "favicon.ico",
+            glob: 'favicon.ico',
             dot: true
           }
         }
       ],
       {
-        ignore: [".gitkeep", "**/.DS_Store", "**/Thumbs.db"],
-        debug: "warning"
+        ignore: ['.gitkeep', '**/.DS_Store', '**/Thumbs.db'],
+        debug: 'warning'
       }
     ),
     new ProgressPlugin(),
@@ -391,12 +391,12 @@ module.exports = {
       exclude: /(\\|\/)node_modules(\\|\/)/,
       failOnError: false,
       onDetected: false,
-      cwd: "F:\\repo\\choosy-doc-app"
+      cwd: 'F:\\repo\\choosy-doc-app'
     }),
     new NamedLazyChunksWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: "./src\\index.html",
-      filename: "./index.html",
+      template: './src\\index.html',
+      filename: './index.html',
       hash: false,
       inject: true,
       compile: true,
@@ -404,9 +404,9 @@ module.exports = {
       minify: false,
       cache: true,
       showErrors: true,
-      chunks: "all",
+      chunks: 'all',
       excludeChunks: [],
-      title: "Webpack App",
+      title: 'Webpack App',
       xhtml: true,
       chunksSortMode: function sort(left, right) {
         let leftIndex = entryPoints.indexOf(left.names[0]);
@@ -422,11 +422,11 @@ module.exports = {
     }),
     new BaseHrefWebpackPlugin({}),
     new CommonsChunkPlugin({
-      name: ["inline"],
+      name: ['inline'],
       minChunks: null
     }),
     new CommonsChunkPlugin({
-      name: ["vendor"],
+      name: ['vendor'],
       minChunks: module => {
         return (
           module.resource &&
@@ -435,39 +435,39 @@ module.exports = {
             module.resource.startsWith(realNodeModules))
         );
       },
-      chunks: ["main"]
+      chunks: ['main']
     }),
     new SourceMapDevToolPlugin({
-      filename: "[file].map[query]",
-      moduleFilenameTemplate: "[resource-path]",
-      fallbackModuleFilenameTemplate: "[resource-path]?[hash]",
-      sourceRoot: "webpack:///"
+      filename: '[file].map[query]',
+      moduleFilenameTemplate: '[resource-path]',
+      fallbackModuleFilenameTemplate: '[resource-path]?[hash]',
+      sourceRoot: 'webpack:///'
     }),
     new CommonsChunkPlugin({
-      name: ["main"],
+      name: ['main'],
       minChunks: 2,
-      async: "common"
+      async: 'common'
     }),
     new NamedModulesPlugin({}),
     new AngularCompilerPlugin({
-      mainPath: "main.ts",
+      mainPath: 'main.ts',
       platform: 0,
       hostReplacementPaths: {
-        "environments\\environment.ts": "environments\\environment.ts"
+        'environments\\environment.ts': 'environments\\environment.ts'
       },
       sourceMap: true,
-      tsConfigPath: "src\\tsconfig.app.json",
+      tsConfigPath: 'src\\tsconfig.app.json',
       skipCodeGeneration: true,
       compilerOptions: {}
     })
     // new BundleAnalyzerPlugin()
   ],
   node: {
-    fs: "empty",
+    fs: 'empty',
     global: true,
-    crypto: "empty",
-    tls: "empty",
-    net: "empty",
+    crypto: 'empty',
+    tls: 'empty',
+    net: 'empty',
     process: true,
     module: false,
     clearImmediate: false,

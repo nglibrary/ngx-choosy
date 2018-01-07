@@ -11,26 +11,20 @@ import { ChoosyListService } from '../../services/choosy-list.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'choosy-list',
-  templateUrl: './choosy-list.component.html',
+  selector: 'choosy-items',
+  templateUrl: './choosy-items.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChoosyListComponent implements OnInit {
-  @Input() options: any;
-  @Input() optionTpl: TemplateRef<any>;
-  @ViewChild('defaultOptionTpl', { read: TemplateRef })
-  defaultOptionTpl;
-
+export class ChoosyItemsComponent implements OnInit {
+  @Input('ref') ref: any;
   private tpl: TemplateRef<any>;
   constructor(private listService: ChoosyListService) {}
 
   ngOnInit() {
-    this.tpl = this.optionTpl || this.defaultOptionTpl;
+    console.log('ref', this.ref.choosyCompIns);
+    console.log(this.listService.getAllSelectedOptions());
   }
   trackByFn(index, item) {
     return item.uid;
-  }
-  select(e) {
-    this.listService.selectOption(e);
   }
 }

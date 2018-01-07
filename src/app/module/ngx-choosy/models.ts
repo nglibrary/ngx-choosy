@@ -12,3 +12,8 @@ export interface ChoosyOption {
   };
   value: string | object;
 }
+
+export type ChoosyOptions = ChoosyOption[];
+
+// TODO: add all
+export type ChoosyEvent = 'optionSelected' | 'optionsAdded';

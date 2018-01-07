@@ -1,8 +1,9 @@
-<ng-container *ngFor="let option of options">
-  <div *ngTemplateOutlet="tpl; context: { $implicit: option.value }">
+<ng-container *ngFor="let option of options;trackBy:trackByFn">
+  <div [class.selected]="option.state.selected" (click)="select(option)">
+    <ng-template *ngTemplateOutlet="tpl; context: { $implicit: option.value }">
+    </ng-template>
   </div>
 </ng-container>
-
 <ng-template #defaultOptionTpl let-option>
-  == {{option.email}} ==
+  == {{option}} ==
 </ng-template>

@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgxChoosyModule } from './module/ngx-choosy/ngx-choosy.module';
@@ -12,6 +13,7 @@ import { X1SimpleArrayComponent } from './x1-simple-array/x1-simple-array.compon
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     NgxChoosyModule.forRoot()
   ],

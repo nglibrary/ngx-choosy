@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'choosy-footer',
   templateUrl: './choosy-footer.component.html',
-  styleUrls: ['./choosy-footer.component.css']
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChoosyFooterComponent implements OnInit {
+  @Input() optionsCount = 0;
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

@@ -2,11 +2,46 @@
   x1-simple-array works!
 </p>
 
-<choosy [options]="items" [optionTpl]="itemsTpl" [config]="{foobar:'baz'}"></choosy>
+<hr>
+<h3>Multiselect</h3>
+
+<input type="text" placeholder="name" choosy-multi-select [options]="(items|async)" [config]="{foobar:'baz'}" [optionTpl]="itemsTpl"
+  #cmref="choosyMultiSelectRef">
+
+<choosy-items [ref]="cmref"></choosy-items>
+
+<hr>
+<h3>Menu</h3>
+<button class="choosy-menu" [optionTpl]="menuTpl">menu</button>
+
+<hr>
+
+
+<input type="text" placeholder="name" choosy-select [options]="(items|async)" [config]="{foobar:'baz'}" [optionTpl]="itemsTpl"
+  #cRef="choosySelectRef">
+
+<hr>
+
+<button (click)="add(cRef)">Add</button>
+<button (click)="remove(cRef)">Remove</button>
+
+<!-- 
+<choosy [options]="(items|async)" [config]="{foobar:'baz'}" #cRef="choosyRef"></choosy>
+ -->
+
+<!-- <pre>{{cRef.initialOptions|json}}</pre> -->
 
 <ng-template let-item #itemsTpl>
   <div>
     <strong>{{item.email}}</strong>
   </div>
   <div>{{item.name.first}} - {{item.tags.join('-')}}</div>
+</ng-template>
+
+<ng-template #menuTpl>
+  <ul>
+    <li>one</li>
+    <li>two</li>
+    <li>three</li>
+  </ul>
 </ng-template>

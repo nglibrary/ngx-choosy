@@ -1,3 +1,12 @@
-<choosy-header (search)="onSearch($event)"></choosy-header>
-<choosy-list [options]="options" [optionTpl]="optionTpl"></choosy-list>
-<choosy-footer></choosy-footer>
+<ng-container *ngIf="config.type=='select'">
+  <ng-container *ngIf="optionsSub|async as opt">
+    <choosy-header *ngIf="opt.length>0" (search)="onSearch($event)"></choosy-header>
+    <choosy-list [options]="opt" [optionTpl]="optionTpl"></choosy-list>
+    <choosy-footer [optionsCount]="opt.length"></choosy-footer>
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="config.type=='menu'">
+  <ng-template *ngTemplateOutlet="optionTpl">
+  </ng-template>
+</ng-container>
