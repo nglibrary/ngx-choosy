@@ -1,6 +1,8 @@
 export interface ChoosyConfig {
   search: any;
   footer: any;
+  dropdown: any;
+  displayValue: any;
 }
 
 export interface ChoosyOption {

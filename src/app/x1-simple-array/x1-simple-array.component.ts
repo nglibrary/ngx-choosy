@@ -6,6 +6,8 @@ import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/delay';
 import { Observable } from 'rxjs/Observable';
 
+import { names } from './data';
+
 @Component({
   selector: 'app-x1-simple-array',
   templateUrl: './x1-simple-array.component.html',
@@ -15,8 +17,9 @@ export class X1SimpleArrayComponent implements OnInit {
   choosy: any;
   choosy2: any;
   items: Observable<any[]>;
-  name = 'lokesh';
-  constructor(private http: HttpClient) {}
+  email = 'Melicent Dunkerly';
+  users = names;
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     // this.items = data;
@@ -67,5 +70,26 @@ export class X1SimpleArrayComponent implements OnInit {
       ]
     };
     cRef.listService.addOptions(d);
+  }
+
+  setV() {
+    this.email = {
+      _id: '5a4a3b882b469cc315752cf9',
+      guid: 'e6ebde7f-a9f3-4cec-8eff-86c236d0df08',
+      isActive: true,
+      balance: '$1,859.80',
+      name: { first: 'Roseann', last: 'Wolfe' },
+      company: 'ENJOLA',
+      email: 'roseann.wolfe@enjola.name',
+      tags: ['ipsum', 'ea', 'incididunt', 'elit', 'mollit'],
+      friends: [
+        { id: 0, name: 'Payne Jordan' },
+        { id: 1, name: 'Jaime Cohen' },
+        { id: 2, name: 'Carroll Perez' }
+      ]
+    };
+  }
+  dv(value) {
+    return value.split(' ').join(' and ');
   }
 }

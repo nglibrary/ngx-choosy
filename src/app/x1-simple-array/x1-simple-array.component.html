@@ -1,8 +1,53 @@
-<p>
-  x1-simple-array works!
-</p>
+<time>today</time>
 
-<hr>
+<div class="container">
+  <div class="row">
+    <div class="col-md-5 mx-auto text-center">
+      <div class="form-group">
+        <input type="text" placeholder="name" choosy-select [options]="users" [config]="{displayValue:dv}" class="form-control" #cRef="choosySelectRef"
+          [(ngModel)]="email">
+      </div>
+
+      <div class="card" *ngIf="email">
+        {{email}}
+      </div>
+      <div>
+        <button class="btn btn-warning" (click)="setV()">set</button>
+        <button class="btn btn-outline-success" (click)="add(cRef)">Add</button>
+        <button class="btn btn-outline-danger" (click)="remove(cRef)">Remove</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-5 mx-auto text-center">
+      <div class="form-group">
+        <input type="text" placeholder="name" choosy-select [options]="(items|async)" [config]="{displayValue:'name.first'}" [optionTpl]="itemsTpl"
+          class="form-control" #cRefs="choosySelectRef" [(ngModel)]="emails">
+      </div>
+      <ng-template let-item #itemsTpl>
+        <div>
+          <strong>{{item.email}}</strong>
+        </div>
+        <div>{{item.name.first}} - {{item.tags.join('-')}}</div>
+      </ng-template>
+      <div class="card" *ngIf="emails">
+        {{emails.email}}
+      </div>
+      <div>
+        <button class="btn btn-warning" (click)="setV()">set</button>
+        <button class="btn btn-outline-success" (click)="add(cRef)">Add</button>
+        <button class="btn btn-outline-danger" (click)="remove(cRef)">Remove</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- <hr>
 <h3>Multiselect</h3>
 
 <input type="text" placeholder="name" choosy-multi-select [options]="(items|async)" [config]="{foobar:'baz'}" [optionTpl]="itemsTpl"
@@ -15,15 +60,13 @@
 <button class="choosy-menu" [optionTpl]="menuTpl">menu</button>
 
 <hr>
+ -->
 
 
-<input type="text" placeholder="name" choosy-select [options]="(items|async)" [config]="{foobar:'baz'}" [optionTpl]="itemsTpl"
-  #cRef="choosySelectRef">
 
-<hr>
+<!-- <hr> -->
 
-<button (click)="add(cRef)">Add</button>
-<button (click)="remove(cRef)">Remove</button>
+
 
 <!-- 
 <choosy [options]="(items|async)" [config]="{foobar:'baz'}" #cRef="choosyRef"></choosy>
@@ -31,12 +74,7 @@
 
 <!-- <pre>{{cRef.initialOptions|json}}</pre> -->
 
-<ng-template let-item #itemsTpl>
-  <div>
-    <strong>{{item.email}}</strong>
-  </div>
-  <div>{{item.name.first}} - {{item.tags.join('-')}}</div>
-</ng-template>
+
 
 <ng-template #menuTpl>
   <ul>

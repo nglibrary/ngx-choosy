@@ -1,0 +1,5 @@
+{
+  "$schema": "../app-config-schema.json",
+  "name": "fooby",
+  "age": 32
+}

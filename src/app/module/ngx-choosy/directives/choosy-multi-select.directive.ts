@@ -31,23 +31,19 @@ export class ChoosyMultiSelectDirective {
 
   @HostListener('focus')
   onFocus($event) {
-    console.log('injected');
     const b = {
       options: this.options,
       config: { ...this.config, type: 'select' },
       optionTpl: this.optionTpl
     };
-    this.choosyCompIns = this.hostService.init(ChoosyComponent as any, b);
+    this.choosyCompIns = this.hostService.init(ChoosyComponent as any, b, '');
     this.setPosition();
-    console.log('this.choosy multi CompIns ', this.choosyCompIns);
   }
   @HostListener('blur')
   onBlur($event) {
-    console.log('ejected');
     // this.hostService.destroy();
   }
   private setPosition() {
-    console.log('renderer', this.ElRef.nativeElement);
     this.hostService.renderer = this.renderer;
     this.hostService.setPosition(this.ElRef.nativeElement, 'FIXED', 300);
   }

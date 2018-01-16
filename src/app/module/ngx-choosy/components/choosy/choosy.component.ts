@@ -3,7 +3,11 @@ import {
   OnInit,
   Input,
   TemplateRef,
-  ChangeDetectionStrategy
+  ElementRef,
+  HostBinding,
+  ChangeDetectionStrategy,
+  InjectionToken,
+  Inject
 } from '@angular/core';
 
 import { ChoosyConfig, ChoosyOption } from '../../models';
@@ -17,6 +21,7 @@ import 'rxjs/add/operator/filter';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -25,18 +30,13 @@ import { Observable } from 'rxjs/Observable';
   preserveWhitespaces: false,
   exportAs: 'choosyRef',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      :host(){
-        display:block;
-        position: absolute;
-        background: red;
-      }
-    `
-  ]
+  styleUrls: ['./choosy.style.scss'],
+  providers: [ChoosyListService]
 })
 export class ChoosyComponent implements OnInit {
   optionsSub = new BehaviorSubject([]);
+  instanceID = null;
+  initialized = new Subject<any>();
   private initialOptions = [];
   @Input() config: Partial<ChoosyConfig> = {};
   @Input()
@@ -48,19 +48,24 @@ export class ChoosyComponent implements OnInit {
   }
   @Input() optionTpl: TemplateRef<any>;
 
+  @HostBinding('attr.data-instance-id') instanceIDAttr: string;
+  @HostBinding('style.height') height: string;
+
   constructor(
+    public listService: ChoosyListService,
     private configService: ChoosyConfigService,
-    private listService: ChoosyListService
-  ) {}
+    public elRef: ElementRef
+  ) { }
   ngOnInit() {
+    this.instanceIDAttr = this.instanceID;
     this.config = this.configService.mergeWithDefault(this.config);
+    this.height = this.config.dropdown.height + 'px';
     this.listService.setOptionsSub(this.optionsSub);
-    this.optionsSub.subscribe(temp => {
-      console.log('emitetd', temp);
-    });
-    this.listService.events.subscribe(e => {
-      console.log('event', e.name, e.value);
-    });
+    this.optionsSub.subscribe(temp => { });
+    this.listService.events.subscribe(e => { });
+    this.listService.setName(this.instanceID);
+    this.initialized.next(true);
+    console.log('token ==>', this.instanceID, this.listService.getName());
   }
 
   onSearch(keyword) {

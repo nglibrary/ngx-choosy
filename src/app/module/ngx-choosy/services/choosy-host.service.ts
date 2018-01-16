@@ -19,13 +19,18 @@ export class ChoosyHostService {
   compFac: ComponentFactory<ChoosyComponent>;
   compView: HTMLElement;
   renderer: Renderer2;
+  instanceID = null;
+  static instances = {};
   constructor(
     private appRef: ApplicationRef,
     private compFacResolver: ComponentFactoryResolver,
     private injector: Injector
   ) {}
 
-  init(component: ChoosyComponent, bindings: object = {}) {
+  init(component: ChoosyComponent, bindings: object = {}, instanceID: string) {
+    if (ChoosyHostService.instances[instanceID]) {
+      return ChoosyHostService.instances[instanceID];
+    }
     this.compFac = this.compFacResolver.resolveComponentFactory(
       component as any
     );
@@ -33,6 +38,7 @@ export class ChoosyHostService {
     this.compIns = this.bindInputs(this.compRef.instance, bindings);
     this.appRef.attachView(this.compRef.hostView);
     this.compView = this.getComponentView();
+    this.addInstance(instanceID);
     document.body.appendChild(this.compView);
     return this.compIns;
   }
@@ -44,9 +50,21 @@ export class ChoosyHostService {
 
   destroy(): void {
     this.appRef.detachView(this.compRef.hostView);
+    delete ChoosyHostService.instances[this.instanceID];
     this.compRef.destroy();
   }
-  setPosition(srcEl, mode = 'auto', fixedWidth = 120) {
+
+  addInstance(instanceID: string) {
+    this.compIns.instanceID = this.instanceID = instanceID;
+    ChoosyHostService.instances[this.instanceID] = this.compIns;
+  }
+  getInstanceID() {
+    return this.compIns.instanceID;
+  }
+  getInstances() {
+    return ChoosyHostService.instances;
+  }
+  setPosition(srcEl, mode = 'AUTO', fixedWidth = 120) {
     let top, width, left;
     const elCoOrds = this.getElementOffset(srcEl);
     if (mode === 'AUTO') {
@@ -86,5 +104,20 @@ export class ChoosyHostService {
   private getComponentView(): HTMLElement {
     return (this.compRef.hostView as EmbeddedViewRef<any>)
       .rootNodes[0] as HTMLElement;
+  }
+
+  closeOnOutsideClick(el: HTMLElement, event: any) {
+    if (!this.compIns) return;
+    const compEl = this.compIns.elRef.nativeElement;
+    if (
+      event.target !== el &&
+      event.target !== compEl &&
+      !compEl.contains(event.target)
+    ) {
+      this.destroy();
+    }
+    // event.preventDefault();
+    // event.stopImmediatePropagation();
+    // TODO: refactor
   }
 }

@@ -1,0 +1,11 @@
+.header {
+  background-color: #f00;
+  display: block;
+  height: 10px;
+  width: 200px; }
+  .header.green {
+    background-color: #0f0; }
+  .header.blue {
+    background-color: #00f; }
+  .header:hover {
+    background-color: #000; }

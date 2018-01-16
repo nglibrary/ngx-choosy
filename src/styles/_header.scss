@@ -1,0 +1,34 @@
+$red:#f00;
+$green:#0f0;
+$blue:#00f; 
+
+// Header box 
+//
+// Testing the box
+//
+// default - Default block
+// .blue - Blue block
+// .green - Green block
+// :disabled - Disabled block
+// :hover - hover block 
+//
+// markup:
+// <header class="{$modifiers}">header text</header>
+//
+// Styleguide 1.1
+
+.header{
+  background-color: $red;
+  display:block;
+  height:10px;
+  width:200px;
+  &.green{
+    background-color: $green;
+  }
+  &.blue{
+    background-color: $blue;
+  }
+  &:hover{
+    background-color: #000;
+  }
+}

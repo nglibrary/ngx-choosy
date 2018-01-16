@@ -7,7 +7,9 @@ import { ChoosySearchService } from './choosy-search.service';
 @Injectable()
 export class ChoosyListService {
   optionsSub: BehaviorSubject<ChoosyOptions>;
-  events: Subject<{ name: ChoosyEvent; value: any }> = new Subject();
+  // TODO:change name typeto ChoosyEvent
+  events: Subject<{ name: any; value: any }> = new Subject();
+  c = '';
   private latestFilteredOptions: ChoosyOptions = [];
   constructor(private searchService: ChoosySearchService) {}
 
@@ -22,6 +24,7 @@ export class ChoosyListService {
     this.optionsSub.next(opts);
     this.events.next({ name: 'optionSelected', value: option.value });
   }
+
   addOptions(options: any | any[]): void {
     if (!Array.isArray(options)) {
       options = [options];
@@ -52,6 +55,19 @@ export class ChoosyListService {
     });
     this.optionsSub.next(opts);
     this.events.next({ name: 'optionDisabled', value: disabledOpt });
+  }
+  setOptionAsSelected(fn: (option: any) => boolean): void {
+    let setOpt = null;
+    const opts = this.optionsSub.getValue().map((o: ChoosyOption) => {
+      o.state.selected = false;
+      if (fn(o.value)) {
+        o.state.selected = true;
+        setOpt = o;
+      }
+      return o;
+    });
+    this.optionsSub.next(opts);
+    this.events.next({ name: 'optionSet', value: setOpt });
   }
   clearDisabledOption(option: any): void {
     const opts = this.optionsSub.getValue().map((o: ChoosyOption) => {
@@ -132,6 +148,14 @@ export class ChoosyListService {
           ? '-'
           : option
     };
+  }
+
+  setName(name) {
+    if (!this.c) this.c = name;
+  }
+
+  getName() {
+    return this.c;
   }
 
   private generateUID(length = 36): string {

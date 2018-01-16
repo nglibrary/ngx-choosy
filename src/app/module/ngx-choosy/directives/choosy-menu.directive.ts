@@ -28,19 +28,16 @@ export class ChoosyMenuDirective {
 
   @HostListener('click')
   onFocus($event) {
-    console.log('injected');
     const b = {
       options: this.options,
       config: { ...this.config, type: 'menu' },
       optionTpl: this.optionTpl
     };
-    this.choosyCompIns = this.hostService.init(ChoosyComponent as any, b);
+    this.choosyCompIns = this.hostService.init(ChoosyComponent as any, b, '');
     this.setPosition();
-    console.log('choosy menu ', this.choosyCompIns);
   }
 
   private setPosition() {
-    console.log('renderer', this.ElRef.nativeElement);
     this.hostService.renderer = this.renderer;
     this.hostService.setPosition(this.ElRef.nativeElement, 'FIXED', 300);
   }

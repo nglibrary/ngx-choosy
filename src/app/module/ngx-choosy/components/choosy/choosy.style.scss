@@ -1,0 +1,14 @@
+:host(){
+  display:block;
+  position: absolute;
+  border:1px solid #ced4da;
+  background: #fff;
+  border-radius: 3px;
+  margin-top: 5px;
+  overflow:auto;
+}
+
+::ng-deep choosy-list .selected{
+  background-color: #3F51B5;
+  color: #fff;
+}

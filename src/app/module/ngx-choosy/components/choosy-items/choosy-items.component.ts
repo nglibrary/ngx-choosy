@@ -20,10 +20,7 @@ export class ChoosyItemsComponent implements OnInit {
   private tpl: TemplateRef<any>;
   constructor(private listService: ChoosyListService) {}
 
-  ngOnInit() {
-    console.log('ref', this.ref.choosyCompIns);
-    console.log(this.listService.getAllSelectedOptions());
-  }
+  ngOnInit() {}
   trackByFn(index, item) {
     return item.uid;
   }
