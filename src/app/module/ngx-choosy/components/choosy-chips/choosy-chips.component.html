@@ -1,0 +1,8 @@
+<ul>
+  <li class="badge badge-secondary" *ngFor="let option of options">
+    {{option.value}}
+    <button type="button" class="close" aria-label="Close" (click)="unselect(option)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </li>
+</ul>

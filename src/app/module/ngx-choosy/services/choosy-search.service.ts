@@ -4,11 +4,9 @@ import { Injectable } from '@angular/core';
 export class ChoosySearchService {
   constructor() {}
 
-  search(list, keyword) {
+  search(list, keyword, config) {
     return this.initializeSearch().then((fuse: any) => {
-      const f = new fuse(list, {
-        keys: ['value.email']
-      });
+      const f = new fuse(list, config);
       return f.search(keyword);
     });
   }

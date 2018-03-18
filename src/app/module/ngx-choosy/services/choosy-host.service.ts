@@ -10,9 +10,11 @@ import {
   Renderer2
 } from '@angular/core';
 import { ChoosyComponent } from '../components/choosy/choosy.component';
+import { ChoosyPosition } from '../models';
 
 @Injectable()
 export class ChoosyHostService {
+  static instances = {};
   compIns: ChoosyComponent;
   vcRef: ViewContainerRef;
   compRef: ComponentRef<ChoosyComponent>;
@@ -20,7 +22,6 @@ export class ChoosyHostService {
   compView: HTMLElement;
   renderer: Renderer2;
   instanceID = null;
-  static instances = {};
   constructor(
     private appRef: ApplicationRef,
     private compFacResolver: ComponentFactoryResolver,
@@ -31,9 +32,7 @@ export class ChoosyHostService {
     if (ChoosyHostService.instances[instanceID]) {
       return ChoosyHostService.instances[instanceID];
     }
-    this.compFac = this.compFacResolver.resolveComponentFactory(
-      component as any
-    );
+    this.compFac = this.compFacResolver.resolveComponentFactory(component as any);
     this.compRef = this.compFac.create(this.injector);
     this.compIns = this.bindInputs(this.compRef.instance, bindings);
     this.appRef.attachView(this.compRef.hostView);
@@ -61,15 +60,18 @@ export class ChoosyHostService {
   getInstanceID() {
     return this.compIns.instanceID;
   }
+  getInstance(instanceID) {
+    return ChoosyHostService.instances[instanceID];
+  }
   getInstances() {
     return ChoosyHostService.instances;
   }
-  setPosition(srcEl, mode = 'AUTO', fixedWidth = 120) {
+  setPosition(srcEl: HTMLElement, position: ChoosyPosition = 'AUTO', fixedWidth = 120) {
     let top, width, left;
     const elCoOrds = this.getElementOffset(srcEl);
-    if (mode === 'AUTO') {
+    if (position === 'AUTO') {
       ({ top, left, width } = elCoOrds);
-    } else if (mode === 'FIXED') {
+    } else if (position === 'FIXED') {
       ({ top, left } = elCoOrds);
       width = fixedWidth;
     }
@@ -91,10 +93,7 @@ export class ChoosyHostService {
       left: Math.ceil(left)
     };
   }
-  private applyStyle(
-    element: HTMLElement,
-    styleObj: { [x: string]: any } = {}
-  ): void {
+  private applyStyle(element: HTMLElement, styleObj: { [x: string]: any } = {}): void {
     // tslint:disable-next-line:forin
     for (const style in styleObj) {
       this.renderer.setStyle(element, style, styleObj[style] + 'px');
@@ -102,18 +101,13 @@ export class ChoosyHostService {
   }
 
   private getComponentView(): HTMLElement {
-    return (this.compRef.hostView as EmbeddedViewRef<any>)
-      .rootNodes[0] as HTMLElement;
+    return (this.compRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
   }
 
   closeOnOutsideClick(el: HTMLElement, event: any) {
     if (!this.compIns) return;
     const compEl = this.compIns.elRef.nativeElement;
-    if (
-      event.target !== el &&
-      event.target !== compEl &&
-      !compEl.contains(event.target)
-    ) {
+    if (event.target !== el && event.target !== compEl && !compEl.contains(event.target)) {
       this.destroy();
     }
     // event.preventDefault();

@@ -4,10 +4,13 @@ import {
   Input,
   ViewChild,
   TemplateRef,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  HostBinding,
+  ElementRef
 } from '@angular/core';
-import { ChoosyOption } from '../../models';
+import { ChoosyOption, ChoosyConfig } from '../../models';
 import { ChoosyListService } from '../../services/choosy-list.service';
+import { ChoosyConfigService } from '../../services/choosy-config.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -17,20 +20,36 @@ import { ChoosyListService } from '../../services/choosy-list.service';
 })
 export class ChoosyListComponent implements OnInit {
   @Input() options: any;
+  @Input() config: ChoosyConfig;
   @Input() optionTpl: TemplateRef<any>;
   @ViewChild('defaultOptionTpl', { read: TemplateRef })
   defaultOptionTpl;
+  @HostBinding('style.maxHeight') height: string;
 
   private tpl: TemplateRef<any>;
-  constructor(private listService: ChoosyListService) {}
+  constructor(
+    private listService: ChoosyListService,
+    private configService: ChoosyConfigService,
+    private elRef: ElementRef
+  ) {}
 
   ngOnInit() {
     this.tpl = this.optionTpl || this.defaultOptionTpl;
+    this.height = this.config.dropdown.height + 'px';
+  }
+  ngAfterViewInit() {
+    const scollEl = this.elRef.nativeElement;
+    const targetEl = this.elRef.nativeElement.querySelector('.selected');
+    if (!targetEl) {
+      return;
+    }
+    scollEl.scrollTop = targetEl.offsetTop;
   }
   trackByFn(index, item) {
     return item.uid;
   }
-  select(e) {
-    this.listService.selectOption(e);
+  selection(option, isSelected) {
+    const method = isSelected ? 'clearSelectedOption' : 'selectOption';
+    (this.listService as any)[method](option);
   }
 }

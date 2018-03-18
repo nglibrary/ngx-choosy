@@ -6,6 +6,7 @@ import { ChoosyHeaderComponent } from './components/choosy-header/choosy-header.
 import { ChoosyFooterComponent } from './components/choosy-footer/choosy-footer.component';
 import { ChoosyListComponent } from './components/choosy-list/choosy-list.component';
 import { ChoosyItemsComponent } from './components/choosy-items/choosy-items.component';
+import { ChoosyChipsComponent } from './components/choosy-chips/choosy-chips.component';
 
 import { ChoosySelectDirective } from './directives/choosy-select.directive';
 import { ChoosyMenuDirective } from './directives/choosy-menu.directive';
@@ -27,6 +28,7 @@ import { CHOOSY_CONFIG, choosyDefaultConfig } from './config';
     ChoosyFooterComponent,
     ChoosyListComponent,
     ChoosyItemsComponent,
+    ChoosyChipsComponent,
     ChoosySelectDirective,
     ChoosyMenuDirective,
     ChoosyMultiSelectDirective
@@ -35,6 +37,7 @@ import { CHOOSY_CONFIG, choosyDefaultConfig } from './config';
   exports: [
     ChoosyComponent,
     ChoosyItemsComponent,
+    ChoosyChipsComponent,
     ChoosySelectDirective,
     ChoosyMenuDirective,
     ChoosyMultiSelectDirective

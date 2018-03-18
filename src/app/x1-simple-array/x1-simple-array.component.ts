@@ -73,23 +73,26 @@ export class X1SimpleArrayComponent implements OnInit {
   }
 
   setV() {
-    this.email = {
-      _id: '5a4a3b882b469cc315752cf9',
-      guid: 'e6ebde7f-a9f3-4cec-8eff-86c236d0df08',
-      isActive: true,
-      balance: '$1,859.80',
-      name: { first: 'Roseann', last: 'Wolfe' },
-      company: 'ENJOLA',
-      email: 'roseann.wolfe@enjola.name',
-      tags: ['ipsum', 'ea', 'incididunt', 'elit', 'mollit'],
-      friends: [
-        { id: 0, name: 'Payne Jordan' },
-        { id: 1, name: 'Jaime Cohen' },
-        { id: 2, name: 'Carroll Perez' }
-      ]
-    };
+    // this.email = {
+    //   _id: '5a4a3b882b469cc315752cf9',
+    //   guid: 'e6ebde7f-a9f3-4cec-8eff-86c236d0df08',
+    //   isActive: true,
+    //   balance: '$1,859.80',
+    //   name: { first: 'Roseann', last: 'Wolfe' },
+    //   company: 'ENJOLA',
+    //   email: 'roseann.wolfe@enjola.name',
+    //   tags: ['ipsum', 'ea', 'incididunt', 'elit', 'mollit'],
+    //   friends: [
+    //     { id: 0, name: 'Payne Jordan' },
+    //     { id: 1, name: 'Jaime Cohen' },
+    //     { id: 2, name: 'Carroll Perez' }
+    //   ]
+    // };
   }
   dv(value) {
-    return value.split(' ').join(' and ');
+    if (typeof value === 'string') {
+      return value.split(' ').join(' and ');
+    }
+    return value.map(v => v.value).join(' and ');
   }
 }

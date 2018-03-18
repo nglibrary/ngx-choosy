@@ -6,12 +6,14 @@ import {
   Renderer2,
   HostBinding,
   ElementRef,
-  forwardRef
+  forwardRef,
+  OnInit
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { ChoosyHostService } from '../services/choosy-host.service';
 import { ChoosyComponent } from '../components/choosy/choosy.component';
 import { ChoosyConfig } from '../models';
+import { ChoosyConfigService } from '../services';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -23,9 +25,9 @@ import { ChoosyConfig } from '../models';
     //   useExisting: forwardRef(() => ChoosySelectDirective),
     //   multi: true
     // }
-  ],
+  ]
 })
-export class ChoosySelectDirective implements ControlValueAccessor {
+export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
   @Input() options: any[] = [];
   @Input() config: Partial<ChoosyConfig> = {};
   @Input() optionTpl: TemplateRef<any>;
@@ -34,13 +36,14 @@ export class ChoosySelectDirective implements ControlValueAccessor {
   private choosyCompIns: ChoosyComponent;
   private changeFn: Function;
   constructor(
+    private configService: ChoosyConfigService,
     private hostService: ChoosyHostService,
     private renderer: Renderer2,
     private elRef: ElementRef,
     public model: NgControl
-  ) { }
+  ) {}
 
-  @HostBinding('attr.data-choost-instance-id') instanceIDAttr: string;
+  @HostBinding('attr.data-choosy-instance-id') instanceIDAttr: string;
 
   @HostListener('document:click', ['$event'])
   documentClickEvent(event: Event): void {
@@ -48,11 +51,12 @@ export class ChoosySelectDirective implements ControlValueAccessor {
       this.hostService.closeOnOutsideClick(this.elRef.nativeElement, event);
     }
   }
+
   @HostListener('focus')
   onFocus($event) {
     const b = {
       options: this.options,
-      config: { ...this.config, type: 'select' },
+      config: this.config,
       optionTpl: this.optionTpl
     };
     if (!this.instanceID) {
@@ -64,14 +68,10 @@ export class ChoosySelectDirective implements ControlValueAccessor {
       this.instanceID = this.instanceIDAttr;
     }
 
-    this.choosyCompIns = this.hostService.init(
-      ChoosyComponent as any,
-      b,
-      this.instanceID
-    );
+    this.choosyCompIns = this.hostService.init(ChoosyComponent as any, b, this.instanceID);
     this.setPosition();
     this.choosyCompIns.initialized.filter(a => a === true).subscribe(a => {
-      console.log('model Value ___ ', this.model.control.value);
+      console.log('model Value ___ ', this.choosyCompIns.listService);
       this.choosyCompIns.listService.setOptionAsSelected(
         v => this.getValue(v) === this.getValue(this.model.control.value)
       );
@@ -79,7 +79,10 @@ export class ChoosySelectDirective implements ControlValueAccessor {
 
     this.choosyCompIns.listService.events
       .filter(a => a.name === 'optionSelected')
-      .map(a => a.value)
+      .map(a => {
+        console.log('sel a', a);
+        return a.value;
+      })
       .subscribe(a => {
         // this.changeFn(a);
         this.model.control.setValue(a);
@@ -98,6 +101,10 @@ export class ChoosySelectDirective implements ControlValueAccessor {
     // this.hostService.destroy();
   }
 
+  ngOnInit() {
+    this.config = this.configService.mergeAllWithDefault(this.config, { type: 'select' });
+  }
+
   writeValue(value: any): void {
     if (value) {
       this.value = value;
@@ -107,7 +114,7 @@ export class ChoosySelectDirective implements ControlValueAccessor {
   registerOnChange(fn: any): void {
     this.changeFn = fn;
   }
-  registerOnTouched(fn: any): void { }
+  registerOnTouched(fn: any): void {}
 
   private setPosition() {
     this.hostService.renderer = this.renderer;
@@ -118,11 +125,11 @@ export class ChoosySelectDirective implements ControlValueAccessor {
     if (typeof key === 'function') {
       return key(value);
     }
-    if (key) {
-      let v = value;
-      key.split('.').map(a => v = v[a]);
-      value = v;
-    }
+    // if (key) {
+    //   let v = value;
+    //   key.split('.').map(a => (v = v[a]));
+    //   value = v;
+    // }
     return value;
   }
 }

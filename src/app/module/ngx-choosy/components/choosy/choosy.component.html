@@ -1,10 +1,17 @@
-<ng-container *ngIf="config.type=='select'">
-  <ng-container *ngIf="optionsSub|async as opt">
-    <choosy-header *ngIf="opt.length>0" (search)="onSearch($event)"></choosy-header>
-    <choosy-list [options]="opt" [optionTpl]="optionTpl"></choosy-list>
-    <choosy-footer [optionsCount]="opt.length"></choosy-footer>
+<ng-container *ngIf="!optionsLoading">
+  <ng-container *ngIf="initialOptions|async as opt;">
+    <choosy-header *ngIf="config.search?.enable" (search)="onSearch($event)"></choosy-header>
+    <choosy-list [options]="opt" [optionTpl]="optionTpl" [config]="config"></choosy-list>
+    <choosy-footer [optionsCount]="opt.length" *ngIf="config.footer?.enable"></choosy-footer>
   </ng-container>
 </ng-container>
+
+<ng-container *ngIf="optionsLoading">
+  <div class="choosy-loading">
+    loading...
+  </div>
+</ng-container>
+
 
 <ng-container *ngIf="config.type=='menu'">
   <ng-template *ngTemplateOutlet="optionTpl">

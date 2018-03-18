@@ -10,4 +10,8 @@ export class ChoosyConfigService {
   mergeWithDefault(localConfig: Partial<ChoosyConfig>): ChoosyConfig | object {
     return merge(this.defaultConfig, localConfig);
   }
+
+  mergeAllWithDefault(...configs) {
+    return merge.all([this.defaultConfig, ...configs]);
+  }
 }

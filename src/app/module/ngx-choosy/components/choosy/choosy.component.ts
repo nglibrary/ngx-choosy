@@ -7,7 +7,10 @@ import {
   HostBinding,
   ChangeDetectionStrategy,
   InjectionToken,
-  Inject
+  Inject,
+  Output,
+  EventEmitter,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { ChoosyConfig, ChoosyOption } from '../../models';
@@ -34,44 +37,64 @@ import { Subject } from 'rxjs/Subject';
   providers: [ChoosyListService]
 })
 export class ChoosyComponent implements OnInit {
-  optionsSub = new BehaviorSubject([]);
   instanceID = null;
   initialized = new Subject<any>();
-  private initialOptions = [];
+  initialOptions: Observable<any>;
   @Input() config: Partial<ChoosyConfig> = {};
   @Input()
   set options(opt) {
-    if (opt) {
-      this.initialOptions = this.listService.mapMetaData(opt);
-      this.optionsSub.next(this.initialOptions);
+    if (opt instanceof Observable) {
+      this.listService.setOptionsFromObservable(opt, this.config);
+    } else if (Array.isArray(opt)) {
+      this.listService.setOptions(opt, this.config);
+    } else {
+      throw new Error('Invalid options');
     }
+    this.initialOptions = this.listService.optionsSub;
   }
   @Input() optionTpl: TemplateRef<any>;
+  @Output() events: EventEmitter<any> = new EventEmitter();
+  @Output() selected: EventEmitter<any> = new EventEmitter();
 
   @HostBinding('attr.data-instance-id') instanceIDAttr: string;
-  @HostBinding('style.height') height: string;
+  @HostBinding('attr.class') classNameAttr: string;
+
+  optionsLoading = true;
 
   constructor(
     public listService: ChoosyListService,
     private configService: ChoosyConfigService,
-    public elRef: ElementRef
-  ) { }
+    public elRef: ElementRef,
+    private cdRef: ChangeDetectorRef
+  ) {}
   ngOnInit() {
     this.instanceIDAttr = this.instanceID;
     this.config = this.configService.mergeWithDefault(this.config);
-    this.height = this.config.dropdown.height + 'px';
-    this.listService.setOptionsSub(this.optionsSub);
-    this.optionsSub.subscribe(temp => { });
-    this.listService.events.subscribe(e => { });
+    this.classNameAttr = this.config.theme;
     this.listService.setName(this.instanceID);
     this.initialized.next(true);
     console.log('token ==>', this.instanceID, this.listService.getName());
+    this.listService.events
+      .map(e => {
+        if (e.name === 'optionSelected') {
+          this.selected.emit(e.value);
+        }
+        return e;
+      })
+      .subscribe(e => this.events.emit(e));
+    this.listService.isLoading().subscribe(x => {
+      this.optionsLoading = x;
+      this.cdRef.detectChanges();
+    });
   }
 
   onSearch(keyword) {
     if (keyword instanceof Event) {
       keyword = (keyword.target as HTMLInputElement).value;
     }
-    this.listService.filterOptions(keyword);
+    this.listService.filterOptions(keyword, this.config.search);
+  }
+  ngOnDestroy() {
+    console.log('____ choosy is dead!_____');
   }
 }

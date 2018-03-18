@@ -1,9 +1,9 @@
 <ng-container *ngFor="let option of options;trackBy:trackByFn">
-  <div [class.selected]="option.state.selected" (click)="select(option)">
+  <div [class.selected]="option.state.selected" (click)="selection(option,option.state.selected)">
     <ng-template *ngTemplateOutlet="tpl; context: { $implicit: option.value }">
     </ng-template>
   </div>
 </ng-container>
 <ng-template #defaultOptionTpl let-option>
-  == {{option}} ==
+  {{option}}
 </ng-template>

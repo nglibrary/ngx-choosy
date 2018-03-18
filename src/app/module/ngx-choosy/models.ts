@@ -1,8 +1,10 @@
 export interface ChoosyConfig {
   search: any;
-  footer: any;
+  footer: ChoosyFooter;
   dropdown: any;
   displayValue: any;
+  type: any;
+  theme: ChoosyTheme;
 }
 
 export interface ChoosyOption {
@@ -15,7 +17,15 @@ export interface ChoosyOption {
   value: string | object;
 }
 
+export interface ChoosyFooter {
+  enable: boolean;
+}
+
 export type ChoosyOptions = ChoosyOption[];
 
 // TODO: add all
 export type ChoosyEvent = 'optionSelected' | 'optionsAdded';
+
+export type ChoosyPosition = 'AUTO' | 'FIXED';
+
+export type ChoosyTheme = 'default' | 'modern' | 'skeleton';

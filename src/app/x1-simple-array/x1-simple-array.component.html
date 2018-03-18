@@ -1,15 +1,17 @@
 <time>today</time>
 
+<!-- <choosy-chips [ref]="cRef"></choosy-chips>
+
 <div class="container">
   <div class="row">
     <div class="col-md-5 mx-auto text-center">
       <div class="form-group">
-        <input type="text" placeholder="name" choosy-select [options]="users" [config]="{displayValue:dv}" class="form-control" #cRef="choosySelectRef"
-          [(ngModel)]="email">
+        <input type="text" placeholder="name" choosy-multi-select [options]="users" [config]="{displayValue:dv}" class="form-control"
+          #cRef="choosyMultiSelectRef" [(ngModel)]="email">
       </div>
 
       <div class="card" *ngIf="email">
-        {{email}}
+        {{email|json}}
       </div>
       <div>
         <button class="btn btn-warning" (click)="setV()">set</button>
@@ -18,7 +20,9 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
+
+<pre>{{emails|json}}</pre>
 
 <div class="container">
   <div class="row">

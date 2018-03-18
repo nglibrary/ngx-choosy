@@ -1,9 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { ChoosyConfig } from './models';
 
-export const CHOOSY_CONFIG = new InjectionToken<ChoosyConfig>(
-  'choosy-default-config'
-);
+export const CHOOSY_CONFIG = new InjectionToken<ChoosyConfig>('choosy-default-config');
 
 export const choosyDefaultConfig: ChoosyConfig = {
   search: {
@@ -18,10 +16,15 @@ export const choosyDefaultConfig: ChoosyConfig = {
     keys: ['value'],
     autoFocus: true,
     hasClearBtn: true,
+    enable: true
   },
-  footer: {},
+  footer: {
+    enable: false
+  },
   dropdown: {
     height: 300
   },
-  displayValue: ''
+  type: '',
+  displayValue: 'value',
+  theme: 'default'
 };
