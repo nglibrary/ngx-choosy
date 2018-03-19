@@ -62,9 +62,11 @@ export class ChoosyListService {
   }
   disableOption(fn: (option: any) => boolean): void {
     let disabledOpt = null;
-    const opts = this.optionsSub.getValue().filter((o: ChoosyOption) => {
-      o.state.disabled = fn(o.value);
-      disabledOpt = o;
+    const opts = this.optionsSub.getValue().map((o: ChoosyOption) => {
+      if (fn(o.value)) {
+        o.state.disabled = fn(o.value);
+        disabledOpt = o;
+      }
       return o;
     });
     this.optionsSub.next(opts);
@@ -86,15 +88,20 @@ export class ChoosyListService {
     this.optionsSub.next(opts);
     this.events.next({ name: 'optionSet', value: setOpt });
   }
-  clearDisabledOption(option: any): void {
+  clearDisabledOption(cbOrStr: ((option: any) => boolean) | string): void {
+    let setOpt = null;
     const opts = this.optionsSub.getValue().map((o: ChoosyOption) => {
-      if (o.uid === option.uid) {
+      if (typeof cbOrStr === 'function' && cbOrStr(o.value)) {
         o.state.disabled = false;
+        setOpt = o;
+      } else if (typeof cbOrStr === 'string' && cbOrStr === o.value) {
+        o.state.disabled = false;
+        setOpt = o;
       }
       return o;
     });
     this.optionsSub.next(opts);
-    this.events.next({ name: 'optionEnabled', value: option });
+    this.events.next({ name: 'optionEnabled', value: setOpt });
   }
   clearAllDisabledOptions(): void {
     const opts = this.optionsSub.getValue().map(o => {

@@ -1,22 +1,22 @@
 @import './config';
 
-&{
-  display:block;
+& {
+  display: block;
   width: 100%;
   // position: absolute;
-  border:1px solid $choosy-border;
+  border: 1px solid $choosy-border;
   background: $choosy-bg;
   border-radius: 3px;
   margin-top: 5px;
-  color:$choosy-text;
+  color: $choosy-text;
 }
 
-& ::ng-deep choosy-header{
+& ::ng-deep choosy-header {
   display: block;
   padding: 10px;
 }
 
-& ::ng-deep input[type='search']{
+& ::ng-deep input[type='search'] {
   border: 1px solid $choosy-border;
   box-shadow: none;
   border-radius: 2px;
@@ -25,36 +25,40 @@
   width: 100%;
 }
 
-& ::ng-deep choosy-list{
+& ::ng-deep choosy-list {
   overflow: auto;
   display: block;
   position: relative;
   padding: 10px;
 }
 
-& ::ng-deep choosy-list>div{
+& ::ng-deep choosy-list > div {
   padding: 7px;
   border-bottom: 1px solid $choosy-border;
   border-radius: 4px;
   cursor: pointer;
-  &:last-child{
+  &:last-child {
     border-bottom: 0;
   }
-  &:hover:not(.selected){
+  &:hover:not(.selected) {
     background-color: $choosy-bg-alt;
   }
-  &.selected{
-    background-color: $choosy-selected; 
+  &.selected {
+    background-color: $choosy-selected;
     color: #fff;
+  }
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
-& .choosy-loading{
+& .choosy-loading {
   padding: 10px;
   text-align: center;
 }
 
-& ::ng-deep choosy-footer{
+& ::ng-deep choosy-footer {
   padding: 10px;
   display: block;
   font-size: 80%;

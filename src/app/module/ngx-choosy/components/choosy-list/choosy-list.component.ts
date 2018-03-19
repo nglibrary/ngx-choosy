@@ -48,8 +48,11 @@ export class ChoosyListComponent implements OnInit {
   trackByFn(index, item) {
     return item.uid;
   }
-  selection(option, isSelected) {
-    const method = isSelected ? 'clearSelectedOption' : 'selectOption';
+  selection(option, state) {
+    if (state.disabled) {
+      return;
+    }
+    const method = state.selected ? 'clearSelectedOption' : 'selectOption';
     (this.listService as any)[method](option);
   }
 }

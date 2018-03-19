@@ -1,5 +1,5 @@
 <ng-container *ngFor="let option of options;trackBy:trackByFn">
-  <div [class.selected]="option.state.selected" (click)="selection(option,option.state.selected)">
+  <div [class.selected]="option.state.selected" [class.disabled]="option.state.disabled" (click)="selection(option,option.state)">
     <ng-template *ngTemplateOutlet="tpl; context: { $implicit: option.value }">
     </ng-template>
   </div>
