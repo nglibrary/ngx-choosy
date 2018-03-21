@@ -74,14 +74,10 @@ export class ChoosyComponent implements OnInit {
     this.listService.setName(this.instanceID);
     this.initialized.next(true);
     console.log('token ==>', this.instanceID, this.listService.getName());
-    this.listService.events
-      .map(e => {
-        if (e.name === 'optionSelected') {
-          this.selected.emit(e.value);
-        }
-        return e;
-      })
-      .subscribe(e => this.events.emit(e));
+    this.listService.getSelectedOptions().subscribe(x => {
+      this.selected.emit(x);
+    });
+    this.listService.events.subscribe(e => this.events.emit(e));
     this.listService.isLoading().subscribe(x => {
       this.optionsLoading = x;
       this.cdRef.detectChanges();

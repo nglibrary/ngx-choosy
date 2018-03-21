@@ -175,6 +175,16 @@ export class ChoosyListService {
   isLoading() {
     return this.optionsLoading.asObservable().pipe(share());
   }
+
+  getSelectedOptions() {
+    return this.optionsSub.map(x => x.filter(y => y.state.selected)).map(s => {
+      if (this.settings.type === 'select') {
+        return (s[0] && s[0].value) || [];
+      } else {
+        return s.map(d => d.value);
+      }
+    });
+  }
   private metaData(option): ChoosyOption {
     return {
       uid: this.generateUID(),

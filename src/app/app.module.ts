@@ -13,9 +13,10 @@ import { ChoosyWithTplComponent } from './demo/choosy-with-tpl/choosy-with-tpl.c
 import { ChoosyObsInputComponent } from './demo/choosy-obs-input/choosy-obs-input.component';
 import { ChoosyAddRemOptComponent } from './demo/choosy-add-rem-opt/choosy-add-rem-opt.component';
 import { EnableDiableOptComponent } from './demo/enable-diable-opt/enable-diable-opt.component';
+import { OutputValComponent } from './demo/output-val/output-val.component';
 
 @NgModule({
-  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent],
+  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent, OutputValComponent],
   imports: [
     BrowserModule,
     FormsModule,
