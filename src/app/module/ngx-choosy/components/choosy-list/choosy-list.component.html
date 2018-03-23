@@ -1,8 +1,11 @@
-<ng-container *ngFor="let option of options;trackBy:trackByFn">
-  <div [class.selected]="option.state.selected" [class.disabled]="option.state.disabled" (click)="selection(option,option.state)">
-    <ng-template *ngTemplateOutlet="tpl; context: { $implicit: option.value }">
-    </ng-template>
-  </div>
+<ng-container *ngIf="options|async as opt">
+  <ng-container *ngFor="let option of opt;trackBy:trackByFn">
+    <div [class.selected]="option.state.selected" [class.disabled]="option.state.disabled" [class.active]="option.state.active"
+      (click)="selection(option,option.state)">
+      <ng-template *ngTemplateOutlet="tpl; context: { $implicit: option.value }">
+      </ng-template>
+    </div>
+  </ng-container>
 </ng-container>
 <ng-template #defaultOptionTpl let-option>
   {{option}}

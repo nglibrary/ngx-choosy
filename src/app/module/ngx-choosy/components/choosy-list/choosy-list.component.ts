@@ -6,11 +6,13 @@ import {
   TemplateRef,
   ChangeDetectionStrategy,
   HostBinding,
-  ElementRef
+  ElementRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { ChoosyOption, ChoosyConfig } from '../../models';
 import { ChoosyListService } from '../../services/choosy-list.service';
 import { ChoosyConfigService } from '../../services/choosy-config.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -19,7 +21,7 @@ import { ChoosyConfigService } from '../../services/choosy-config.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChoosyListComponent implements OnInit {
-  @Input() options: any;
+  @Input() options: Observable<any>;
   @Input() config: ChoosyConfig;
   @Input() optionTpl: TemplateRef<any>;
   @ViewChild('defaultOptionTpl', { read: TemplateRef })
@@ -30,12 +32,18 @@ export class ChoosyListComponent implements OnInit {
   constructor(
     private listService: ChoosyListService,
     private configService: ChoosyConfigService,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.tpl = this.optionTpl || this.defaultOptionTpl;
     this.height = this.config.dropdown.height + 'px';
+    this.options.subscribe(x => {
+      console.log('options', x);
+      this.cdRef.markForCheck();
+      this.cdRef.detectChanges();
+    });
   }
   ngAfterViewInit() {
     const scollEl = this.elRef.nativeElement;

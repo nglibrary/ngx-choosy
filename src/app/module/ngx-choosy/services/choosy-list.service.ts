@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ChoosySearchService } from './choosy-search.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/share';
 import { share } from 'rxjs/operators';
 
 @Injectable()
@@ -149,6 +150,7 @@ export class ChoosyListService {
   updateSettings(settings: any) {
     this.settings = settings;
     this.events.next({ name: 'configUpdated', value: this.settings });
+    this.clearAllSelectedOptions();
   }
   // TODO
   // when filter is active (has filtered items) , other actions like add, remove.. should be in sync with filtered items
@@ -191,7 +193,8 @@ export class ChoosyListService {
       state: {
         disabled: false,
         selected: false,
-        hidden: false
+        hidden: false,
+        active: false
       },
       value: !option || (typeof option === 'object' && Object.keys(option).length === 0) ? '-' : option
     };
@@ -207,9 +210,79 @@ export class ChoosyListService {
     return this.c;
   }
 
+  getOptions() {
+    return this.optionsSub.asObservable();
+  }
+
   ngOnDestroy() {
-    console.log('dstroy servic');
     this.selectedOptionsBucket = [];
+  }
+
+  removeAllMarked() {}
+
+  markNextAsActive() {
+    let index = 0;
+    const items = this.optionsSub.getValue();
+    const totalItems = items.length;
+    const activeItemIndex = items.findIndex(x => x.state.active);
+    const selectedItemIndex = items.findIndex(x => x.state.selected);
+
+    if (activeItemIndex === -1 && selectedItemIndex !== -1 && selectedItemIndex < totalItems - 1) {
+      index = selectedItemIndex + 1;
+    } else if (activeItemIndex === -1 && selectedItemIndex !== -1 && selectedItemIndex === totalItems - 1) {
+      index = 0;
+    } else if (activeItemIndex === -1) {
+      index = 0;
+    } else if (activeItemIndex < totalItems - 1) {
+      index = activeItemIndex + 1;
+    } else if (activeItemIndex === totalItems - 1) {
+      index = 0;
+    }
+
+    let nextItem;
+    const nxt = this.optionsSub.getValue().map((x, i) => {
+      console.log('index', index);
+      x.state.active = false;
+      if (i === index) {
+        nextItem = x;
+        x.state.active = true;
+      }
+      return x;
+    });
+    this.optionsSub.next(nxt);
+    this.events.next({ name: 'markedNextAsActive', value: nextItem });
+  }
+  markPreviousAsActive() {
+    let index = 0;
+    const items = this.optionsSub.getValue();
+    const totalItems = items.length;
+    const activeItemIndex = items.findIndex(x => x.state.active);
+    const selectedItemIndex = items.findIndex(x => x.state.selected);
+
+    if (activeItemIndex === -1 && selectedItemIndex > 0 && selectedItemIndex <= totalItems - 1) {
+      index = selectedItemIndex - 1;
+    } else if (activeItemIndex === -1 && selectedItemIndex === 0) {
+      index = totalItems - 1;
+    } else if (activeItemIndex === -1) {
+      index = totalItems - 1;
+    } else if (activeItemIndex > 0 && activeItemIndex <= totalItems - 1) {
+      index = activeItemIndex - 1;
+    } else if (activeItemIndex === 0) {
+      index = totalItems - 1;
+    }
+
+    let prevItem;
+    const nxt = this.optionsSub.getValue().map((x, i) => {
+      console.log('pindex', index);
+      x.state.active = false;
+      if (i === index) {
+        prevItem = x;
+        x.state.active = true;
+      }
+      return x;
+    });
+    this.optionsSub.next(nxt);
+    this.events.next({ name: 'markedPrevAsActive', value: prevItem });
   }
 
   private generateUID(length = 36): string {

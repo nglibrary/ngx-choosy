@@ -13,6 +13,7 @@ export interface ChoosyOption {
     disabled: boolean;
     selected: boolean;
     hidden: boolean;
+    active: boolean;
   };
   value: string | object;
 }

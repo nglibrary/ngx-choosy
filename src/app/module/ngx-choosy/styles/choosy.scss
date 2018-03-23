@@ -47,6 +47,10 @@
     background-color: $choosy-selected;
     color: #fff;
   }
+  &.active {
+    background-color: transparentize($choosy-selected, 0.5);
+    color: #fff;
+  }
   &.disabled {
     opacity: 0.5;
     cursor: not-allowed;

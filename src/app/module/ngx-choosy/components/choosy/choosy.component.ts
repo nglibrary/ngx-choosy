@@ -17,14 +17,21 @@ import { ChoosyConfig, ChoosyOption } from '../../models';
 import { ChoosyConfigService } from '../../services/choosy-config.service';
 import { ChoosyListService } from '../../services/choosy-list.service';
 
+import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/observable/fromEvent';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+
+const keyCodes = {
+  '38': 'UP',
+  '40': 'DOWN'
+};
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -50,7 +57,7 @@ export class ChoosyComponent implements OnInit {
     } else {
       throw new Error('Invalid options');
     }
-    this.initialOptions = this.listService.optionsSub;
+    this.initialOptions = this.listService.getOptions();
   }
   @Input() optionTpl: TemplateRef<any>;
   @Output() events: EventEmitter<any> = new EventEmitter();
@@ -58,6 +65,8 @@ export class ChoosyComponent implements OnInit {
 
   @HostBinding('attr.data-instance-id') instanceIDAttr: string;
   @HostBinding('attr.class') classNameAttr: string;
+
+  keypressSub: Subject<any> = new Subject();
 
   optionsLoading = true;
 
@@ -82,6 +91,12 @@ export class ChoosyComponent implements OnInit {
       this.optionsLoading = x;
       this.cdRef.detectChanges();
     });
+    Observable.fromEvent(this.elRef.nativeElement, 'keydown')
+      .map((x: KeyboardEvent) => x.keyCode)
+      .map(x => keyCodes[x])
+      .filter(x => x !== undefined)
+      .subscribe(x => this.keypressSub.next(x));
+    this.activeOption();
   }
 
   onSearch(keyword) {
@@ -90,6 +105,26 @@ export class ChoosyComponent implements OnInit {
     }
     this.listService.filterOptions(keyword, this.config.search);
   }
+
+  activeOption() {
+    console.log('el', this.elRef.nativeElement);
+
+    this.keypressSub
+      .asObservable()
+      .do(x => {
+        console.log('====>0', x);
+        if (x === 'UP') {
+          this.listService.markPreviousAsActive();
+        } else {
+          this.listService.markNextAsActive();
+        }
+      })
+      .subscribe(a => {
+        // console.log('keypressed', a, this.elRef.nativeElement.querySelectorAll('choosy-list>div'));
+      });
+    // https://codereview.stackexchange.com/questions/132397/prev-next-buttons-for-a-circular-list
+  }
+
   ngOnDestroy() {
     console.log('____ choosy is dead!_____');
   }

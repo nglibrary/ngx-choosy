@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -12,7 +7,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChoosyFooterComponent implements OnInit {
-  @Input() optionsCount = 0;
+  @Input() options;
   constructor() {}
 
   ngOnInit() {}
