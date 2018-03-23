@@ -285,6 +285,13 @@ export class ChoosyListService {
     this.events.next({ name: 'markedPrevAsActive', value: prevItem });
   }
 
+  selectActiveOption() {
+    const activeOption = this.optionsSub.getValue().filter(z => z.state.active);
+    if (activeOption.length > 0) {
+      this.selectOption(activeOption[0]);
+    }
+  }
+
   private generateUID(length = 36): string {
     return Math.random()
       .toString(length)

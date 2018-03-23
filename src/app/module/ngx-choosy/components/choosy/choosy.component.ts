@@ -30,7 +30,8 @@ import { Subject } from 'rxjs/Subject';
 
 const keyCodes = {
   '38': 'UP',
-  '40': 'DOWN'
+  '40': 'DOWN',
+  '13': 'ENTER'
 };
 
 @Component({
@@ -115,8 +116,10 @@ export class ChoosyComponent implements OnInit {
         console.log('====>0', x);
         if (x === 'UP') {
           this.listService.markPreviousAsActive();
-        } else {
+        } else if (x == 'DOWN') {
           this.listService.markNextAsActive();
+        } else if (x == 'ENTER') {
+          this.listService.selectActiveOption();
         }
       })
       .subscribe(a => {
