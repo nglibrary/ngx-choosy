@@ -121,6 +121,7 @@ export class ChoosyComponent implements OnInit {
       })
       .subscribe(a => {
         // console.log('keypressed', a, this.elRef.nativeElement.querySelectorAll('choosy-list>div'));
+        this.elRef.nativeElement.querySelector('choosy-list>div.active').scrollIntoView(false);
       });
     // https://codereview.stackexchange.com/questions/132397/prev-next-buttons-for-a-circular-list
   }
