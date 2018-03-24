@@ -16,9 +16,10 @@ import { EnableDiableOptComponent } from './demo/enable-diable-opt/enable-diable
 import { OutputValComponent } from './demo/output-val/output-val.component';
 import { ActiveLoopComponent } from './demo/active-loop/active-loop.component';
 import { ChipsComponent } from './demo/chips/chips.component';
+import { FilterOutsideComponent } from './demo/filter-outside/filter-outside.component';
 
 @NgModule({
-  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent, OutputValComponent, ActiveLoopComponent, ChipsComponent],
+  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent, OutputValComponent, ActiveLoopComponent, ChipsComponent, FilterOutsideComponent],
   imports: [
     BrowserModule,
     FormsModule,
