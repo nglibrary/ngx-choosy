@@ -71,7 +71,6 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
     this.choosyCompIns = this.hostService.init(ChoosyComponent as any, b, this.instanceID);
     this.setPosition();
     this.choosyCompIns.initialized.filter(a => a === true).subscribe(a => {
-      console.log('model Value ___ ', this.choosyCompIns.listService);
       this.choosyCompIns.listService.setOptionAsSelected(
         v => this.getValue(v) === this.getValue(this.model.control.value)
       );
@@ -80,7 +79,6 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
     this.choosyCompIns.listService.events
       .filter(a => a.name === 'optionSelected')
       .map(a => {
-        console.log('sel a', a);
         return a.value;
       })
       .subscribe(a => {

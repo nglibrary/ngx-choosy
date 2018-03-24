@@ -5,6 +5,7 @@ export interface ChoosyConfig {
   displayValue: any;
   type: any;
   theme: ChoosyTheme;
+  multiselect: ChoosyMultiselect;
 }
 
 export interface ChoosyOption {
@@ -20,6 +21,9 @@ export interface ChoosyOption {
 
 export interface ChoosyFooter {
   enable: boolean;
+}
+export interface ChoosyMultiselect {
+  removeOnSelect: boolean;
 }
 
 export type ChoosyOptions = ChoosyOption[];

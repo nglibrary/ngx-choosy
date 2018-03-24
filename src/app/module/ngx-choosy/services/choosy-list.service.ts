@@ -27,13 +27,15 @@ export class ChoosyListService {
       if (this.settings.type !== 'multi-select') {
         o.state.selected = false;
       }
+      if (o.uid === option.uid && this.settings.type === 'multi-select' && this.settings.multiselect.removeOnSelect) {
+        o.state.hidden = true;
+      }
       if (o.uid === option.uid) {
         o.state.selected = true;
         this.selectedOptionsBucket.push(option);
       }
       return o;
     });
-    console.log('select option', option);
     this.optionsSub.next(opts);
     this.events.next({
       name: 'optionSelected',
@@ -84,6 +86,9 @@ export class ChoosyListService {
         o.state.selected = true;
         setOpt = o;
       }
+      if (this.settings.type === 'multi-select' && this.settings.multiselect.removeOnSelect) {
+        o.state.hidden = false;
+      }
       return o;
     });
     this.optionsSub.next(opts);
@@ -117,6 +122,9 @@ export class ChoosyListService {
       if (o.uid === option.uid) {
         o.state.selected = false;
       }
+      if (o.uid === option.uid && this.settings.type === 'multi-select') {
+        o.state.hidden = false;
+      }
       return o;
     });
     this.optionsSub.next(opts);
@@ -125,6 +133,7 @@ export class ChoosyListService {
   clearAllSelectedOptions(): void {
     const opts = this.optionsSub.getValue().map((o: ChoosyOption) => {
       o.state.selected = false;
+      o.state.hidden = false;
       return o;
     });
     this.optionsSub.next(opts);
@@ -222,7 +231,8 @@ export class ChoosyListService {
 
   markNextAsActive() {
     let index = 0;
-    const items = this.optionsSub.getValue();
+    let uid;
+    const items = this.optionsSub.getValue().filter(x => !x.state.hidden);
     const totalItems = items.length;
     const activeItemIndex = items.findIndex(x => x.state.active);
     const selectedItemIndex = items.findIndex(x => x.state.selected);
@@ -238,12 +248,12 @@ export class ChoosyListService {
     } else if (activeItemIndex === totalItems - 1) {
       index = 0;
     }
+    uid = items[index].uid;
 
     let nextItem;
     const nxt = this.optionsSub.getValue().map((x, i) => {
-      console.log('index', index);
       x.state.active = false;
-      if (i === index) {
+      if (x.uid === uid) {
         nextItem = x;
         x.state.active = true;
       }
@@ -254,7 +264,8 @@ export class ChoosyListService {
   }
   markPreviousAsActive() {
     let index = 0;
-    const items = this.optionsSub.getValue();
+    let uid;
+    const items = this.optionsSub.getValue().filter(x => !x.state.hidden);
     const totalItems = items.length;
     const activeItemIndex = items.findIndex(x => x.state.active);
     const selectedItemIndex = items.findIndex(x => x.state.selected);
@@ -270,12 +281,12 @@ export class ChoosyListService {
     } else if (activeItemIndex === 0) {
       index = totalItems - 1;
     }
+    uid = items[index].uid;
 
     let prevItem;
     const nxt = this.optionsSub.getValue().map((x, i) => {
-      console.log('pindex', index);
       x.state.active = false;
-      if (i === index) {
+      if (x.uid === uid) {
         prevItem = x;
         x.state.active = true;
       }

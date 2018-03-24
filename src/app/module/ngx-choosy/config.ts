@@ -26,5 +26,8 @@ export const choosyDefaultConfig: ChoosyConfig = {
   },
   type: '',
   displayValue: 'value',
-  theme: 'default'
+  theme: 'default',
+  multiselect: {
+    removeOnSelect: true
+  }
 };

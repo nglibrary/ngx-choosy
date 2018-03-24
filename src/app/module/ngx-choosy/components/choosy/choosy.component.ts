@@ -80,10 +80,10 @@ export class ChoosyComponent implements OnInit {
   ngOnInit() {
     this.instanceIDAttr = this.instanceID;
     this.config = this.configService.mergeWithDefault(this.config);
+    this.listService.updateSettings(this.config);
     this.classNameAttr = this.config.theme;
     this.listService.setName(this.instanceID);
     this.initialized.next(true);
-    console.log('token ==>', this.instanceID, this.listService.getName());
     this.listService.getSelectedOptions().subscribe(x => {
       this.selected.emit(x);
     });
@@ -108,28 +108,21 @@ export class ChoosyComponent implements OnInit {
   }
 
   activeOption() {
-    console.log('el', this.elRef.nativeElement);
-
     this.keypressSub
       .asObservable()
       .do(x => {
-        console.log('====>0', x);
         if (x === 'UP') {
           this.listService.markPreviousAsActive();
-        } else if (x == 'DOWN') {
+        } else if (x === 'DOWN') {
           this.listService.markNextAsActive();
-        } else if (x == 'ENTER') {
+        } else if (x === 'ENTER') {
           this.listService.selectActiveOption();
         }
       })
       .subscribe(a => {
-        // console.log('keypressed', a, this.elRef.nativeElement.querySelectorAll('choosy-list>div'));
         this.elRef.nativeElement.querySelector('choosy-list>div.active').scrollIntoView(false);
       });
-    // https://codereview.stackexchange.com/questions/132397/prev-next-buttons-for-a-circular-list
   }
 
-  ngOnDestroy() {
-    console.log('____ choosy is dead!_____');
-  }
+  ngOnDestroy() {}
 }

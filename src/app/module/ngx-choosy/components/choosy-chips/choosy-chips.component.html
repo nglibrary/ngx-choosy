@@ -1,7 +1,7 @@
 <ul>
   <li class="badge badge-secondary" *ngFor="let option of options">
-    {{option.value}}
-    <button type="button" class="close" aria-label="Close" (click)="unselect(option)">
+    {{displayValue(this.ref.config.displayValue,option)}}
+    <button type="button" class="close" aria-label="Close" (click)="deselect(option)">
       <span aria-hidden="true">&times;</span>
     </button>
   </li>

@@ -4,6 +4,7 @@ import { ChoosyHostService } from '../../services/choosy-host.service';
 import { ChoosyListService } from '../../services/choosy-list.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
+import { ChoosyComponent } from '../../../../demo/choosy/choosy.component';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -13,10 +14,17 @@ import 'rxjs/add/operator/switchMap';
 export class ChoosyChipsComponent implements OnInit, OnChanges {
   @Input() ref: any;
   options: ChoosyOption[] = [];
-  constructor(private hostService: ChoosyHostService) { }
+  constructor(private hostService: ChoosyHostService) {}
 
   ngOnInit() {
-    console.log('ref init', this.ref);
+    console.log('instanceof', this.ref instanceof ChoosyComponent);
+    this.ref.listService
+      .getAllSelectedOptions()
+      .map(a => a.filter(x => x.state && x.state.selected === true))
+      .subscribe(a => {
+        console.log('ref view', a);
+        this.options = a;
+      });
   }
   ngAfterViewInit() {
     // this.ref.instanceIDSub.filter(a => a !== '').subscribe(t => {
@@ -25,21 +33,22 @@ export class ChoosyChipsComponent implements OnInit, OnChanges {
     // let foo = this.hostService
     //     .getInstance(this.ref)
   }
-  ngOnChanges(a) {
-    a.ref
-      .currentValue
-      .instanceIDSub
-      .filter(a => a !== '')
-      .switchMap(s => {
-        console.log('SSS', this.hostService.getInstances());
-        return this.hostService.getInstance(s).listService.getAllSelectedOptions();
-      })
-      .map(a => a.filter(x => x.state && x.state.selected === true))
-      .subscribe(a => {
-        console.log('ref view', a);
-        this.options = a;
-      });
 
+  displayValue(parts, obj) {
+    return parts.split('.').reduce((p, c) => p[c], obj);
+  }
+  ngOnChanges(a) {
+    // a.ref.currentValue.instanceIDSub
+    //   .filter(a => a !== '')
+    //   .switchMap(s => {
+    //     console.log('SSS', this.hostService.getInstances());
+    //     return this.hostService.getInstance(s).listService.getAllSelectedOptions();
+    //   })
+    //   .map(a => a.filter(x => x.state && x.state.selected === true))
+    //   .subscribe(a => {
+    //     console.log('ref view', a);
+    //     this.options = a;
+    //   });
     // if (this.ref) {
     //   this.hostService
     //     .getInstance(this.ref)
@@ -51,7 +60,7 @@ export class ChoosyChipsComponent implements OnInit, OnChanges {
     // }
   }
 
-  unselect(option) {
-    console.log('insID');
+  deselect(option) {
+    this.ref.listService.clearSelectedOption(option);
   }
 }

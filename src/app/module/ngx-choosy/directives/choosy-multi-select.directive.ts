@@ -72,7 +72,6 @@ export class ChoosyMultiSelectDirective {
     );
     this.setPosition();
     this.choosyCompIns.initialized.filter(a => a === true).subscribe(a => {
-      console.log('multi model Value ___ ', this.model.control.value);
       this.choosyCompIns.listService.setOptionAsSelected(
         v => this.getValue(v) === this.getValue(this.model.control.value)
       );
@@ -82,7 +81,6 @@ export class ChoosyMultiSelectDirective {
       .filter(a => a.name === 'optionSelected')
       .map(a => a.value)
       .subscribe(a => {
-        console.log('multi', a);
         // this.changeFn(a);
         this.model.control.setValue(a);
         this.renderer.setProperty(

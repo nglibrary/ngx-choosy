@@ -7,7 +7,8 @@ import {
   ChangeDetectionStrategy,
   HostBinding,
   ElementRef,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  AfterViewInit
 } from '@angular/core';
 import { ChoosyOption, ChoosyConfig } from '../../models';
 import { ChoosyListService } from '../../services/choosy-list.service';
@@ -20,7 +21,7 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './choosy-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChoosyListComponent implements OnInit {
+export class ChoosyListComponent implements OnInit, AfterViewInit {
   @Input() options: Observable<any>;
   @Input() config: ChoosyConfig;
   @Input() optionTpl: TemplateRef<any>;
@@ -39,9 +40,8 @@ export class ChoosyListComponent implements OnInit {
   ngOnInit() {
     this.tpl = this.optionTpl || this.defaultOptionTpl;
     this.height = this.config.dropdown.height + 'px';
+    // todo: refactor
     this.options.subscribe(x => {
-      console.log('options', x);
-      this.cdRef.markForCheck();
       this.cdRef.detectChanges();
     });
   }

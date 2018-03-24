@@ -1,7 +1,7 @@
 <ng-container *ngIf="options|async as opt">
   <ng-container *ngFor="let option of opt;trackBy:trackByFn">
     <div [class.selected]="option.state.selected" [class.disabled]="option.state.disabled" [class.active]="option.state.active"
-      (click)="selection(option,option.state)">
+      (click)="selection(option,option.state)" *ngIf="!option.state.hidden">
       <ng-template *ngTemplateOutlet="tpl; context: { $implicit: option.value }">
       </ng-template>
     </div>
