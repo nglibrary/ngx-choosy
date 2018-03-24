@@ -229,7 +229,7 @@ export class ChoosyListService {
   }
 
   clearAllActive() {
-    const opts = this.optionsSub.getValue().map(x => { 
+    const opts = this.optionsSub.getValue().map(x => {
       x.state.active = false;
       return x;
     });
@@ -240,7 +240,8 @@ export class ChoosyListService {
   markNextAsActive() {
     let index = 0;
     let uid;
-    const items = this.optionsSub.getValue().filter(x => !x.state.hidden);
+    const items = this.optionsSub.getValue().filter(x => !x.state.hidden && !x.state.disabled);
+    console.log('items', items);
     const totalItems = items.length;
     const activeItemIndex = items.findIndex(x => x.state.active);
     const selectedItemIndex = items.findIndex(x => x.state.selected);
@@ -273,7 +274,7 @@ export class ChoosyListService {
   markPreviousAsActive() {
     let index = 0;
     let uid;
-    const items = this.optionsSub.getValue().filter(x => !x.state.hidden);
+    const items = this.optionsSub.getValue().filter(x => !x.state.hidden && !x.state.disabled);
     const totalItems = items.length;
     const activeItemIndex = items.findIndex(x => x.state.active);
     const selectedItemIndex = items.findIndex(x => x.state.selected);
