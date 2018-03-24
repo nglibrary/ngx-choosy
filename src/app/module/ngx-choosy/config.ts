@@ -29,5 +29,8 @@ export const choosyDefaultConfig: ChoosyConfig = {
   theme: 'default',
   multiselect: {
     removeOnSelect: false
+  },
+  autocomplete: {
+    minChars: 2
   }
 };

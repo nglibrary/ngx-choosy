@@ -20,7 +20,10 @@ import { ChoosyListService } from '../../services/choosy-list.service';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/skipWhile';
 import 'rxjs/add/observable/fromEvent';
@@ -65,11 +68,13 @@ export class ChoosyComponent implements OnInit {
   @Input() optionTpl: TemplateRef<any>;
   @Output() events: EventEmitter<any> = new EventEmitter();
   @Output() selected: EventEmitter<any> = new EventEmitter();
+  @Input() autocomplete;
 
   @HostBinding('attr.data-instance-id') instanceIDAttr: string;
   @HostBinding('attr.class') classNameAttr: string;
 
   keypressSub: Subject<any> = new Subject();
+  autocompleteSub: Subject<any> = new Subject();
 
   optionsLoading = true;
 
@@ -98,6 +103,16 @@ export class ChoosyComponent implements OnInit {
       .filter(x => x !== undefined)
       .subscribe(x => this.keypressSub.next(x));
     this.activeOption();
+    this.autocompleteSub
+      .do(x => {
+        this.optionsLoading = true;
+      })
+      .debounceTime(500)
+      .switchMap(x => this.autocomplete(x))
+      .subscribe((z: any) => {
+        this.listService.setOptions(z, this.config);
+        this.optionsLoading = false;
+      });
   }
 
   onSearch(keyword) {
@@ -105,6 +120,12 @@ export class ChoosyComponent implements OnInit {
       keyword = (keyword.target as HTMLInputElement).value;
     }
     this.listService.filterOptions(keyword, this.config.search);
+  }
+  fetch(q) {
+    if (q.length < this.config.autocomplete.minChars) {
+      return;
+    }
+    this.autocompleteSub.next(q);
   }
 
   updateConfig(newConfig) {

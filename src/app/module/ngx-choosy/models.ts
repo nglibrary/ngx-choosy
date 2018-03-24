@@ -6,6 +6,7 @@ export interface ChoosyConfig {
   type: any;
   theme: ChoosyTheme;
   multiselect: ChoosyMultiselect;
+  autocomplete: ChoosyAutocomplete;
 }
 
 export interface ChoosyOption {
@@ -24,6 +25,9 @@ export interface ChoosyFooter {
 }
 export interface ChoosyMultiselect {
   removeOnSelect: boolean;
+}
+export interface ChoosyAutocomplete {
+  minChars: number;
 }
 
 export type ChoosyOptions = ChoosyOption[];

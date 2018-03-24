@@ -42,6 +42,9 @@ export class ChoosyListComponent implements OnInit, AfterViewInit {
     this.height = this.config.dropdown.height + 'px';
     // todo: refactor
     this.options.subscribe(x => {
+      if ((this.cdRef as any).destroyed) {
+        return;
+      }
       this.cdRef.detectChanges();
     });
   }

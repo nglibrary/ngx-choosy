@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="col-md-12 row">
+    <div class="col-md-4">
+      <input type="text" class="form-control" (input)="fetch($event.target.value,ref)">
+    </div>
+    <div class="col-md-4">
+      <choosy [options]="data" [autocomplete]="fetchRepo.bind(this)" [config]="config" #ref="choosyRef" (events)="captureEvents($event)"
+        [optionTpl]="userTpl" (selected)="selected($event)"></choosy>
+    </div>
+    <div class="col-md-4">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let event of events">
+          <div class="text-primary">{{event.name}}</div>
+          <small class="text-muted">{{event.value|json}}</small>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<ng-template #userTpl let-item>
+  <div class="d-flex flex-row p-1">
+    <div class="avatar mr-2">
+      <img [src]="item.owner.avatar_url" width="40" class="rounded-circle">
+    </div>
+    <div class="info">
+      <div>
+        <p class="lead mb-0">{{item.name}}</p>
+      </div>
+      <div>
+        <small>{{item.owner.login}}</small>
+      </div>
+      <div class="d-flex flex-row">
+        <span class="badge badge-pill badge-success mr-2">{{item.stargazers_count}} stars</span>
+        <span class="badge badge-pill badge-danger">{{item.open_issues}} issues</span>
+      </div>
+    </div>
+  </div>
+</ng-template>

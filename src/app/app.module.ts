@@ -17,9 +17,10 @@ import { OutputValComponent } from './demo/output-val/output-val.component';
 import { ActiveLoopComponent } from './demo/active-loop/active-loop.component';
 import { ChipsComponent } from './demo/chips/chips.component';
 import { FilterOutsideComponent } from './demo/filter-outside/filter-outside.component';
+import { AutocompleteComponent } from './demo/autocomplete/autocomplete.component';
 
 @NgModule({
-  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent, OutputValComponent, ActiveLoopComponent, ChipsComponent, FilterOutsideComponent],
+  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent, OutputValComponent, ActiveLoopComponent, ChipsComponent, FilterOutsideComponent, AutocompleteComponent],
   imports: [
     BrowserModule,
     FormsModule,
