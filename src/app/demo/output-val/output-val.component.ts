@@ -31,8 +31,7 @@ export class OutputValComponent implements OnInit {
   toggleSelect(ref, type) {
     this.type = type;
     this.config.type = type;
-    this.config = { ...this.config };
-    ref.listService.updateSettings(this.config);
+    ref.updateConfig(this.config);
   }
   selected(e) {
     console.log('option selected', e);

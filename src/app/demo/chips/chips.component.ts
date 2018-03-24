@@ -15,7 +15,10 @@ export class ChipsComponent implements OnInit {
       keys: ['value.email', 'email']
     },
     displayValue: 'value.email',
-    type: 'multi-select'
+    type: 'multi-select',
+    multiselect: {
+      removeOnSelect: true
+    }
   };
   events = [];
   constructor() {}

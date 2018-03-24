@@ -157,7 +157,7 @@ export class ChoosyListService {
     });
   }
   updateSettings(settings: any) {
-    this.settings = settings;
+    this.settings = settings; 
     this.events.next({ name: 'configUpdated', value: this.settings });
     this.clearAllSelectedOptions();
   }

@@ -28,6 +28,6 @@ export const choosyDefaultConfig: ChoosyConfig = {
   displayValue: 'value',
   theme: 'default',
   multiselect: {
-    removeOnSelect: true
+    removeOnSelect: false
   }
 };

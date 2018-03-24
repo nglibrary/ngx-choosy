@@ -22,6 +22,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/skipWhile';
 import 'rxjs/add/observable/fromEvent';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -51,6 +52,7 @@ export class ChoosyComponent implements OnInit {
   @Input() config: Partial<ChoosyConfig> = {};
   @Input()
   set options(opt) {
+    this.config = this.configService.mergeWithDefault(this.config);
     if (opt instanceof Observable) {
       this.listService.setOptionsFromObservable(opt, this.config);
     } else if (Array.isArray(opt)) {
@@ -79,8 +81,6 @@ export class ChoosyComponent implements OnInit {
   ) {}
   ngOnInit() {
     this.instanceIDAttr = this.instanceID;
-    this.config = this.configService.mergeWithDefault(this.config);
-    this.listService.updateSettings(this.config);
     this.classNameAttr = this.config.theme;
     this.listService.setName(this.instanceID);
     this.initialized.next(true);
@@ -107,6 +107,11 @@ export class ChoosyComponent implements OnInit {
     this.listService.filterOptions(keyword, this.config.search);
   }
 
+  updateConfig(newConfig) {
+    this.config = this.configService.mergeAllWithDefault(this.config, newConfig);
+    this.listService.updateSettings(this.config);
+  }
+
   activeOption() {
     this.keypressSub
       .asObservable()
@@ -119,6 +124,7 @@ export class ChoosyComponent implements OnInit {
           this.listService.selectActiveOption();
         }
       })
+      .filter(x => x !== 'ENTER')
       .subscribe(a => {
         this.elRef.nativeElement.querySelector('choosy-list>div.active').scrollIntoView(false);
       });
