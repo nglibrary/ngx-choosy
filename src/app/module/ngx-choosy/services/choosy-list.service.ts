@@ -157,7 +157,7 @@ export class ChoosyListService {
     });
   }
   updateSettings(settings: any) {
-    this.settings = settings; 
+    this.settings = settings;
     this.events.next({ name: 'configUpdated', value: this.settings });
     this.clearAllSelectedOptions();
   }
@@ -176,6 +176,7 @@ export class ChoosyListService {
     });
   }
   clearFilteredOptions() {
+    this.clearAllActive();
     this.optionsSub.next(this.latestFilteredOptions);
     this.events.next({ name: 'clearFilteredOptions', value: this.latestFilteredOptions });
   }
@@ -227,7 +228,14 @@ export class ChoosyListService {
     this.selectedOptionsBucket = [];
   }
 
-  removeAllMarked() {}
+  clearAllActive() {
+    const opts = this.optionsSub.getValue().map(x => { 
+      x.state.active = false;
+      return x;
+    });
+    this.optionsSub.next(opts);
+    this.events.next({ name: 'removeAllActive', value: null });
+  }
 
   markNextAsActive() {
     let index = 0;

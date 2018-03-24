@@ -4,7 +4,7 @@
       <input type="text" class="form-control" (input)="filter($event.target.value,ref)" (keydown.arrowdown)="keypressed('DOWN',ref)"
         (keydown.arrowup)="keypressed('UP',ref)">
       <button class="btn btn-info btn-block mt-2" (click)="search('lcarnie4',ref)">Search 'lcarnie4'</button>
-      <button class="btn btn-danger btn-block mt-2" (click)="search('',ref)">Clear</button>
+      <button class="btn btn-danger btn-block mt-2" (click)="clear(ref)">Clear</button>
     </div>
     <div class="col-md-4">
       <choosy [options]="data" [config]="config" #ref="choosyRef" (events)="captureEvents($event)" [optionTpl]="userTpl" (selected)="selected($event)"></choosy>

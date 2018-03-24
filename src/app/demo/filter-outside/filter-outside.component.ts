@@ -38,6 +38,10 @@ export class FilterOutsideComponent implements OnInit {
     ref.onSearch(e);
   }
 
+  clear(ref) {
+    ref.listService.clearFilteredOptions();
+  }
+
   keypressed(e, ref) {
     console.log('KEY', e);
     ref.keypressSub.next(e);
