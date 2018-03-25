@@ -19,7 +19,15 @@
     <span> {{option}}</span>
   </div>
 </ng-template>
-<ng-template #checkboxCustomOptionTpl let-option>
-  <input type="checkbox">
-  <ng-template *ngTemplateOutlet="optionTpl; context: { $implicit: option }"></ng-template>
+<ng-template #checkboxCustomOptionTpl let-option let-state="state">
+  <div class="choosy-checkbox-tpl">
+    <span>
+      <input type="checkbox" [checked]="state.selected">
+    </span>
+    <span>
+      <ng-template *ngTemplateOutlet="optionTpl; context: { $implicit: option }"></ng-template>
+    </span>
+  </div>
+
+
 </ng-template>

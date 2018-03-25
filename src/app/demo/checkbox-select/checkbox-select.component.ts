@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChoosyConfig } from '../../module/ngx-choosy/models';
-import { data } from './data';
+import { data as d1 } from '../choosy-with-tpl/data';
+import { data as d2 } from './data';
 
 @Component({
   selector: 'app-checkbox-select',
@@ -8,8 +9,20 @@ import { data } from './data';
   styles: []
 })
 export class CheckboxSelectComponent implements OnInit {
-  data = data;
-  config: Partial<ChoosyConfig> = {
+  data1 = d1;
+  data2 = d2;
+  config1: Partial<ChoosyConfig> = {
+    search: {
+      enable: true,
+      keys: ['value.email']
+    },
+    displayValue: 'value.email',
+    type: 'multi-select',
+    multiselect: {
+      checkbox: true
+    }
+  };
+  config2: Partial<ChoosyConfig> = {
     search: {
       enable: true,
       keys: ['value']
