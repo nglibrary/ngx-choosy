@@ -69,6 +69,7 @@ export class ChoosyComponent implements OnInit, OnChanges, OnDestroy {
     this.initialOptions = this.listService.getOptions();
   }
   @Input() optionTpl: TemplateRef<any>;
+  @Input() headerTpl: TemplateRef<any>;
   @Output() events: EventEmitter<any> = new EventEmitter();
   @Output() selected: EventEmitter<any> = new EventEmitter();
   @Input() autocomplete;

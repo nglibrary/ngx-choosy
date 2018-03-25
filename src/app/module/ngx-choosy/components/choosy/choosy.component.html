@@ -1,3 +1,6 @@
+<div class="choosy-headboard">
+  <ng-template *ngTemplateOutlet="headerTpl"></ng-template>
+</div>
 <ng-container *ngIf="!optionsLoading && initialOptions">
   <choosy-header *ngIf="config.search?.enable" (search)="onSearch($event)"></choosy-header>
   <choosy-list [options]="initialOptions" [optionTpl]="optionTpl" [config]="config"></choosy-list>

@@ -1,0 +1,23 @@
+&.freestyle ::ng-deep{
+border:0;
+background-color: transparent;
+choosy-list{
+  display:flex;
+  flex-wrap: wrap;
+  max-height: 100% !important;
+  >div{
+    border: 0;
+    overflow: initial;
+  }
+  >div:hover{
+    background-color: transparent;
+  }
+
+  >div.selected{
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: transparent;
+    overflow: initial;
+  }
+}
+}
