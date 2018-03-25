@@ -7,6 +7,7 @@ export interface ChoosyConfig {
   theme?: ChoosyTheme;
   multiselect?: ChoosyMultiselect;
   autocomplete?: ChoosyAutocomplete;
+  groupBy?: string | null;
 }
 
 export interface ChoosyOption {

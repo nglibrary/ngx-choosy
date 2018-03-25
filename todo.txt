@@ -41,3 +41,4 @@ https://joshuajohnson.co.uk/Choices/
 input as search
 grouped list
 add to list
+custom loader

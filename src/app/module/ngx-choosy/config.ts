@@ -33,5 +33,6 @@ export const choosyDefaultConfig: ChoosyConfig = {
   },
   autocomplete: {
     minChars: 2
-  }
+  },
+  groupBy: null
 };

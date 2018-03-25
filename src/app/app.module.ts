@@ -21,9 +21,10 @@ import { AutocompleteComponent } from './demo/autocomplete/autocomplete.componen
 import { CheckboxSelectComponent } from './demo/checkbox-select/checkbox-select.component';
 import { HeadboardComponent } from './demo/headboard/headboard.component';
 import { FreestyleComponent } from './demo/freestyle/freestyle.component';
+import { GroupbyComponent } from './demo/groupby/groupby.component';
 
 @NgModule({
-  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent, OutputValComponent, ActiveLoopComponent, ChipsComponent, FilterOutsideComponent, AutocompleteComponent, CheckboxSelectComponent, HeadboardComponent, FreestyleComponent],
+  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent, OutputValComponent, ActiveLoopComponent, ChipsComponent, FilterOutsideComponent, AutocompleteComponent, CheckboxSelectComponent, HeadboardComponent, FreestyleComponent, GroupbyComponent],
   imports: [
     BrowserModule,
     FormsModule,

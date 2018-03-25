@@ -1,12 +1,32 @@
-<ng-container *ngIf="options|async as opt">
-  <ng-container *ngFor="let option of opt;trackBy:trackByFn">
-    <div [class.selected]="option.state.selected" [class.disabled]="option.state.disabled" [class.active]="option.state.active"
-      (click)="selection(option,option.state)" *ngIf="!option.state.hidden">
-      <ng-template *ngTemplateOutlet="tpl; context: { $implicit: option.value,state:option.state }">
-      </ng-template>
-    </div>
+<ng-container *ngIf="config.groupBy">
+  <ng-container *ngIf="options|async as groups">
+    <ng-container *ngFor="let group of (groups | groupBy:config.groupBy)">
+      <span>{{group.key}}</span>
+      <ng-container *ngFor="let groupitem of group.value">
+        <div [class.selected]="groupitem.state.selected" [class.disabled]="groupitem.state.disabled" [class.active]="groupitem.state.active"
+          (click)="selection(groupitem.value,groupitem.state)" *ngIf="!groupitem.state.hidden">
+          <ng-template *ngTemplateOutlet="tpl; context: { $implicit: groupitem.value,state:groupitem.state }">
+          </ng-template>
+        </div>
+      </ng-container>
+    </ng-container>
   </ng-container>
 </ng-container>
+
+<ng-container *ngIf="!config.groupBy">
+  <ng-container *ngIf="options|async as opt">
+    <ng-container *ngFor="let option of opt;trackBy:trackByFn">
+
+      <div [class.selected]="option.state.selected" [class.disabled]="option.state.disabled" [class.active]="option.state.active"
+        (click)="selection(option,option.state)" *ngIf="!option.state.hidden">
+        <ng-template *ngTemplateOutlet="tpl; context: { $implicit: option.value,state:option.state }">
+        </ng-template>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>
+
+
 <ng-template #defaultOptionTpl let-option>
   {{option}}
 </ng-template>
