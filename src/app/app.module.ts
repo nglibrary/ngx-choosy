@@ -18,9 +18,10 @@ import { ActiveLoopComponent } from './demo/active-loop/active-loop.component';
 import { ChipsComponent } from './demo/chips/chips.component';
 import { FilterOutsideComponent } from './demo/filter-outside/filter-outside.component';
 import { AutocompleteComponent } from './demo/autocomplete/autocomplete.component';
+import { CheckboxSelectComponent } from './demo/checkbox-select/checkbox-select.component';
 
 @NgModule({
-  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent, OutputValComponent, ActiveLoopComponent, ChipsComponent, FilterOutsideComponent, AutocompleteComponent],
+  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent, OutputValComponent, ActiveLoopComponent, ChipsComponent, FilterOutsideComponent, AutocompleteComponent, CheckboxSelectComponent],
   imports: [
     BrowserModule,
     FormsModule,

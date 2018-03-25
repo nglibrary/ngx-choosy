@@ -27,6 +27,10 @@ export class ChoosyListComponent implements OnInit, AfterViewInit {
   @Input() optionTpl: TemplateRef<any>;
   @ViewChild('defaultOptionTpl', { read: TemplateRef })
   defaultOptionTpl;
+  @ViewChild('checkboxDefaultOptionTpl', { read: TemplateRef })
+  checkboxDefaultOptionTpl;
+  @ViewChild('checkboxCustomOptionTpl', { read: TemplateRef })
+  checkboxCustomOptionTpl;
   @HostBinding('style.maxHeight') height: string;
 
   private tpl: TemplateRef<any>;
@@ -38,7 +42,11 @@ export class ChoosyListComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    this.tpl = this.optionTpl || this.defaultOptionTpl;
+    if (this.config.type === 'multi-select' && this.config.multiselect.checkbox) {
+      this.tpl = this.optionTpl ? this.checkboxCustomOptionTpl : this.checkboxDefaultOptionTpl;
+    } else {
+      this.tpl = this.optionTpl || this.defaultOptionTpl;
+    }
     this.height = this.config.dropdown.height + 'px';
     // todo: refactor
     this.options.subscribe(x => {

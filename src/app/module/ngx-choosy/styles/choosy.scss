@@ -43,10 +43,7 @@
   &:hover:not(.selected) {
     background-color: $choosy-bg-alt;
   }
-  &.selected {
-    background-color: $choosy-selected;
-    color: #fff;
-  }
+  &.selected {} 
   &.active {
     background-color: transparentize($choosy-selected, 0.5);
     color: #fff;
@@ -55,6 +52,11 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+}
+
+&.choosy-no-checkbox ::ng-deep choosy-list > div.selected{
+  background-color: $choosy-selected;
+    color: #fff;
 }
 
 & .choosy-loading {
@@ -68,4 +70,12 @@
   font-size: 80%;
   text-align: center;
   opacity: 0.5;
+}
+
+& ::ng-deep choosy-list .choosy-checkbox-tpl{
+  display:flex;
+  flex-direction:row;
+  span:first-child{
+    margin-right:0.5rem;
+  }
 }

@@ -10,7 +10,10 @@ import {
   Inject,
   Output,
   EventEmitter,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  SimpleChange,
+  OnChanges,
+  OnDestroy
 } from '@angular/core';
 
 import { ChoosyConfig, ChoosyOption } from '../../models';
@@ -48,7 +51,7 @@ const keyCodes = {
   styleUrls: ['./choosy.style.scss'],
   providers: [ChoosyListService]
 })
-export class ChoosyComponent implements OnInit {
+export class ChoosyComponent implements OnInit, OnChanges, OnDestroy {
   instanceID = null;
   initialized = new Subject<any>();
   initialOptions: Observable<any>;
@@ -113,6 +116,8 @@ export class ChoosyComponent implements OnInit {
         this.listService.setOptions(z, this.config);
         this.optionsLoading = false;
       });
+
+    this.updateClassName();
   }
 
   onSearch(keyword) {
@@ -131,6 +136,13 @@ export class ChoosyComponent implements OnInit {
   updateConfig(newConfig) {
     this.config = this.configService.mergeAllWithDefault(this.config, newConfig);
     this.listService.updateSettings(this.config);
+    this.updateClassName();
+  }
+
+  ngOnChanges(change: any) {
+    if (change.config) {
+      this.updateConfig(change.config.currentValue);
+    }
   }
 
   activeOption() {
@@ -149,6 +161,17 @@ export class ChoosyComponent implements OnInit {
       .subscribe(a => {
         this.elRef.nativeElement.querySelector('choosy-list>div.active').scrollIntoView(false);
       });
+  }
+
+  updateClassName() {
+    const features = [
+      this.config.theme,
+      this.config.footer.enable ? 'choosy-has-footer' : 'choosy-no-footer',
+      this.config.search.enable ? 'choosy-has-search' : 'choosy-no-search',
+      this.config.multiselect.checkbox ? 'choosy-has-checkbox' : 'choosy-no-checkbox'
+    ];
+
+    this.classNameAttr = features.join(' ');
   }
 
   ngOnDestroy() {}

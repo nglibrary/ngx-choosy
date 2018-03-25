@@ -1,12 +1,12 @@
 export interface ChoosyConfig {
-  search: any;
-  footer: ChoosyFooter;
-  dropdown: any;
-  displayValue: any;
-  type: any;
-  theme: ChoosyTheme;
-  multiselect: ChoosyMultiselect;
-  autocomplete: ChoosyAutocomplete;
+  search?: any;
+  footer?: ChoosyFooter;
+  dropdown?: any;
+  displayValue?: any;
+  type?: any;
+  theme?: ChoosyTheme;
+  multiselect?: ChoosyMultiselect;
+  autocomplete?: ChoosyAutocomplete;
 }
 
 export interface ChoosyOption {
@@ -21,13 +21,14 @@ export interface ChoosyOption {
 }
 
 export interface ChoosyFooter {
-  enable: boolean;
+  enable?: boolean;
 }
 export interface ChoosyMultiselect {
-  removeOnSelect: boolean;
+  removeOnSelect?: boolean;
+  checkbox?: boolean;
 }
 export interface ChoosyAutocomplete {
-  minChars: number;
+  minChars?: number;
 }
 
 export type ChoosyOptions = ChoosyOption[];
