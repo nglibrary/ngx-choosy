@@ -7,7 +7,6 @@ import { NgxChoosyModule } from './module/ngx-choosy/ngx-choosy.module';
 
 import { AppComponent } from './app.component';
 import { X1SimpleArrayComponent } from './x1-simple-array/x1-simple-array.component';
-import { ExampleSingleSelectComponent } from './example-single-select/example-single-select.component';
 import { ChoosyComponent } from './demo/choosy/choosy.component';
 import { ChoosyWithTplComponent } from './demo/choosy-with-tpl/choosy-with-tpl.component';
 import { ChoosyObsInputComponent } from './demo/choosy-obs-input/choosy-obs-input.component';
@@ -22,17 +21,32 @@ import { CheckboxSelectComponent } from './demo/checkbox-select/checkbox-select.
 import { HeadboardComponent } from './demo/headboard/headboard.component';
 import { FreestyleComponent } from './demo/freestyle/freestyle.component';
 import { GroupbyComponent } from './demo/groupby/groupby.component';
+import { OverlayComponent } from './demo/overlay/overlay.component';
+import { TestComponent } from './demo/overlay/test.component';
 
 @NgModule({
-  declarations: [AppComponent, X1SimpleArrayComponent, ExampleSingleSelectComponent, ChoosyComponent, ChoosyWithTplComponent, ChoosyObsInputComponent, ChoosyAddRemOptComponent, EnableDiableOptComponent, OutputValComponent, ActiveLoopComponent, ChipsComponent, FilterOutsideComponent, AutocompleteComponent, CheckboxSelectComponent, HeadboardComponent, FreestyleComponent, GroupbyComponent],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    NgxChoosyModule.forRoot()
+  declarations: [
+    AppComponent,
+    ChoosyComponent,
+    ChoosyWithTplComponent,
+    ChoosyObsInputComponent,
+    ChoosyAddRemOptComponent,
+    EnableDiableOptComponent,
+    OutputValComponent,
+    ActiveLoopComponent,
+    ChipsComponent,
+    FilterOutsideComponent,
+    AutocompleteComponent,
+    CheckboxSelectComponent,
+    HeadboardComponent,
+    FreestyleComponent,
+    GroupbyComponent,
+    OverlayComponent,
+    TestComponent
   ],
+  imports: [BrowserModule, FormsModule, HttpClientModule, ReactiveFormsModule, NgxChoosyModule.forRoot()],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [TestComponent]
 })
 export class AppModule {}

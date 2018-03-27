@@ -12,7 +12,14 @@ import { ChoosySelectDirective } from './directives/choosy-select.directive';
 import { ChoosyMenuDirective } from './directives/choosy-menu.directive';
 import { ChoosyMultiSelectDirective } from './directives/choosy-multi-select.directive';
 
-import { ChoosyConfigService, ChoosyListService, ChoosySearchService, ChoosyHostService } from './services';
+import {
+  ChoosyConfigService,
+  ChoosyListService,
+  ChoosySearchService,
+  ChoosyHostService,
+  OverlayService,
+  DomService
+} from './services';
 import { CHOOSY_CONFIG, choosyDefaultConfig } from './config';
 import { GroupByPipe } from './pipes/groupby.pipe';
 
@@ -39,7 +46,14 @@ import { GroupByPipe } from './pipes/groupby.pipe';
     ChoosyMenuDirective,
     ChoosyMultiSelectDirective
   ],
-  providers: [ChoosyConfigService, ChoosyListService, ChoosySearchService, ChoosyHostService]
+  providers: [
+    ChoosyConfigService,
+    ChoosyListService,
+    ChoosySearchService,
+    ChoosyHostService,
+    OverlayService,
+    DomService
+  ]
 })
 export class NgxChoosyModule {
   static forRoot(globalConfig: any = {}): ModuleWithProviders {

@@ -1,8 +1,0 @@
-@import '../../styles/choosy.scss';
-:host() {
-    display: block;
-    @extend #choosy;
-    >div {
-        @extend #choosy-frame;
-    }
-}

@@ -1,38 +1,4 @@
 58.6kb
-////
-
-<choosy>
-  <choosy-header></choosy-header>
-  <choosy-options></choosy-options>
-  <choosy-footer></choosy-footer>
-</choosy>
-
-<choosy 
-  [config]="" 
-  [options]="" 
-  [optionTplRef]=""
-  (selected)=""
-  (loading)=""
-  #choosyRef
->
-</choosy>
-
-<choosy-header
-  (searching)=""
->
-</choosy-header>
-
-<choosy-options
-  [options]=""
-  [optionTplRef]=""
->
-</choosy-options>
-
-<choosy-footer
-  [enable]=""
-  [totalOptionsCount]=""
->
-</choosy-footer>
 /////////////
 
 https://joshuajohnson.co.uk/Choices/
@@ -42,3 +8,26 @@ input as search
 grouped list
 add to list
 custom loader
+
+
+//////////////////
+
+
+let hostRef =  overlay({className:'overlay'}).host(comp,{elative:'global'|HTMLElement})
+hostRef.open();
+hostRef.close();
+hostRef.otherInstanceOpened.subscribe();
+hostRef.overlayClicked.subscribe()
+hostRef.outsideClicked.subscribe()
+hostRef.srcElementSizeChanged().subscribe()
+hostRef.windowResized().subscribe()
+hostRef.compRef
+
+
+defaultBehaviorDecorator(hostRef);
+btnBehaviorDecorator(hostRef);
+
+
+overlayRef // overlay - backdrop
+hostRef // placeholder for component
+domRef // watch dom size change

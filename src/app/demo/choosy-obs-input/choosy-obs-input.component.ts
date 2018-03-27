@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { data } from './data';
 import { ChoosyConfig } from '../../module/ngx-choosy/models';
 import { HttpClient } from '@angular/common/http';
+import { delay } from 'rxjs/operator/delay';
 
 @Component({
   selector: 'app-choosy-obs-input',
@@ -25,7 +25,7 @@ export class ChoosyObsInputComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.data = this.http.get('https://api.myjson.com/bins/gpwa3').delay(5000);
+    this.data = this.http.get('https://api.myjson.com/bins/gpwa3');
   }
   captureEvents(e) {
     this.events.unshift(e);

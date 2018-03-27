@@ -1,0 +1,13 @@
+<div class="card">
+  <input type="text" class="form-control" (input)="trigger($event.target.value)">
+</div>
+
+
+
+<button class="btn btn-primary" (click)="create1()">create 1</button>
+<button class="btn btn-primary" (click)="create2()">create 2</button>
+
+<hr>
+
+<button class="btn btn-danger" (click)="delete1()">delete 1</button>
+<button class="btn btn-danger" (click)="delete2()">delete 2</button>

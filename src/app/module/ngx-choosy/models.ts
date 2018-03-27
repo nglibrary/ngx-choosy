@@ -40,3 +40,9 @@ export type ChoosyEvent = 'optionSelected' | 'optionsAdded';
 export type ChoosyPosition = 'AUTO' | 'FIXED';
 
 export type ChoosyTheme = 'default' | 'modern' | 'skeleton' | 'freestyle';
+
+export interface HtmlElementOptions {
+  className?: string;
+  id?: string;
+  attr?: { [x: string]: string };
+}
