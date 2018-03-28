@@ -26,6 +26,12 @@ export class DomService {
     return prevParent;
   }
 
+  setPositions(element: HTMLElement, positions: object) {
+    Object.keys(positions).forEach(prop => {
+      element.style[prop] = `${positions[prop]}px`;
+    });
+  }
+
   removeElement(element: HTMLElement) {
     element.parentNode.removeChild(element);
   }

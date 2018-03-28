@@ -31,3 +31,17 @@ btnBehaviorDecorator(hostRef);
 overlayRef // overlay - backdrop
 hostRef // placeholder for component
 domRef // watch dom size change
+
+const size = {x:'auto',y:'auto'}
+
+ReltiveToElem({
+  origin:'#src',
+  initialPos:'bottom|left',
+  autoUpdate:true
+})
+
+RelativeToWindow({
+  position:'center|top left|custom'
+  customPosX:11,
+  customPosY:11
+})

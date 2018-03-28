@@ -8,9 +8,9 @@ import { ChoosyListComponent } from './components/choosy-list/choosy-list.compon
 import { ChoosyItemsComponent } from './components/choosy-items/choosy-items.component';
 import { ChoosyChipsComponent } from './components/choosy-chips/choosy-chips.component';
 
-import { ChoosySelectDirective } from './directives/choosy-select.directive';
-import { ChoosyMenuDirective } from './directives/choosy-menu.directive';
-import { ChoosyMultiSelectDirective } from './directives/choosy-multi-select.directive';
+// import { ChoosySelectDirective } from './directives/choosy-select.directive';
+// import { ChoosyMenuDirective } from './directives/choosy-menu.directive';
+// import { ChoosyMultiSelectDirective } from './directives/choosy-multi-select.directive';
 
 import {
   ChoosyConfigService,
@@ -32,19 +32,19 @@ import { GroupByPipe } from './pipes/groupby.pipe';
     ChoosyListComponent,
     ChoosyItemsComponent,
     ChoosyChipsComponent,
-    ChoosySelectDirective,
-    ChoosyMenuDirective,
-    ChoosyMultiSelectDirective,
+    // ChoosySelectDirective,
+    // ChoosyMenuDirective,
+    // ChoosyMultiSelectDirective,
     GroupByPipe
   ],
   entryComponents: [ChoosyComponent],
   exports: [
     ChoosyComponent,
     ChoosyItemsComponent,
-    ChoosyChipsComponent,
-    ChoosySelectDirective,
-    ChoosyMenuDirective,
-    ChoosyMultiSelectDirective
+    ChoosyChipsComponent
+    // ChoosySelectDirective,
+    // ChoosyMenuDirective,
+    // ChoosyMultiSelectDirective
   ],
   providers: [
     ChoosyConfigService,

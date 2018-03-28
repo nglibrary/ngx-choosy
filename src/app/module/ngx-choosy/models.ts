@@ -46,3 +46,23 @@ export interface HtmlElementOptions {
   id?: string;
   attr?: { [x: string]: string };
 }
+
+export interface ChoosyHostPosition {
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+}
+
+export type ChoosyHostPositionInside =
+  | 'TOP'
+  | 'BOTTOM'
+  | 'LEFT'
+  | 'RIGHT'
+  | 'CENTER'
+  | 'TOP RIGHT'
+  | 'TOP LEFT'
+  | 'BOTTOM LEFT'
+  | 'BOTTOM RIGHT';
+
+export type ChoosyHostPositionOutside = 'TOP' | 'BOTTOM' | 'LEFT' | 'RIGHT';

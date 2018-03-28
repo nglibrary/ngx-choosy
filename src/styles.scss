@@ -6,6 +6,8 @@ body{
   font-family: 'Rubik', sans-serif;
   color:#273444;
 }
-
+.host-container {
+  position: absolute;
+}
 @import './styles/_icon.scss';
 @import './styles/_icon-active.scss';
