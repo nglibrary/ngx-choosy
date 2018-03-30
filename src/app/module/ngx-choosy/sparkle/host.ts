@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 @Injectable()
-export class ChoosyHostService {
+export class Host {
   private compFac;
   private compRef;
   private compIns: Component;
@@ -18,7 +18,7 @@ export class ChoosyHostService {
     private injector: Injector
   ) {}
 
-  attach(component: Component): ChoosyHostService {
+  attach(component: Component): Host {
     this.compFac = this.compFacResolver.resolveComponentFactory(component as any);
     this.compRef = this.compFac.create(this.injector);
     this.compIns = this.compRef.instance;

@@ -9,5 +9,14 @@ body{
 .host-container {
   position: absolute;
 }
+
+app-test{
+  display:block;
+  width:100%;
+}
+.overlay-container{
+  pointer-events: none
+}
+
 @import './styles/_icon.scss';
 @import './styles/_icon-active.scss';

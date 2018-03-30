@@ -3,10 +3,13 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-test',
   template: `
-    <p>I am a dynamic component;</p>
+    <p class="m-0">I am a dynamic component! hoohoo</p>
   `,
   styles: [
     `
+      :host{
+        width:100%;
+      }
       p{
         display:inline-block;
         background-color:#fff;

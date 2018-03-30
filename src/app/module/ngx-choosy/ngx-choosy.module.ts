@@ -12,19 +12,13 @@ import { ChoosyChipsComponent } from './components/choosy-chips/choosy-chips.com
 // import { ChoosyMenuDirective } from './directives/choosy-menu.directive';
 // import { ChoosyMultiSelectDirective } from './directives/choosy-multi-select.directive';
 
-import {
-  ChoosyConfigService,
-  ChoosyListService,
-  ChoosySearchService,
-  ChoosyHostService,
-  OverlayService,
-  DomService
-} from './services';
+import { ChoosyConfigService, ChoosyListService, ChoosySearchService } from './services';
 import { CHOOSY_CONFIG, choosyDefaultConfig } from './config';
 import { GroupByPipe } from './pipes/groupby.pipe';
+import { SparkleModule } from './sparkle/sparkle.module';
 
 @NgModule({
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SparkleModule],
   declarations: [
     ChoosyComponent,
     ChoosyHeaderComponent,
@@ -46,14 +40,7 @@ import { GroupByPipe } from './pipes/groupby.pipe';
     // ChoosyMenuDirective,
     // ChoosyMultiSelectDirective
   ],
-  providers: [
-    ChoosyConfigService,
-    ChoosyListService,
-    ChoosySearchService,
-    ChoosyHostService,
-    OverlayService,
-    DomService
-  ]
+  providers: [ChoosyConfigService, ChoosyListService, ChoosySearchService]
 })
 export class NgxChoosyModule {
   static forRoot(globalConfig: any = {}): ModuleWithProviders {

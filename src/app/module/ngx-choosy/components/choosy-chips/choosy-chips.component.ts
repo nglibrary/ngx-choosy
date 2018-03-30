@@ -1,6 +1,5 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { ChoosyOption } from '../../models';
-import { ChoosyHostService } from '../../services/choosy-host.service';
 import { ChoosyListService } from '../../services/choosy-list.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
@@ -14,7 +13,7 @@ import { ChoosyComponent } from '../../../../demo/choosy/choosy.component';
 export class ChoosyChipsComponent implements OnInit, OnChanges {
   @Input() ref: any;
   options: ChoosyOption[] = [];
-  constructor(private hostService: ChoosyHostService) {}
+  constructor() {}
 
   ngOnInit() {
     console.log('instanceof', this.ref instanceof ChoosyComponent);

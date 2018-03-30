@@ -1,16 +1,23 @@
-<div class="card">
+<!-- <div class="card">
   <input type="text" class="form-control" (input)="trigger($event.target.value)">
+</div> -->
+
+<ul class="nav justify-content-center navbar-light bg-light">
+  <li class="nav-item">
+    <button class="nav-link btn btn-info" (click)="switchPos()"> {{position}}</button>
+  </li>
+  <li class="nav-item">
+    <button class="nav-link btn btn-link" (click)="delete1()">Delete 1</button>
+  </li>
+</ul>
+
+<div class="container">
+  <div class="col-md-6 mx-auto">
+    <div class="frame">
+      <span class="center" #src (mouseenter)="create1($event)" (mouseleave)="delete1($event)">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure, magnam earum illum in quod assumenda omnis totam, nobis nihil
+        ut labore doloremque? Commodi fuga tenetur quis facere consequuntur alias nesciunt!
+      </span>
+    </div>
+  </div>
 </div>
-
-<p #src>
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure, magnam earum illum in quod assumenda omnis totam, nobis nihil
-  ut labore doloremque? Commodi fuga tenetur quis facere consequuntur alias nesciunt!
-</p>
-
-<button class="btn btn-primary" (click)="create1()">create 1</button>
-<button class="btn btn-primary" (click)="create2()">create 2</button>
-
-<hr>
-
-<button class="btn btn-danger" (click)="delete1()">delete 1</button>
-<button class="btn btn-danger" (click)="delete2()">delete 2</button>
