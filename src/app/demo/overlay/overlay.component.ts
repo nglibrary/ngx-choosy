@@ -11,18 +11,18 @@ import { InsidePlacement } from '../../module/ngx-choosy/sparkle/models';
     `
       div.frame{
         background: #E0F7FA;
-        margin: 3rem 0;
+        // margin: 3rem 0;
         border-radius: 3px;
       }
       .center{
         display: inline-block;
         width: 500px;
-        margin-left: 10rem;
-        margin-top: 5rem;
+        // margin-left: 10rem;
+        // margin-top: 5rem;
         padding: 2rem;
         background: #CE93D8;
         border-radius: 3px;
-        box-shadow: 0px 13px 28px rgba(189, 189, 189, 0.32);
+        // box-shadow: 0px 13px 28px rgba(189, 189, 189, 0.32);
         color: #fff;
       }
     `

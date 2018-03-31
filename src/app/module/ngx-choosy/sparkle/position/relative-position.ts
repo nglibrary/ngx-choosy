@@ -19,9 +19,7 @@ export class RelativePosition extends Position {
   }
   getPositions(hostElement: HTMLElement, size: ContainerSize = { width: '100%', height: '100%' }): PositionCoOrds {
     const srcCoords = this.getCoords(this.src);
-    this.resetCoOrds(hostElement);
-    const hostCoords = this.getCoords(hostElement);
-    console.log('host height', srcCoords.top, hostElement.offsetHeight, hostCoords);
+    hostElement = this.resetCoOrds(hostElement);
 
     const top = srcCoords.top;
     const left = srcCoords.left;
@@ -33,10 +31,9 @@ export class RelativePosition extends Position {
     if (size.height === '100%') {
       size.height = 'auto';
     }
-
     switch (this.pos) {
       case OutsidePlacement.BOTTOM:
-        return { ...size, top: top + hostElement.offsetHeight, left: left };
+        return { ...size, top: top + (srcCoords as any).height, left: left };
       case OutsidePlacement.TOP:
         return { ...size, top: top - hostElement.offsetHeight, left: left };
       case OutsidePlacement.LEFT:
@@ -84,5 +81,6 @@ export class RelativePosition extends Position {
     element.style.bottom = '';
     element.style.left = '';
     element.style.right = '';
+    return element;
   }
 }

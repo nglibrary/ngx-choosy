@@ -6,6 +6,7 @@ import { Position } from './position/position';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { DefaultPosition } from './position/default-position';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 
 export const DefaultOverlayInstanceConfig: OverlayInstanceConfig = {
   backdrop: false,
@@ -48,9 +49,8 @@ export class OverlayInstance {
     const host = this.host.attach(component);
     const compView = host.componentView();
     this.dom.insertChildren(this.hostContainer, compView);
-    console.log('before', this.hostContainer.offsetHeight);
     this.calculateCoords();
-    this.computePos.next(true);
+    // this.computePos.next(true);
     return host;
   }
   detachComponent() {}
@@ -61,10 +61,8 @@ export class OverlayInstance {
 
   private calculateCoords() {
     this.computePos.subscribe(res => {
-      console.log('resizing..', this.hostContainer);
-      console.log('after', this.hostContainer.offsetHeight);
       const coords = this.position.getPositions(this.hostContainer, this.size);
-      this.dom.setPositions(this.hostContainer, coords);
+      requestAnimationFrame(() => this.dom.setPositions(this.hostContainer, coords));
     });
   }
 }
