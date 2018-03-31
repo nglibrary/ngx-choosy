@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-test',
   template: `
-    <p class="m-0">I am a dynamic component! hoohoo</p>
+    I am a dynamic component text...
   `,
   styles: [
     `
@@ -11,10 +11,9 @@ import { Component, OnInit } from '@angular/core';
         width:100%;
       }
       p{
-        display:inline-block;
-        background-color:#fff;
-        border:1px solid #aaa;
-        padding:10px;
+        // background-color:#fff;
+        // border:1px solid #aaa;
+        // padding:10px;
       }
     `
   ]

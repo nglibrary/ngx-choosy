@@ -5,8 +5,8 @@ export interface HtmlElementOptions {
 }
 
 export interface PositionCoOrds {
-  top: number;
-  left: number;
+  top?: number;
+  left?: number;
   bottom?: number;
   right?: number;
   height?: number | string;
@@ -31,6 +31,6 @@ export enum OutsidePlacement {
 }
 
 export interface ContainerSize {
-  width: string;
-  height: string;
+  width: string | number;
+  height: string | number;
 }

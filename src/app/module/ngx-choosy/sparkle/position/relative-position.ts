@@ -25,16 +25,20 @@ export class RelativePosition extends Position {
     const left = srcCoords.left;
 
     if (size.width === '100%') {
-      size.width = srcCoords.width + 'px';
+      size.width = srcCoords.width;
+    }
+
+    if (size.height === '100%') {
+      size.height = 'auto';
     }
 
     switch (this.pos) {
       case OutsidePlacement.BOTTOM:
         return { ...size, top: srcCoords.bottom, left: left };
       case OutsidePlacement.TOP:
-        return { ...size, top: top - hostCoords.height, left };
+        return { ...size, top: top - hostElement.offsetHeight, left: left };
       case OutsidePlacement.LEFT:
-        return { ...size, top, left: left - hostCoords.width };
+        return { ...size, top, left: left - (size.width as number) };
       case OutsidePlacement.RIGHT:
         return { ...size, top, left: srcCoords.right };
     }

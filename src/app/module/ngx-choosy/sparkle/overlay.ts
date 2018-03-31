@@ -4,7 +4,7 @@ import { Host } from './host';
 import { ContainerSize } from './models';
 import { Position } from './position/position';
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { debounceTime, throttleTime } from 'rxjs/operators';
+import { debounceTime, throttleTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Injectable()
 export class Overlay {
@@ -26,8 +26,9 @@ export class Overlay {
     });
 
     this.dom.insertChildren(this.dom.html.BODY, this.instances[id], hostContainer);
-
-    return this.instantiate(id);
+    const foo = this.instantiate(id);
+    foo.watchWindowResize();
+    return foo;
   }
   destroy(): void {
     this.dom.removeElement(this.instances[this.currentInstanceId]);
@@ -38,10 +39,9 @@ export class Overlay {
     const compView = host.componentView();
     const hostElement = this.getHostElement();
     this.dom.insertChildren(hostElement, compView);
-    const coords = this.position.getPositions(compView, this.size);
+    const coords = this.position.getPositions(hostElement, this.size);
+    console.log('initial coordinates', coords);
     this.dom.setPositions(hostElement, coords);
-
-    this.watchWindowResize();
     return host;
   }
 
@@ -57,16 +57,12 @@ export class Overlay {
 
   private watchWindowResize() {
     fromEvent(window, 'resize')
-      // .pipe(throttleTime(1500))
+      // .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe(event => {
         console.log('window resize');
-        const k = Object.keys(this.instances)[0];
-        const overl = this.instances[k];
-        const hostc = overl.querySelector('.host-container');
-        const compc = hostc.children[0];
-        console.log('--', overl, hostc, compc);
-        const coords = this.position.getPositions(compc, this.size);
-        this.dom.setPositions(hostc, coords);
+        const h = this.getHostElement();
+        const coords = this.position.getPositions(h, this.size);
+        this.dom.setPositions(h, coords);
       });
   }
 

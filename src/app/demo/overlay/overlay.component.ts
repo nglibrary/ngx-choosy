@@ -51,7 +51,10 @@ export class OverlayComponent implements OnInit {
     }
   }
   create1(e) {
-    this.ref1 = this.overlay.create(new RelativePosition({ src: this.src.nativeElement, pos: this.position }));
+    this.ref1 = this.overlay.create(new RelativePosition({ src: this.src.nativeElement, pos: this.position }), {
+      height: '100%',
+      width: 300
+    });
     this.host1 = this.ref1.attachComponent(TestComponent);
     console.log('ref1', this.ref1);
   }
