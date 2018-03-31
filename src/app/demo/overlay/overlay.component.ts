@@ -36,7 +36,7 @@ export class OverlayComponent implements OnInit {
   @ViewChild('src', { read: ElementRef })
   src: ElementRef;
   positions = [InsidePlacement.BOTTOM, InsidePlacement.LEFT, InsidePlacement.RIGHT, InsidePlacement.TOP];
-  positionIndex = 3;
+  positionIndex = 0;
   position: any = '';
   constructor(private overlay: Overlay) {}
 
@@ -51,11 +51,12 @@ export class OverlayComponent implements OnInit {
     }
   }
   create1(e) {
-    this.ref1 = this.overlay.create(new RelativePosition({ src: this.src.nativeElement, pos: this.position }), {
-      height: '100%',
-      width: 300
-    });
-    this.host1 = this.ref1.attachComponent(TestComponent);
+    this.ref1 = this.overlay.create();
+    this.host1 = this.ref1.attachComponent(
+      TestComponent,
+      new RelativePosition({ src: this.src.nativeElement, pos: this.position }),
+      { height: '100%', width: '100%' }
+    );
     console.log('ref1', this.ref1);
   }
   delete1() {

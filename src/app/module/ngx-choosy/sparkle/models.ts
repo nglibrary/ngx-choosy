@@ -34,3 +34,14 @@ export interface ContainerSize {
   width: string | number;
   height: string | number;
 }
+
+export interface OverlayInstanceConfig {
+  backdrop: boolean;
+  containerClass: string;
+  hostContainerClass: string;
+  watchWindowResize: boolean;
+  watchDocClick: boolean;
+  windowResizeCallback: () => void;
+  docClickCallback: () => void;
+  parentElement: HTMLElement | null;
+}

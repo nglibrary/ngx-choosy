@@ -9,6 +9,8 @@ grouped list
 add to list
 custom loader
 
+movie list - left right section - on hover a item show cast in right section
+
 
 //////////////////
 
