@@ -15,11 +15,9 @@ import { Component, OnInit } from '@angular/core';
     `
       :host{
         width:100%;
-      }
-      p{
-        // background-color:#fff;
-        // border:1px solid #aaa;
-        // padding:10px;
+        background-color:#fff;
+        border:1px solid #aaa;
+        padding:10px;
       }
     `
   ]

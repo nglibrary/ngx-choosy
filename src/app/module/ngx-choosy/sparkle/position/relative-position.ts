@@ -8,7 +8,7 @@ export interface Config {
 }
 
 export class RelativePosition extends Position {
-  private src: HTMLElement;
+  src: HTMLElement;
   private pos: OutsidePlacement;
   private autoUpdate: boolean;
   constructor({ src, pos = OutsidePlacement.TOP, autoUpdate = false }: Config = {}) {

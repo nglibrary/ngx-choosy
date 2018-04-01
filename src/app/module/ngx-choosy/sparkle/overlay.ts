@@ -6,6 +6,7 @@ import { Position } from './position/position';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { debounceTime, throttleTime, distinctUntilChanged } from 'rxjs/operators';
 import { OverlayInstance } from './overlay-instance';
+import { DefaultPosition } from './position/default-position';
 
 export const Config = {
   maxOverlays: 3,
@@ -15,11 +16,10 @@ export const Config = {
 @Injectable()
 export class Overlay {
   protected instances: { [x: string]: OverlayInstance } = {};
-  constructor(private dom: DomHelper, private host: Host) {}
-  create() {
-    const id = this.ID;
+  constructor(private dom: DomHelper, private host: Host<any>) {}
+  create(position: Position = new DefaultPosition(), size?: ContainerSize, id: string = this.ID) {
     const overlayIns = new OverlayInstance(this.dom, this.host);
-    this.instances[id] = overlayIns.create(id);
+    this.instances[id] = overlayIns.create(position, size, id);
     return this.instances[id];
   }
   private get ID(): string {

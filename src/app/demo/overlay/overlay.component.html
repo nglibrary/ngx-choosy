@@ -12,12 +12,13 @@
 </ul>
 
 <div class="container">
-  <div class="col-md-6 mx-auto">
+  <div class="col-md-6 mx-auto" [class.col-lg-12]="cls">
     <div class="frame">
-      <span class="center" #src (click)="create1($event)" (mouseleave)="delete1($event)">
+      <span class="center" #src (dblclick)="toggle($event)">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure, magnam earum illum in quod assumenda omnis totam, nobis nihil
         ut labore doloremque? Commodi fuga tenetur quis facere consequuntur alias nesciunt!
       </span>
     </div>
+    <button (click)="cls=!cls">toggle class</button>
   </div>
 </div>

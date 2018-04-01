@@ -23,6 +23,7 @@ import { FreestyleComponent } from './demo/freestyle/freestyle.component';
 import { GroupbyComponent } from './demo/groupby/groupby.component';
 import { OverlayComponent } from './demo/overlay/overlay.component';
 import { TestComponent } from './demo/overlay/test.component';
+import { DropdownDirectiveComponent } from './demo/dropdown-directive/dropdown-directive.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { TestComponent } from './demo/overlay/test.component';
     FreestyleComponent,
     GroupbyComponent,
     OverlayComponent,
-    TestComponent
+    TestComponent,
+    DropdownDirectiveComponent
   ],
   imports: [BrowserModule, FormsModule, HttpClientModule, ReactiveFormsModule, NgxChoosyModule.forRoot()],
   providers: [],

@@ -45,3 +45,7 @@ export interface OverlayInstanceConfig {
   docClickCallback: () => void;
   parentElement: HTMLElement | null;
 }
+
+export interface ComponentType<T> {
+  new (...args: any[]): T;
+}

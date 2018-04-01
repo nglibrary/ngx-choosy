@@ -1,5 +1,5 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChoosyComponent } from './components/choosy/choosy.component';
 import { ChoosyHeaderComponent } from './components/choosy-header/choosy-header.component';
@@ -8,7 +8,7 @@ import { ChoosyListComponent } from './components/choosy-list/choosy-list.compon
 import { ChoosyItemsComponent } from './components/choosy-items/choosy-items.component';
 import { ChoosyChipsComponent } from './components/choosy-chips/choosy-chips.component';
 
-// import { ChoosySelectDirective } from './directives/choosy-select.directive';
+import { ChoosySelectDirective } from './directives/choosy-select.directive';
 // import { ChoosyMenuDirective } from './directives/choosy-menu.directive';
 // import { ChoosyMultiSelectDirective } from './directives/choosy-multi-select.directive';
 
@@ -18,7 +18,7 @@ import { GroupByPipe } from './pipes/groupby.pipe';
 import { SparkleModule } from './sparkle/sparkle.module';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, SparkleModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SparkleModule],
   declarations: [
     ChoosyComponent,
     ChoosyHeaderComponent,
@@ -26,7 +26,7 @@ import { SparkleModule } from './sparkle/sparkle.module';
     ChoosyListComponent,
     ChoosyItemsComponent,
     ChoosyChipsComponent,
-    // ChoosySelectDirective,
+    ChoosySelectDirective,
     // ChoosyMenuDirective,
     // ChoosyMultiSelectDirective,
     GroupByPipe
@@ -35,8 +35,8 @@ import { SparkleModule } from './sparkle/sparkle.module';
   exports: [
     ChoosyComponent,
     ChoosyItemsComponent,
-    ChoosyChipsComponent
-    // ChoosySelectDirective,
+    ChoosyChipsComponent,
+    ChoosySelectDirective
     // ChoosyMenuDirective,
     // ChoosyMultiSelectDirective
   ],

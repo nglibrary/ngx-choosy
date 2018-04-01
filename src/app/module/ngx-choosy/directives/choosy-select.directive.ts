@@ -10,10 +10,15 @@ import {
   OnInit
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
-import { ChoosyHostService } from '../services/choosy-host.service';
 import { ChoosyComponent } from '../components/choosy/choosy.component';
 import { ChoosyConfig } from '../models';
 import { ChoosyConfigService } from '../services';
+import { Overlay } from '../sparkle/overlay';
+import { OverlayInstance } from '../sparkle/overlay-instance';
+import { RelativePosition } from '../sparkle/position/relative-position';
+import { Host } from '../sparkle/host';
+import { ComponentType, OutsidePlacement } from '../sparkle/models';
+import { ComponentInstance } from '../sparkle/component-instance';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -28,6 +33,8 @@ import { ChoosyConfigService } from '../services';
   ]
 })
 export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
+  hostIns: Host<ChoosyComponent>;
+  overlayRef: OverlayInstance;
   @Input() options: any[] = [];
   @Input() config: Partial<ChoosyConfig> = {};
   @Input() optionTpl: TemplateRef<any>;
@@ -37,66 +44,33 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
   private changeFn: Function;
   constructor(
     private configService: ChoosyConfigService,
-    private hostService: ChoosyHostService,
+    private overlay: Overlay,
     private renderer: Renderer2,
     private elRef: ElementRef,
     public model: NgControl
   ) {}
 
-  @HostBinding('attr.data-choosy-instance-id') instanceIDAttr: string;
+  @HostBinding('attr.data-choosy-instance-id') insID: string;
 
   @HostListener('document:click', ['$event'])
   documentClickEvent(event: Event): void {
-    if (this.hostService.instanceID === this.instanceID) {
-      this.hostService.closeOnOutsideClick(this.elRef.nativeElement, event);
-    }
+    //  todo
   }
 
   @HostListener('focus')
   onFocus($event) {
-    const b = {
-      options: this.options,
-      config: this.config,
-      optionTpl: this.optionTpl
-    };
-    if (!this.instanceID) {
-      this.instanceID = Math.random()
-        .toString(36)
-        .substr(2, 5);
-      this.instanceIDAttr = this.instanceID;
-    } else {
-      this.instanceID = this.instanceIDAttr;
-    }
-
-    this.choosyCompIns = this.hostService.init(ChoosyComponent as any, b, this.instanceID);
-    this.setPosition();
-    this.choosyCompIns.initialized.filter(a => a === true).subscribe(a => {
-      this.choosyCompIns.listService.setOptionAsSelected(
-        v => this.getValue(v) === this.getValue(this.model.control.value)
-      );
-    });
-
-    this.choosyCompIns.listService.events
-      .filter(a => a.name === 'optionSelected')
-      .map(a => {
-        return a.value;
-      })
-      .subscribe(a => {
-        // this.changeFn(a);
-        this.model.control.setValue(a);
-        this.renderer.setProperty(this.elRef.nativeElement, 'value', this.getValue(a));
-        // this.hostService.destroy();
-      });
+    if (this.overlayRef) return;
+    this.createChoosy();
   }
 
   @HostListener('blur')
   onBlur($event) {
-    // this.hostService.destroy();
+    // this.overlayRef.destroy();
   }
   @HostListener('keyup', ['$event'])
   onKeyup($event) {
     this.choosyCompIns.listService.filterOptions($event.target.value);
-    // this.hostService.destroy();
+    // this.overlay.destroy();
   }
 
   ngOnInit() {
@@ -114,11 +88,6 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
   }
   registerOnTouched(fn: any): void {}
 
-  private setPosition() {
-    this.hostService.renderer = this.renderer;
-    this.hostService.setPosition(this.elRef.nativeElement, 'AUTO', 300);
-  }
-
   private getValue(value, key = this.config.displayValue) {
     if (typeof key === 'function') {
       return key(value);
@@ -129,5 +98,21 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
     //   value = v;
     // }
     return value;
+  }
+
+  private createChoosy() {
+    this.overlayRef = this.overlay.create(
+      new RelativePosition({
+        src: this.elRef.nativeElement,
+        pos: OutsidePlacement.BOTTOM
+      })
+    );
+    this.insID = this.overlayRef.id;
+    this.hostIns = this.overlayRef.attachComponent(ChoosyComponent, {
+      options: this.options,
+      config: this.config,
+      instanceID: this.insID
+    });
+    this.hostIns.getCompIns().addProps({ config: this.config });
   }
 }

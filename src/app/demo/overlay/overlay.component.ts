@@ -11,18 +11,18 @@ import { InsidePlacement } from '../../module/ngx-choosy/sparkle/models';
     `
       div.frame{
         background: #E0F7FA;
-        // margin: 3rem 0;
+        margin: 3rem 0;
         border-radius: 3px;
       }
       .center{
         display: inline-block;
         width: 500px;
-        // margin-left: 10rem;
-        // margin-top: 5rem;
+        margin-left: 10rem;
+        margin-top: 5rem;
         padding: 2rem;
         background: #CE93D8;
         border-radius: 3px;
-        // box-shadow: 0px 13px 28px rgba(189, 189, 189, 0.32);
+        box-shadow: 0px 13px 28px rgba(189, 189, 189, 0.32);
         color: #fff;
       }
     `
@@ -50,6 +50,14 @@ export class OverlayComponent implements OnInit {
       this.positionIndex = 0;
     }
   }
+  toggle(e) {
+    if (this.ref1) {
+      this.delete1();
+      this.ref1 = null;
+    } else {
+      this.create1(e);
+    }
+  }
   create1(e) {
     this.ref1 = this.overlay.create();
     this.host1 = this.ref1.attachComponent(
@@ -60,7 +68,7 @@ export class OverlayComponent implements OnInit {
     console.log('ref1', this.ref1);
   }
   delete1() {
-    // this.host1.detach();
-    // this.ref1.destroy();
+    this.host1.detach();
+    this.ref1.destroy();
   }
 }
