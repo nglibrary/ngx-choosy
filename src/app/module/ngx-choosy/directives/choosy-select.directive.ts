@@ -7,7 +7,9 @@ import {
   HostBinding,
   ElementRef,
   forwardRef,
-  OnInit
+  OnInit,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { ChoosyComponent } from '../components/choosy/choosy.component';
@@ -19,6 +21,8 @@ import { RelativePosition } from '../sparkle/position/relative-position';
 import { Host } from '../sparkle/host';
 import { ComponentType, OutsidePlacement } from '../sparkle/models';
 import { ComponentInstance } from '../sparkle/component-instance';
+import { Subject } from 'rxjs/Subject';
+import { GlobalPosition } from '../sparkle/position/global-position';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -35,13 +39,16 @@ import { ComponentInstance } from '../sparkle/component-instance';
 export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
   hostIns: Host<ChoosyComponent>;
   overlayRef: OverlayInstance;
+  choosy: ChoosyComponent;
   @Input() options: any[] = [];
   @Input() config: Partial<ChoosyConfig> = {};
   @Input() optionTpl: TemplateRef<any>;
+  @Output() selected: EventEmitter<any> = new EventEmitter();
   value: any = null;
   instanceID: string = null;
   private choosyCompIns: ChoosyComponent;
   private changeFn: Function;
+  private optionSelected: Subject<any> = new Subject();
   constructor(
     private configService: ChoosyConfigService,
     private overlay: Overlay,
@@ -59,22 +66,32 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
 
   @HostListener('focus')
   onFocus($event) {
-    if (this.overlayRef) return;
+    if (this.overlayRef) {
+      return;
+    }
     this.createChoosy();
   }
 
   @HostListener('blur')
   onBlur($event) {
-    // this.overlayRef.destroy();
+    // this.destroyChoosy();
   }
   @HostListener('keyup', ['$event'])
-  onKeyup($event) {
-    this.choosyCompIns.listService.filterOptions($event.target.value);
+  onKeyup(e) {
+    if (this.choosy) {
+      this.choosy.onSearch(e.target.value);
+    }
     // this.overlay.destroy();
   }
 
   ngOnInit() {
     this.config = this.configService.mergeAllWithDefault(this.config, { type: 'select' });
+    this.optionSelected.subscribe(x => {
+      this.writeValue(x);
+      this.destroyChoosy();
+
+      // this.selected.emit(x);
+    });
   }
 
   writeValue(value: any): void {
@@ -101,18 +118,21 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
   }
 
   private createChoosy() {
-    this.overlayRef = this.overlay.create(
-      new RelativePosition({
-        src: this.elRef.nativeElement,
-        pos: OutsidePlacement.BOTTOM
-      })
-    );
+    this.overlayRef = this.overlay.create(new GlobalPosition(OutsidePlacement.BOTTOM), { width: 200, height: 200 });
     this.insID = this.overlayRef.id;
     this.hostIns = this.overlayRef.attachComponent(ChoosyComponent, {
       options: this.options,
       config: this.config,
       instanceID: this.insID
     });
-    this.hostIns.getCompIns().addProps({ config: this.config });
+    this.choosy = this.hostIns.getCompIns().component;
+    this.choosy.listService.setOptionAsSelected(this.value);
+    this.choosy.events.filter(x => x.name === 'optionSelected').subscribe(x => this.optionSelected.next(x.value));
+  }
+
+  private destroyChoosy() {
+    this.overlayRef.destroy();
+    this.overlayRef = null;
+    this.choosy = null;
   }
 }

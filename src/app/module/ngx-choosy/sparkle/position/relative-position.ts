@@ -31,7 +31,7 @@ export class RelativePosition extends Position {
     if (size.height === '100%') {
       size.height = 'auto';
     }
-    switch (this.pos) {
+    switch (this.pos) { 
       case OutsidePlacement.BOTTOM:
         return { ...size, top: top + (srcCoords as any).height, left: left };
       case OutsidePlacement.TOP:
