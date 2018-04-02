@@ -4,10 +4,9 @@
 
 <ul class="nav justify-content-center navbar-light bg-light">
   <li class="nav-item">
-    <button class="nav-link btn btn-info" (click)="switchPos()"> {{position}}</button>
-  </li>
-  <li class="nav-item">
-    <button class="nav-link btn btn-link" (click)="delete1()">Delete 1</button>
+    <select class="form-control" [(ngModel)]="selectedPlacementIndex" (change)="placementChanged()">
+      <option [value]="i" *ngFor="let p of placements;let i=index">{{p.name}}</option>
+    </select>
   </li>
 </ul>
 

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { TestComponent } from './test.component';
 import { RelativePosition } from '../../module/ngx-choosy/sparkle/position/relative-position';
 import { Overlay } from '../../module/ngx-choosy/sparkle/overlay';
-import { InsidePlacement } from '../../module/ngx-choosy/sparkle/models';
+import { InsidePlacement, OutsidePlacement } from '../../module/ngx-choosy/sparkle/models';
 
 @Component({
   selector: 'app-overlay',
@@ -35,40 +35,81 @@ export class OverlayComponent implements OnInit {
   host2;
   @ViewChild('src', { read: ElementRef })
   src: ElementRef;
-  positions = [InsidePlacement.BOTTOM, InsidePlacement.LEFT, InsidePlacement.RIGHT, InsidePlacement.TOP];
-  positionIndex = 0;
-  position: any = '';
+  placements = [
+    {
+      name: 'top',
+      placement: OutsidePlacement.TOP
+    },
+    {
+      name: 'top left',
+      placement: OutsidePlacement.TOP_LEFT
+    },
+    {
+      name: 'top right',
+      placement: OutsidePlacement.TOP_RIGHT
+    },
+    {
+      name: 'bottom',
+      placement: OutsidePlacement.BOTTOM
+    },
+    {
+      name: 'bottom left',
+      placement: OutsidePlacement.BOTTOM_LEFT
+    },
+    {
+      name: 'bottom right',
+      placement: OutsidePlacement.BOTTOM_RIGHT
+    },
+    {
+      name: 'left',
+      placement: OutsidePlacement.LEFT
+    },
+    {
+      name: 'left top',
+      placement: OutsidePlacement.LEFT_TOP
+    },
+    {
+      name: 'left bottom',
+      placement: OutsidePlacement.LEFT_BOTTOM
+    },
+    {
+      name: 'right',
+      placement: OutsidePlacement.RIGHT
+    },
+    {
+      name: 'right top',
+      placement: OutsidePlacement.RIGHT_TOP
+    },
+    {
+      name: 'right bottom',
+      placement: OutsidePlacement.RIGHT_BOTTOM
+    }
+  ];
+  selectedPlacementIndex: any = 0;
   constructor(private overlay: Overlay) {}
 
-  ngOnInit() {
-    this.position = this.positions[this.positionIndex];
+  ngOnInit() {}
+
+  placementChanged() {
+    console.log('placementChanged', this.selectedPlacementIndex, this.placements[this.selectedPlacementIndex]);
+    this.delete();
+    this.create(this.placements[this.selectedPlacementIndex].placement);
   }
-  switchPos() {
-    this.positionIndex++;
-    this.position = this.positions[this.positionIndex];
-    if (this.positionIndex === this.positions.length) {
-      this.positionIndex = 0;
-    }
-  }
-  toggle(e) {
-    if (this.ref1) {
-      this.delete1();
-      this.ref1 = null;
-    } else {
-      this.create1(e);
-    }
-  }
-  create1(e) {
-    this.ref1 = this.overlay.create();
-    this.host1 = this.ref1.attachComponent(
-      TestComponent,
-      new RelativePosition({ src: this.src.nativeElement, pos: this.position }),
-      { height: '100%', width: '100%' }
+  create(pos) {
+    this.ref1 = this.overlay.create(
+      new RelativePosition({
+        src: this.src.nativeElement,
+        pos,
+        hostHeight: '100%',
+        hostWidth: 'auto'
+      })
     );
-    console.log('ref1', this.ref1);
+    this.host1 = this.ref1.attachComponent(TestComponent);
   }
-  delete1() {
-    this.host1.detach();
-    this.ref1.destroy();
+  delete() {
+    if (this.ref1) {
+      this.ref1.destroy();
+      this.ref1 = null;
+    }
   }
 }

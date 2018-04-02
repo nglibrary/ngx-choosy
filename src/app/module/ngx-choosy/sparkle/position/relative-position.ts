@@ -5,42 +5,81 @@ export interface Config {
   src?: HTMLElement;
   pos?: OutsidePlacement;
   autoUpdate?: boolean;
+  hostWidth?: string | number;
+  hostHeight?: string | number;
 }
 
 export class RelativePosition extends Position {
   src: HTMLElement;
   private pos: OutsidePlacement;
   private autoUpdate: boolean;
-  constructor({ src, pos = OutsidePlacement.TOP, autoUpdate = false }: Config = {}) {
+  private hostWidth: string | number;
+  private hostHeight: string | number;
+  constructor({
+    src,
+    pos = OutsidePlacement.TOP,
+    autoUpdate = false,
+    hostWidth = '100%',
+    hostHeight = '100%'
+  }: Config) {
     super();
     this.src = src;
     this.pos = pos;
+    this.hostWidth = hostWidth;
+    this.hostHeight = hostHeight;
     this.autoUpdate = autoUpdate;
   }
-  getPositions(hostElement: HTMLElement, size: ContainerSize = { width: '100%', height: '100%' }): PositionCoOrds {
-    const srcCoords = this.getCoords(this.src);
-    hostElement = this.resetCoOrds(hostElement);
+  getPositions(hostElement: HTMLElement): PositionCoOrds {
+    const s = this.getCoords(this.src);
 
-    const top = srcCoords.top;
-    const left = srcCoords.left;
-
-    if (size.width === '100%') {
-      size.width = srcCoords.width;
+    if (this.hostWidth === '100%') {
+      this.hostWidth = s.width;
     }
 
-    if (size.height === '100%') {
-      size.height = 'auto';
+    if (this.hostHeight === '100%') {
+      this.hostHeight = 'auto';
     }
-    switch (this.pos) { 
+    const h = this.getCoords(hostElement);
+    let props;
+    switch (this.pos) {
       case OutsidePlacement.BOTTOM:
-        return { ...size, top: top + (srcCoords as any).height, left: left };
+        props = this.calculateBottom(s, h);
+        break;
       case OutsidePlacement.TOP:
-        return { ...size, top: top - hostElement.offsetHeight, left: left };
+        props = this.calculateTop(s, h);
+        break;
       case OutsidePlacement.LEFT:
-        return { ...size, top, left: left - (size.width as number) };
+        props = this.calculateLeft(s, h);
+        break;
       case OutsidePlacement.RIGHT:
-        return { ...size, top, left: srcCoords.right };
+        props = this.calculateRight(s, h);
+        break;
+      case OutsidePlacement.TOP_LEFT:
+        props = this.calculateTopLeft(s, h);
+        break;
+      case OutsidePlacement.TOP_RIGHT:
+        props = this.calculateTopRight(s, h);
+        break;
+      case OutsidePlacement.BOTTOM_LEFT:
+        props = this.calculateBottomLeft(s, h);
+        break;
+      case OutsidePlacement.BOTTOM_RIGHT:
+        props = this.calculateBottomRight(s, h);
+        break;
+      case OutsidePlacement.RIGHT_TOP:
+        props = this.calculateRightTop(s, h);
+        break;
+      case OutsidePlacement.RIGHT_BOTTOM:
+        props = this.calculateRightBottom(s, h);
+        break;
+      case OutsidePlacement.LEFT_TOP:
+        props = this.calculateLeftTop(s, h);
+        break;
+      case OutsidePlacement.LEFT_BOTTOM:
+        props = this.calculateLeftBottom(s, h);
+        break;
     }
+    return { ...props, width: this.hostWidth, height: this.hostHeight };
   }
 
   private getSize(el): { x: number; y: number } {
@@ -82,5 +121,69 @@ export class RelativePosition extends Position {
     element.style.left = '';
     element.style.right = '';
     return element;
+  }
+
+  private calculateTop(src, host) {
+    const left = src.left + (src.width - host.width) / 2;
+    const top = src.top - host.height;
+    return { left, top };
+  }
+  private calculateBottom(src, host) {
+    const left = src.left + (src.width - host.width) / 2;
+    const top = src.top + src.height;
+    return { left, top };
+  }
+  private calculateLeft(src, host) {
+    const left = src.left - host.width;
+    const top = src.top + (src.height - host.height) / 2;
+    return { left, top };
+  }
+  private calculateRight(src, host) {
+    const left = src.right;
+    const top = src.top + (src.height - host.height) / 2;
+    return { left, top };
+  }
+
+  private calculateTopLeft(src, host) {
+    const left = src.left;
+    const top = src.top - host.height;
+    return { left, top };
+  }
+  private calculateTopRight(src, host) {
+    const left = src.left + src.width - host.width;
+    const top = src.top - host.height;
+    return { left, top };
+  }
+  private calculateBottomLeft(src, host) {
+    const left = src.left;
+    const top = src.top + src.height;
+    return { left, top };
+  }
+  private calculateBottomRight(src, host) {
+    const left = src.left + src.width - host.width;
+    const top = src.top + src.height;
+    return { left, top };
+  }
+
+  private calculateLeftTop(src, host) {
+    const left = src.left - host.width;
+    const top = src.top;
+    return { left, top };
+  }
+  private calculateLeftBottom(src, host) {
+    const left = src.left - host.width;
+    const top = src.top + src.height - host.height;
+    return { left, top };
+  }
+
+  private calculateRightTop(src, host) {
+    const left = src.right;
+    const top = src.top;
+    return { left, top };
+  }
+  private calculateRightBottom(src, host) {
+    const left = src.right;
+    const top = src.top + src.height - host.height;
+    return { left, top };
   }
 }

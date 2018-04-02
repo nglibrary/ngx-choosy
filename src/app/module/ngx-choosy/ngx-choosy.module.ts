@@ -27,7 +27,7 @@ import { SparkleModule } from './sparkle/sparkle.module';
     ChoosyItemsComponent,
     ChoosyChipsComponent,
     ChoosySelectDirective,
-    // ChoosyMenuDirective,
+    // ChoosyMenuDirective, 
     // ChoosyMultiSelectDirective,
     GroupByPipe
   ],

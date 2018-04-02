@@ -17,9 +17,9 @@ export const Config = {
 export class Overlay {
   protected instances: { [x: string]: OverlayInstance } = {};
   constructor(private dom: DomHelper, private host: Host<any>) {}
-  create(position: Position = new DefaultPosition(), size?: ContainerSize, id: string = this.ID) {
+  create(position: Position = new DefaultPosition(), id: string = this.ID) {
     const overlayIns = new OverlayInstance(this.dom, this.host);
-    this.instances[id] = overlayIns.create(position, size, id);
+    this.instances[id] = overlayIns.create(position, id);
     return this.instances[id];
   }
   private get ID(): string {

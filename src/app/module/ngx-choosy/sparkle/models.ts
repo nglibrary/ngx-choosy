@@ -16,18 +16,26 @@ export enum InsidePlacement {
   TOP,
   BOTTOM,
   LEFT,
-  RIGHT
-}
-export enum OutsidePlacement {
-  TOP,
-  BOTTOM,
-  LEFT,
   RIGHT,
   TOP_LEFT,
   TOP_RIGHT,
   BOTTOM_LEFT,
   BOTTOM_RIGHT,
   CENTER
+}
+export enum OutsidePlacement {
+  TOP,
+  LEFT,
+  RIGHT,
+  BOTTOM,
+  TOP_LEFT,
+  TOP_RIGHT,
+  BOTTOM_LEFT,
+  BOTTOM_RIGHT,
+  LEFT_TOP,
+  LEFT_BOTTOM,
+  RIGHT_TOP,
+  RIGHT_BOTTOM
 }
 
 export interface ContainerSize {

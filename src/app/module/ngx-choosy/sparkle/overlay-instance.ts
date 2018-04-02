@@ -25,20 +25,13 @@ export class OverlayInstance {
   private container: HTMLElement;
   private hostContainer: HTMLElement;
   private position: Position;
-  private size: ContainerSize = { width: 'auto', height: 'auto' };
   private computePos: BehaviorSubject<boolean> = new BehaviorSubject(true);
   id: string;
   constructor(public dom: DomHelper, public host: Host<any>) {}
-  create(
-    position: Position = new DefaultPosition(),
-    size?: ContainerSize,
-    id?: string,
-    config?: OverlayInstanceConfig
-  ) {
+  create(position: Position = new DefaultPosition(), id?: string, config?: OverlayInstanceConfig) {
     this.config = { ...config, ...DefaultOverlayInstanceConfig };
     this.position = position;
     this.id = id;
-    this.size = size;
     this.container = this.dom.createElement('div', {
       className: this.config.containerClass,
       attr: { 'data-overlay-id': id }
@@ -72,7 +65,7 @@ export class OverlayInstance {
 
   private calculateCoords() {
     this.computePos.subscribe(res => {
-      const coords = this.position.getPositions(this.hostContainer, this.size);
+      const coords = this.position.getPositions(this.hostContainer);
       this.dom.setPositions(this.hostContainer, coords);
     });
   }
