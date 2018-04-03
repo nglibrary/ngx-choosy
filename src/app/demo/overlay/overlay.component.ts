@@ -3,6 +3,7 @@ import { TestComponent } from './test.component';
 import { RelativePosition } from '../../module/ngx-choosy/sparkle/position/relative-position';
 import { Overlay } from '../../module/ngx-choosy/sparkle/overlay';
 import { InsidePlacement, OutsidePlacement } from '../../module/ngx-choosy/sparkle/models';
+import { GlobalPosition } from '../../module/ngx-choosy/sparkle/position/global-position';
 
 @Component({
   selector: 'app-overlay',
@@ -85,23 +86,63 @@ export class OverlayComponent implements OnInit {
       placement: OutsidePlacement.RIGHT_BOTTOM
     }
   ];
+
+  outsidePlacements = [
+    {
+      name: 'top',
+      placement: InsidePlacement.TOP
+    },
+    {
+      name: 'top left',
+      placement: InsidePlacement.TOP_LEFT
+    },
+    {
+      name: 'top right',
+      placement: InsidePlacement.TOP_RIGHT
+    },
+    {
+      name: 'bottom',
+      placement: OutsidePlacement.BOTTOM
+    },
+    {
+      name: 'bottom left',
+      placement: InsidePlacement.BOTTOM_LEFT
+    },
+    {
+      name: 'bottom right',
+      placement: InsidePlacement.BOTTOM_RIGHT
+    },
+    {
+      name: 'left',
+      placement: InsidePlacement.LEFT
+    },
+    {
+      name: 'right',
+      placement: InsidePlacement.RIGHT
+    },
+    {
+      name: 'center',
+      placement: InsidePlacement.CENTER
+    }
+  ];
   selectedPlacementIndex: any = 0;
   constructor(private overlay: Overlay) {}
 
   ngOnInit() {}
 
   placementChanged() {
-    console.log('placementChanged', this.selectedPlacementIndex, this.placements[this.selectedPlacementIndex]);
+    console.log('placementChanged', this.selectedPlacementIndex, this.outsidePlacements[this.selectedPlacementIndex]);
     this.delete();
-    this.create(this.placements[this.selectedPlacementIndex].placement);
+    this.create(this.outsidePlacements[this.selectedPlacementIndex].placement);
   }
   create(pos) {
     this.ref1 = this.overlay.create(
-      new RelativePosition({
-        src: this.src.nativeElement,
-        pos,
-        hostHeight: '100%',
-        hostWidth: 'auto'
+      new GlobalPosition({
+        // src: this.src.nativeElement,
+        placement: pos,
+        hostHeight: 'auto',
+        hostWidth: 200,
+        offset: 20
       })
     );
     this.host1 = this.ref1.attachComponent(TestComponent);

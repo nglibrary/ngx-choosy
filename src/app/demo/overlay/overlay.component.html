@@ -5,7 +5,7 @@
 <ul class="nav justify-content-center navbar-light bg-light">
   <li class="nav-item">
     <select class="form-control" [(ngModel)]="selectedPlacementIndex" (change)="placementChanged()">
-      <option [value]="i" *ngFor="let p of placements;let i=index">{{p.name}}</option>
+      <option [value]="i" *ngFor="let p of outsidePlacements;let i=index">{{p.name}}</option>
     </select>
   </li>
 </ul>
