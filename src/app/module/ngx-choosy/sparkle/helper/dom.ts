@@ -40,6 +40,8 @@ export class DomHelper {
   }
 
   removeElement(element: HTMLElement) {
-    element.parentNode.removeChild(element);
+    if (element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
   }
 }

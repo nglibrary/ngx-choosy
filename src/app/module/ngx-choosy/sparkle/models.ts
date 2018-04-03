@@ -60,3 +60,8 @@ export interface ComponentType<T> {
 }
 
 export type SlidePositionDirection = 'LEFT' | 'RIGHT';
+
+export interface MessengerEvent {
+  name: string;
+  data: any;
+}

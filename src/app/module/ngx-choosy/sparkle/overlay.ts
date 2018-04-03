@@ -7,6 +7,7 @@ import { fromEvent } from 'rxjs/observable/fromEvent';
 import { debounceTime, throttleTime, distinctUntilChanged } from 'rxjs/operators';
 import { OverlayInstance } from './overlay-instance';
 import { DefaultPosition } from './position/default-position';
+import { Messenger } from './helper/messenger';
 
 export const Config = {
   maxOverlays: 3,
@@ -16,9 +17,17 @@ export const Config = {
 @Injectable()
 export class Overlay {
   protected instances: { [x: string]: OverlayInstance } = {};
-  constructor(private dom: DomHelper, private host: Host<any>) {}
+  constructor(private dom: DomHelper, private host: Host<any>, private messenger: Messenger) {
+    this.messenger
+      .watch()
+      .filter(e => e.name === 'REMOVE_OVERLAY_INS')
+      .subscribe(e => {
+        delete this.instances[e.data];
+        console.log('removed: ', this.instances);
+      });
+  }
   create(position: Position = new DefaultPosition(), id: string = this.ID) {
-    const overlayIns = new OverlayInstance(this.dom, this.host);
+    const overlayIns = new OverlayInstance(this.dom, this.host, this.messenger);
     this.instances[id] = overlayIns.create(position, id);
     return this.instances[id];
   }

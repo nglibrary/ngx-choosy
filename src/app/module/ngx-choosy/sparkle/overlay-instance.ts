@@ -8,6 +8,7 @@ import { DefaultPosition } from './position/default-position';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
+import { Messenger } from './helper/messenger';
 
 export const DefaultOverlayInstanceConfig: OverlayInstanceConfig = {
   backdrop: false,
@@ -27,7 +28,7 @@ export class OverlayInstance {
   private position: Position;
   private computePos: BehaviorSubject<boolean> = new BehaviorSubject(true);
   id: string;
-  constructor(public dom: DomHelper, public host: Host<any>) {}
+  constructor(public dom: DomHelper, public host: Host<any>, private messenger: Messenger) {}
   create(position: Position = new DefaultPosition(), id?: string, config?: OverlayInstanceConfig) {
     this.config = { ...config, ...DefaultOverlayInstanceConfig };
     this.position = position;
@@ -44,8 +45,9 @@ export class OverlayInstance {
     return this;
   }
   destroy() {
-    this.dom.removeElement(this.container);
     this.host.detach();
+    this.dom.removeElement(this.container);
+    this.messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
   }
   attachComponent<T>(component: ComponentType<T>, props = {}) {
     const host: Host<T> = this.host.attach(component, props);
@@ -55,13 +57,19 @@ export class OverlayInstance {
     this.computePos.next(true);
     this.watchSrcElementPos();
     this.watchSrcElement();
+    this.outsideClick();
     return host;
   }
   detachComponent() {}
   watchWindowResize() {
     fromEvent(window, 'resize').subscribe(() => this.computePos.next(true));
   }
-  onClick() {}
+  outsideClick() {
+    return fromEvent(this.container, 'click').subscribe(x => {
+      console.log('outside clicked');
+      this.destroy();
+    });
+  }
 
   private calculateCoords() {
     this.computePos.subscribe(res => {
