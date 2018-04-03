@@ -11,6 +11,7 @@ export interface PositionCoOrds {
   right?: number;
   height?: number | string;
   width?: number | string;
+  position?: string;
 }
 export enum InsidePlacement {
   TOP,
@@ -57,3 +58,5 @@ export interface OverlayInstanceConfig {
 export interface ComponentType<T> {
   new (...args: any[]): T;
 }
+
+export type SlidePositionDirection = 'LEFT' | 'RIGHT';

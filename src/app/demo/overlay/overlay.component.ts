@@ -4,6 +4,7 @@ import { RelativePosition } from '../../module/ngx-choosy/sparkle/position/relat
 import { Overlay } from '../../module/ngx-choosy/sparkle/overlay';
 import { InsidePlacement, OutsidePlacement } from '../../module/ngx-choosy/sparkle/models';
 import { GlobalPosition } from '../../module/ngx-choosy/sparkle/position/global-position';
+import { SlidePosition } from '../../module/ngx-choosy/sparkle/position/slide-position';
 
 @Component({
   selector: 'app-overlay',
@@ -135,16 +136,19 @@ export class OverlayComponent implements OnInit {
   placementChanged() {
     console.log('placementChanged', this.selectedPlacementIndex, this.outsidePlacements[this.selectedPlacementIndex]);
     this.delete();
-    this.create(this.outsidePlacements[this.selectedPlacementIndex].placement);
+    // this.create(this.outsidePlacements[this.selectedPlacementIndex].placement);
+    this.create();
   }
-  create(pos) {
+  create() {
     this.ref1 = this.overlay.create(
-      new GlobalPosition({
+      new SlidePosition({
+        direction: 'RIGHT',
+        width: '50%'
         // src: this.src.nativeElement,
-        placement: pos,
-        hostHeight: 'auto',
-        hostWidth: 200,
-        offset: 20
+        // placement: pos,
+        // hostHeight: '100%',
+        // hostWidth: '200',
+        // offset: 20
       })
     );
     this.host1 = this.ref1.attachComponent(TestComponent);
