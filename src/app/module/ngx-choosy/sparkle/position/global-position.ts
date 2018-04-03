@@ -20,12 +20,13 @@ export class GlobalPosition extends Position {
     this.hostHeight = hostHeight;
     this.offset = offset;
   }
-  getPositions(host?: HTMLElement) {
+  getPositions(hostElement?: HTMLElement) {
     console.log('got', this);
+    const host = hostElement.getBoundingClientRect();
     let props;
     const src = {
-      width: (Window as any).innerWidth,
-      height: (Window as any).innerHeight
+      width: (window as any).innerWidth,
+      height: (window as any).innerHeight
     };
     switch (this.placement) {
       case InsidePlacement.TOP:
@@ -34,11 +35,32 @@ export class GlobalPosition extends Position {
       case InsidePlacement.BOTTOM:
         props = this.calculateBottom(src, host);
         break;
+      case InsidePlacement.LEFT:
+        props = this.calculateLeft(src, host);
+        break;
+      case InsidePlacement.RIGHT:
+        props = this.calculateRight(src, host);
+        break;
+      case InsidePlacement.CENTER:
+        props = this.calculateCenter(src, host);
+        break;
+      case InsidePlacement.TOP_LEFT:
+        props = this.calculateTopLeft(src, host);
+        break;
+      case InsidePlacement.TOP_RIGHT:
+        props = this.calculateTopRight(src, host);
+        break;
+      case InsidePlacement.BOTTOM_LEFT:
+        props = this.calculateBottomLeft(src, host);
+        break;
+      case InsidePlacement.BOTTOM_RIGHT:
+        props = this.calculateBottomRight(src, host);
+        break;
       default:
         break;
     }
     console.log('props', props);
-    return { ...props, width: this.hostWidth, height: this.hostHeight };
+    return { ...props, width: this.hostWidth, height: this.hostHeight, position: 'fixed' };
   }
 
   private calculateTop(src, host) {
@@ -49,13 +71,41 @@ export class GlobalPosition extends Position {
   private calculateBottom(src, host) {
     const bottom = this.offset;
     const left = (src.width - host.width) / 2;
+    return { left, bottom };
+  }
+  private calculateLeft(src, host) {
+    const top = (src.height - host.height) / 2;
+    const left = this.offset;
     return { left, top };
   }
-  private calculateLeft(src, host) {}
-  private calculateRight(src, host) {}
-  private calculateCenter(src, host) {}
-  private calculateTopLeft(src, host) {}
-  private calculateTopRight(src, host) {}
-  private calculateBottomLeft(src, host) {}
-  private calculateBottomRight(src, host) {}
+  private calculateRight(src, host) {
+    const top = (src.height - host.height) / 2;
+    const right = this.offset;
+    return { right, top };
+  }
+  private calculateCenter(src, host) {
+    const top = (src.height - host.height) / 2;
+    const left = (src.width - host.width) / 2;
+    return { left, top };
+  }
+  private calculateTopLeft(src, host) {
+    const top = this.offset;
+    const left = this.offset;
+    return { left, top };
+  }
+  private calculateTopRight(src, host) {
+    const top = this.offset;
+    const right = this.offset;
+    return { right, top };
+  }
+  private calculateBottomLeft(src, host) {
+    const bottom = this.offset;
+    const left = this.offset;
+    return { left, bottom };
+  }
+  private calculateBottomRight(src, host) {
+    const bottom = this.offset;
+    const right = this.offset;
+    return { right, bottom };
+  }
 }

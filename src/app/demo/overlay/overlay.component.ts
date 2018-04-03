@@ -89,36 +89,38 @@ export class OverlayComponent implements OnInit {
 
   outsidePlacements = [
     {
-      name: 'top',
-      placement: InsidePlacement.TOP
-    },
-    {
       name: 'top left',
       placement: InsidePlacement.TOP_LEFT
     },
+    {
+      name: 'top',
+      placement: InsidePlacement.TOP
+    },
+
     {
       name: 'top right',
       placement: InsidePlacement.TOP_RIGHT
     },
     {
+      name: 'right',
+      placement: InsidePlacement.RIGHT
+    },
+    {
+      name: 'bottom right',
+      placement: InsidePlacement.BOTTOM_RIGHT
+    },
+
+    {
       name: 'bottom',
-      placement: OutsidePlacement.BOTTOM
+      placement: InsidePlacement.BOTTOM
     },
     {
       name: 'bottom left',
       placement: InsidePlacement.BOTTOM_LEFT
     },
     {
-      name: 'bottom right',
-      placement: InsidePlacement.BOTTOM_RIGHT
-    },
-    {
       name: 'left',
       placement: InsidePlacement.LEFT
-    },
-    {
-      name: 'right',
-      placement: InsidePlacement.RIGHT
     },
     {
       name: 'center',
