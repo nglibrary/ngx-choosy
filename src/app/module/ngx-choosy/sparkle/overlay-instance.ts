@@ -27,17 +27,23 @@ export class OverlayInstance {
   private container: HTMLElement;
   private hostContainer: HTMLElement;
   private position: Position;
+  private view: HTMLElement;
   private computePos: BehaviorSubject<boolean> = new BehaviorSubject(true);
   id: string;
   events: BehaviorSubject<string> = new BehaviorSubject('init');
   constructor(public dom: DomHelper, public host: ComponentHost<any>, private messenger: Messenger) {}
-  create(position: Position = new DefaultPosition(), id?: string, config?: OverlayInstanceConfig) {
+  configure(position: Position = new DefaultPosition(), id?: string, config?: OverlayInstanceConfig) {
     this.config = { ...config, ...DefaultOverlayInstanceConfig };
     this.position = position;
     this.id = id;
+  }
+  create() {
     this.container = this.dom.createElement('div', {
       className: this.config.containerClass,
-      attr: { 'data-overlay-id': id }
+      attr: {
+        'data-overlay-id': this.id,
+        style: 'left:0;position: fixed;top: 0;width: 100%;height: 100%;background: rgba(63, 81, 181, 0.39);'
+      }
     });
     this.hostContainer = this.dom.createElement('div', {
       className: this.config.hostContainerClass
@@ -54,6 +60,7 @@ export class OverlayInstance {
     this.messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
   }
   setView(view) {
+    this.view = view;
     this.dom.insertChildren(this.hostContainer, view);
     this.calculateCoords();
     this.computePos.next(true);
@@ -63,10 +70,11 @@ export class OverlayInstance {
     fromEvent(window, 'resize').subscribe(() => this.computePos.next(true));
   }
   outsideClick() {
-    return fromEvent(this.container, 'click').subscribe(x => {
-      console.log('outside clicked');
-      this.events.next('outside clicked');
-      this.destroy();
+    return fromEvent(this.container, 'click').subscribe((event: any) => {
+      if (event.target !== this.hostContainer && event.target !== this.view && !this.view.contains(event.target)) {
+        this.events.next('outside clicked');
+        this.destroy();
+      }
     });
   }
 

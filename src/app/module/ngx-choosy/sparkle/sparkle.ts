@@ -17,10 +17,7 @@ export class SparkleFriendly {
 
 @Injectable()
 export class Sparkle<C> {
-  private _position: Position;
   private _id: string;
-  private _component: ComponentType<C>;
-  private _props: { [x: string]: any };
   private _sparkleRefs = [];
   constructor(
     private _overlay: OverlayInstance,
@@ -37,25 +34,18 @@ export class Sparkle<C> {
       });
   }
   overlay(position: Position, id = this.utils.ID): Sparkle<C> {
-    this._position = position;
     this._id = id;
+    this._overlay.configure(position, id);
     return this;
   }
   host(component: ComponentType<C>, props: { [x: string]: any } = {}): Sparkle<C> {
-    // if (!(component instanceof SparkleFriendly)) {
-    //   throw new Error('Component must implement SparkleFriendly Class!');
-    // }
-    this._component = component;
-    this._props = props;
+    this._host.configure(component, props);
     return this;
   }
   create(): SparkleRef<C> {
-    if (this._sparkleRefs[this._id]) {
-      return;
+    if (!this._sparkleRefs[this._id]) {
+      this._sparkleRefs[this._id] = new SparkleRef(this._overlay, this._host, this._messenger, this._id);
     }
-    const view = this._host.attach(this._component, this._props).componentView();
-    this._overlay.create(this._position, this._id).setView(view);
-    this._sparkleRefs[this._id] = new SparkleRef(this._overlay, this._host, this._messenger, this._id);
     return this._sparkleRefs[this._id];
   }
 }

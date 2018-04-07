@@ -105,7 +105,9 @@ export class ChoosyHostService {
   }
 
   closeOnOutsideClick(el: HTMLElement, event: any) {
-    if (!this.compIns) return;
+    if (!this.compIns) {
+      return;
+    }
     const compEl = this.compIns.elRef.nativeElement;
     if (event.target !== el && event.target !== compEl && !compEl.contains(event.target)) {
       this.destroy();

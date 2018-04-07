@@ -16,6 +16,11 @@ export class SparkleRef<C> {
   ) {
     this.events['overlay'] = this._overlay.events.asObservable();
   }
+  open() {
+    const view = this._host.attach().componentView();
+    this._overlay.create().setView(view);
+    return this;
+  }
   close() {
     this._messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
   }
