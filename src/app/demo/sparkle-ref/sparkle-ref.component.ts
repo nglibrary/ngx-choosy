@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Sparkle } from '../../module/ngx-choosy/sparkle/sparkle';
 import { HelloComponent } from './hello.component';
 import { RelativePosition } from '../../module/ngx-choosy/sparkle/position/relative-position';
 import { GlobalPosition } from '../../module/ngx-choosy/sparkle/position/global-position';
-import { InsidePlacement } from '../../module/ngx-choosy/sparkle/models';
+import { InsidePlacement, OutsidePlacement } from '../../module/ngx-choosy/sparkle/models';
 import { SparkleRef } from '../../module/ngx-choosy/sparkle/sparke-ref';
 
 @Component({
@@ -11,6 +11,8 @@ import { SparkleRef } from '../../module/ngx-choosy/sparkle/sparke-ref';
   templateUrl: './sparkle-ref.component.html'
 })
 export class SparkleRefComponent implements OnInit {
+  @ViewChild('anchor', { read: ElementRef })
+  anchor: ElementRef;
   ref: SparkleRef<HelloComponent>;
   constructor(private sparkle: Sparkle<HelloComponent>) {}
 
@@ -18,11 +20,10 @@ export class SparkleRefComponent implements OnInit {
     this.ref = this.sparkle
       .host(HelloComponent)
       .overlay(
-        new GlobalPosition({
-          placement: InsidePlacement.CENTER,
-          hostHeight: 'auto',
-          hostWidth: 'auto',
-          offset: 20
+        new RelativePosition({
+          pos: OutsidePlacement.BOTTOM,
+          src: this.anchor.nativeElement,
+          hostWidth: 'auto'
         })
       )
       .create();

@@ -64,7 +64,7 @@ export class OverlayInstance {
     this.view = view;
     this.dom.insertChildren(this.hostContainer, view);
     this.calculateCoords();
-    // this.computePos.next(true);
+    this.computePos.next(true);
   }
 
   isHostContainerElement(element): boolean {

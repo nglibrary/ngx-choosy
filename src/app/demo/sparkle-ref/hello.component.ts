@@ -10,6 +10,7 @@ import { SparkleFriendly } from '../../module/ngx-choosy/sparkle/sparkle';
     `
       :host{
         width:100%;
+        display:block;
         background-color:#fff;
         border:1px solid #aaa;
         padding:10px;
