@@ -24,6 +24,8 @@ import { GroupbyComponent } from './demo/groupby/groupby.component';
 import { OverlayComponent } from './demo/overlay/overlay.component';
 import { TestComponent } from './demo/overlay/test.component';
 import { DropdownDirectiveComponent } from './demo/dropdown-directive/dropdown-directive.component';
+import { SparkleRefComponent } from './demo/sparkle-ref/sparkle-ref.component';
+import { HelloComponent } from './demo/sparkle-ref/hello.component';
 
 @NgModule({
   declarations: [
@@ -44,11 +46,13 @@ import { DropdownDirectiveComponent } from './demo/dropdown-directive/dropdown-d
     GroupbyComponent,
     OverlayComponent,
     TestComponent,
-    DropdownDirectiveComponent
+    HelloComponent,
+    DropdownDirectiveComponent,
+    SparkleRefComponent
   ],
   imports: [BrowserModule, FormsModule, HttpClientModule, ReactiveFormsModule, NgxChoosyModule.forRoot()],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [TestComponent]
+  entryComponents: [TestComponent, HelloComponent]
 })
 export class AppModule {}

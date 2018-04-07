@@ -50,3 +50,14 @@ RelativeToWindow({
   customPosX:11,
   customPosY:11
 })
+
+
+this.overlay().create().host(comp).open();
+
+ref.close();
+ref.componentInstance;
+ref.events;
+ref.config;
+ref.posUpdate();
+
+container.component(comp).overlay().open();

@@ -1,5 +1,4 @@
 import { Injectable, Component, ComponentDecorator } from '@angular/core';
-import { Host } from './host';
 import { OverlayInstanceConfig, ContainerSize, ComponentType } from './models';
 import { DomHelper } from './helper/dom';
 import { Position } from './position/position';
@@ -9,6 +8,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
 import { Messenger } from './helper/messenger';
+import { ComponentHost } from './host';
 
 export const DefaultOverlayInstanceConfig: OverlayInstanceConfig = {
   backdrop: false,
@@ -21,6 +21,7 @@ export const DefaultOverlayInstanceConfig: OverlayInstanceConfig = {
   parentElement: null
 };
 
+@Injectable()
 export class OverlayInstance {
   private config: OverlayInstanceConfig;
   private container: HTMLElement;
@@ -28,7 +29,7 @@ export class OverlayInstance {
   private position: Position;
   private computePos: BehaviorSubject<boolean> = new BehaviorSubject(true);
   id: string;
-  constructor(public dom: DomHelper, public host: Host<any>, private messenger: Messenger) {}
+  constructor(public dom: DomHelper, public host: ComponentHost<any>, private messenger: Messenger) {}
   create(position: Position = new DefaultPosition(), id?: string, config?: OverlayInstanceConfig) {
     this.config = { ...config, ...DefaultOverlayInstanceConfig };
     this.position = position;
@@ -49,18 +50,12 @@ export class OverlayInstance {
     this.dom.removeElement(this.container);
     this.messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
   }
-  attachComponent<T>(component: ComponentType<T>, props = {}) {
-    const host: Host<T> = this.host.attach(component, props);
-    const compView = host.componentView();
-    this.dom.insertChildren(this.hostContainer, compView);
+  setView(view) {
+    this.dom.insertChildren(this.hostContainer, view);
     this.calculateCoords();
     this.computePos.next(true);
-    this.watchSrcElementPos();
-    this.watchSrcElement();
     this.outsideClick();
-    return host;
   }
-  detachComponent() {}
   watchWindowResize() {
     fromEvent(window, 'resize').subscribe(() => this.computePos.next(true));
   }
@@ -82,19 +77,5 @@ export class OverlayInstance {
     of((this.position as any).src).subscribe(e => {
       console.log('element', e);
     });
-  }
-
-  private watchSrcElement() {
-    // const observer = new MutationObserver(
-    //   function(mutations) {
-    //     // console.log('size changed!', mutations);s
-    //   }.bind(this)
-    // );
-    // observer.observe((this.position as any).src, {
-    //   attributes: true,
-    //   childList: true,
-    //   characterData: true,
-    //   subtree: true
-    // });
   }
 }

@@ -11,7 +11,7 @@ import { ComponentType } from './models';
 import { ComponentInstance } from './component-instance';
 
 @Injectable()
-export class Host<C> {
+export class ComponentHost<C> {
   private compFac;
   private compRef;
   compIns: ComponentInstance<C>;
@@ -21,12 +21,10 @@ export class Host<C> {
     private injector: Injector
   ) {}
 
-  attach(component: ComponentType<C>, props = {}): Host<C> {
+  attach(component: ComponentType<C>, props = {}): ComponentHost<C> {
     this.compFac = this.compFacResolver.resolveComponentFactory(component);
     this.compRef = this.compFac.create(this.injector);
     this.compIns = this.compRef.instance = <ComponentInstance<C>>new ComponentInstance(this.compRef.instance, props);
-    console.log('props', props);
-    console.log('ins', this.compIns);
     this.appRef.attachView(this.compRef.hostView);
     return this;
   }

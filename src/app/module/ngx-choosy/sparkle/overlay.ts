@@ -1,6 +1,5 @@
 import { Injectable, Component } from '@angular/core';
 import { DomHelper } from './helper/dom';
-import { Host } from './host';
 import { ContainerSize } from './models';
 import { Position } from './position/position';
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -8,6 +7,7 @@ import { debounceTime, throttleTime, distinctUntilChanged } from 'rxjs/operators
 import { OverlayInstance } from './overlay-instance';
 import { DefaultPosition } from './position/default-position';
 import { Messenger } from './helper/messenger';
+import { ComponentHost } from './host';
 
 export const Config = {
   maxOverlays: 3,
@@ -17,7 +17,7 @@ export const Config = {
 @Injectable()
 export class Overlay {
   protected instances: { [x: string]: OverlayInstance } = {};
-  constructor(private dom: DomHelper, private host: Host<any>, private messenger: Messenger) {
+  constructor(private dom: DomHelper, private host: ComponentHost<any>, private messenger: Messenger) {
     this.messenger
       .watch()
       .filter(e => e.name === 'REMOVE_OVERLAY_INS')
