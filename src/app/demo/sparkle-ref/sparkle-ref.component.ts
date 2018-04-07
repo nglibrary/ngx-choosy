@@ -19,7 +19,7 @@ export class SparkleRefComponent implements OnInit {
       .host(HelloComponent)
       .overlay(
         new GlobalPosition({
-          placement: InsidePlacement.TOP_LEFT,
+          placement: InsidePlacement.CENTER,
           hostHeight: 'auto',
           hostWidth: 'auto',
           offset: 20

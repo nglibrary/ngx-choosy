@@ -9,6 +9,7 @@ import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
 import { Messenger } from './helper/messenger';
 import { ComponentHost } from './host';
+import { Subscription } from 'rxjs/Subscription';
 
 export const DefaultOverlayInstanceConfig: OverlayInstanceConfig = {
   backdrop: false,
@@ -24,12 +25,13 @@ export const DefaultOverlayInstanceConfig: OverlayInstanceConfig = {
 @Injectable()
 export class OverlayInstance {
   private config: OverlayInstanceConfig;
-  private container: HTMLElement;
-  private hostContainer: HTMLElement;
   private position: Position;
   private view: HTMLElement;
-  private computePos: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  computePos: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  hostContainer: HTMLElement;
+  container: HTMLElement;
   id: string;
+  positionSubscription: Subscription;
   events: BehaviorSubject<string> = new BehaviorSubject('init');
   constructor(public dom: DomHelper, public host: ComponentHost<any>, private messenger: Messenger) {}
   configure(position: Position = new DefaultPosition(), id?: string, config?: OverlayInstanceConfig) {
@@ -50,36 +52,31 @@ export class OverlayInstance {
     });
     this.dom.insertChildren(this.config.parentElement || this.dom.html.BODY, this.container, this.hostContainer);
     this.events.next('attached');
-    this.watchWindowResize();
     return this;
   }
   destroy() {
     this.host.detach();
     this.dom.removeElement(this.container);
     this.events.next('detached');
-    this.messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
+    this.events.complete();
   }
   setView(view) {
     this.view = view;
     this.dom.insertChildren(this.hostContainer, view);
     this.calculateCoords();
-    this.computePos.next(true);
-    this.outsideClick();
+    // this.computePos.next(true);
   }
-  watchWindowResize() {
-    fromEvent(window, 'resize').subscribe(() => this.computePos.next(true));
+
+  isHostContainerElement(element): boolean {
+    return element !== this.hostContainer && element !== this.view && !this.view.contains(element);
   }
-  outsideClick() {
-    return fromEvent(this.container, 'click').subscribe((event: any) => {
-      if (event.target !== this.hostContainer && event.target !== this.view && !this.view.contains(event.target)) {
-        this.events.next('outside clicked');
-        this.destroy();
-      }
-    });
+
+  cleanup() {
+    this.positionSubscription.unsubscribe();
   }
 
   private calculateCoords() {
-    this.computePos.subscribe(res => {
+    this.positionSubscription = this.computePos.subscribe(res => {
       const coords = this.position.getPositions(this.hostContainer);
       this.dom.setPositions(this.hostContainer, coords);
       this.events.next('positions updated');
