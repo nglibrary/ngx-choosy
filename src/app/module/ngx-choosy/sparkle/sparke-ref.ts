@@ -1,12 +1,22 @@
 import { Injectable } from '@angular/core';
 import { ComponentHost } from './host';
 import { OverlayInstance } from './overlay-instance';
+import { Messenger } from './helper/messenger';
 
 @Injectable()
 export class SparkleRef<C> {
   componentInstance: C;
-  events;
+  events = {};
   config;
-  constructor(private _overlay: OverlayInstance, private _host: ComponentHost<C>) {}
-  close() {}
+  constructor(
+    private _overlay: OverlayInstance,
+    private _host: ComponentHost<C>,
+    private _messenger: Messenger,
+    public id: string
+  ) {
+    this.events['overlay'] = this._overlay.events.asObservable();
+  }
+  close() {
+    this._messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
+  }
 }

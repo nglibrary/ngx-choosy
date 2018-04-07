@@ -29,6 +29,7 @@ export class OverlayInstance {
   private position: Position;
   private computePos: BehaviorSubject<boolean> = new BehaviorSubject(true);
   id: string;
+  events: BehaviorSubject<string> = new BehaviorSubject('init');
   constructor(public dom: DomHelper, public host: ComponentHost<any>, private messenger: Messenger) {}
   create(position: Position = new DefaultPosition(), id?: string, config?: OverlayInstanceConfig) {
     this.config = { ...config, ...DefaultOverlayInstanceConfig };
@@ -42,12 +43,14 @@ export class OverlayInstance {
       className: this.config.hostContainerClass
     });
     this.dom.insertChildren(this.config.parentElement || this.dom.html.BODY, this.container, this.hostContainer);
+    this.events.next('attached');
     this.watchWindowResize();
     return this;
   }
   destroy() {
     this.host.detach();
     this.dom.removeElement(this.container);
+    this.events.next('detached');
     this.messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
   }
   setView(view) {
@@ -62,6 +65,7 @@ export class OverlayInstance {
   outsideClick() {
     return fromEvent(this.container, 'click').subscribe(x => {
       console.log('outside clicked');
+      this.events.next('outside clicked');
       this.destroy();
     });
   }
@@ -70,6 +74,7 @@ export class OverlayInstance {
     this.computePos.subscribe(res => {
       const coords = this.position.getPositions(this.hostContainer);
       this.dom.setPositions(this.hostContainer, coords);
+      this.events.next('positions updated');
     });
   }
 

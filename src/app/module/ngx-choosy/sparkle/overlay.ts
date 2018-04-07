@@ -3,7 +3,7 @@ import { DomHelper } from './helper/dom';
 import { ContainerSize } from './models';
 import { Position } from './position/position';
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { debounceTime, throttleTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, throttleTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { OverlayInstance } from './overlay-instance';
 import { DefaultPosition } from './position/default-position';
 import { Messenger } from './helper/messenger';
@@ -20,7 +20,7 @@ export class Overlay {
   constructor(private dom: DomHelper, private host: ComponentHost<any>, private messenger: Messenger) {
     this.messenger
       .watch()
-      .filter(e => e.name === 'REMOVE_OVERLAY_INS')
+      .pipe(filter(e => e.name === 'REMOVE_OVERLAY_INS'))
       .subscribe(e => {
         delete this.instances[e.data];
         console.log('removed: ', this.instances);

@@ -19,11 +19,13 @@ export class SparkleRefComponent implements OnInit {
         placement: InsidePlacement.CENTER,
         hostHeight: 'auto',
         hostWidth: 'auto'
-      }),
-      'abc'
+      })
     );
   }
   create() {
-    this.ref.create();
+    const r = this.ref.create();
+    r.events.overlay.subscribe(a => {
+      console.log('listening..', a);
+    });
   }
 }
