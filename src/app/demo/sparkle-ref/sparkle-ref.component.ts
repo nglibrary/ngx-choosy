@@ -5,6 +5,7 @@ import { RelativePosition } from '../../module/ngx-choosy/sparkle/position/relat
 import { GlobalPosition } from '../../module/ngx-choosy/sparkle/position/global-position';
 import { InsidePlacement, OutsidePlacement } from '../../module/ngx-choosy/sparkle/models';
 import { SparkleRef } from '../../module/ngx-choosy/sparkle/sparke-ref';
+import { ChoosyComponent } from '../../module/ngx-choosy/components/choosy/choosy.component';
 
 @Component({
   selector: 'app-sparkle-ref',
@@ -13,15 +14,19 @@ import { SparkleRef } from '../../module/ngx-choosy/sparkle/sparke-ref';
 export class SparkleRefComponent implements OnInit {
   @ViewChild('anchor', { read: ElementRef })
   anchor: ElementRef;
-  ref: SparkleRef<HelloComponent>;
-  constructor(private sparkle: Sparkle<HelloComponent>) {}
+  ref: SparkleRef<ChoosyComponent>;
+  data = ['one', 'two', 'three'];
+  constructor(private sparkle: Sparkle<ChoosyComponent>) {}
 
   ngOnInit() {
+    const props = {
+      options: this.data
+    };
     this.ref = this.sparkle
-      .host(HelloComponent)
+      .host(ChoosyComponent, props)
       .overlay(
         new RelativePosition({
-          pos: OutsidePlacement.BOTTOM,
+          pos: OutsidePlacement.BOTTOM_LEFT,
           src: this.anchor.nativeElement,
           hostWidth: 'auto'
         })

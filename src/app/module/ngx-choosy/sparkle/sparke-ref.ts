@@ -27,6 +27,7 @@ export class SparkleRef<C> {
     this._overlay.create().setView(view);
     this.onDocumentClick();
     this.onWindowResize();
+    setTimeout(_ => this._overlay.computePos.next(true), 0);
     return this;
   }
   close() {

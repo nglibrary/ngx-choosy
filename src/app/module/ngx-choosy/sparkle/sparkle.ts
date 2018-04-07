@@ -4,7 +4,7 @@ import { OverlayInstance } from './overlay-instance';
 import { ComponentHost } from './host';
 import { DomHelper } from './helper/dom';
 import { SparkleRef } from './sparke-ref';
-import { ComponentType } from './models';
+import { ComponentType, Props } from './models';
 import { Utils } from './helper/utils';
 import { Messenger } from './helper/messenger';
 import { filter } from 'rxjs/operators';
@@ -38,7 +38,7 @@ export class Sparkle<C> {
     this._overlay.configure(position, id);
     return this;
   }
-  host(component: ComponentType<C>, props: { [x: string]: any } = {}): Sparkle<C> {
+  host(component: ComponentType<C>, props: Props<C> = {}): Sparkle<C> {
     this._host.configure(component, props);
     return this;
   }

@@ -27,7 +27,7 @@ export class OverlayInstance {
   private config: OverlayInstanceConfig;
   private position: Position;
   private view: HTMLElement;
-  computePos: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  computePos: Subject<boolean> = new Subject();
   hostContainer: HTMLElement;
   container: HTMLElement;
   id: string;
@@ -52,6 +52,7 @@ export class OverlayInstance {
     });
     this.dom.insertChildren(this.config.parentElement || this.dom.html.BODY, this.container, this.hostContainer);
     this.events.next('attached');
+    this.calculateCoords();
     return this;
   }
   destroy() {
@@ -63,7 +64,6 @@ export class OverlayInstance {
   setView(view) {
     this.view = view;
     this.dom.insertChildren(this.hostContainer, view);
-    this.calculateCoords();
     this.computePos.next(true);
   }
 

@@ -59,6 +59,8 @@ export interface ComponentType<T> {
   new (...args: any[]): T;
 }
 
+export type Props<T> = { [P in keyof T]?: T[P] };
+
 export type SlidePositionDirection = 'LEFT' | 'RIGHT';
 
 export interface MessengerEvent {

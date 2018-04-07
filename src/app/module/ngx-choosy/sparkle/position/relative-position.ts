@@ -145,7 +145,6 @@ export class RelativePosition extends Position {
   }
 
   private calculateTopLeft(src, host) {
-    console.log('host.height',host.height)
     const left = src.left;
     const top = src.top - host.height;
     return { left, top };

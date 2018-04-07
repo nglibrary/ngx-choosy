@@ -4,7 +4,7 @@ import { SparkleFriendly } from '../../module/ngx-choosy/sparkle/sparkle';
 @Component({
   selector: 'app-hello',
   template: `
-  JAMES BOND
+  {{text}}
   `,
   styles: [
     `
@@ -21,7 +21,12 @@ import { SparkleFriendly } from '../../module/ngx-choosy/sparkle/sparkle';
 export class HelloComponent implements OnInit, SparkleFriendly {
   events;
   config;
+  text = 'JAMES BOND';
   constructor() {}
 
   ngOnInit() {}
+
+  change() {
+    this.text = 'Rambo johny!';
+  }
 }
