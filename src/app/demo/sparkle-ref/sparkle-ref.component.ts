@@ -36,7 +36,10 @@ export class SparkleRefComponent implements OnInit {
   create() {
     const r = this.ref.open();
     r.events['overlay'].subscribe(a => {
-      console.log('listening..', a);
+      console.log('Overlay: listening..', a);
+    });
+    r.events['choosy'].subscribe(a => {
+      console.log('Choosy: listening..', a);
     });
   }
 }

@@ -6,10 +6,11 @@ import { fromEvent } from 'rxjs/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
 import { map, filter, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
+import { ComponentInstance } from './component-instance';
 
 @Injectable()
 export class SparkleRef<C> {
-  componentInstance: C;
+  compIns: ComponentInstance<C>;
   events = {};
   config;
   private docClickSubscription: Subscription;
@@ -20,11 +21,13 @@ export class SparkleRef<C> {
     private _messenger: Messenger,
     public id: string
   ) {
-    this.events['overlay'] = this._overlay.events.asObservable();
+    this.addEvent('overlay', this._overlay);
   }
   open() {
     const view = this._host.attach().componentView();
     this._overlay.create().setView(view);
+    const comp = this._host.getCompIns().component as any;
+    this.addEvent(comp.name, comp);
     this.onDocumentClick();
     this.onWindowResize();
     setTimeout(_ => this._overlay.computePos.next(true), 0);
@@ -33,8 +36,7 @@ export class SparkleRef<C> {
   close() {
     this._overlay.destroy();
     this._messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
-    this.docClickSubscription.unsubscribe();
-    this.windowResizeSubscription.unsubscribe();
+    this.cleanup();
     this._overlay.cleanup();
   }
   onDocumentClick() {
@@ -48,5 +50,14 @@ export class SparkleRef<C> {
     this.windowResizeSubscription = fromEvent(window, 'resize').subscribe(() => {
       this._overlay.computePos.next(true);
     });
+  }
+
+  private addEvent(name, type) {
+    this.events[name] = type.events.asObservable();
+  }
+
+  private cleanup() {
+    this.docClickSubscription.unsubscribe();
+    this.windowResizeSubscription.unsubscribe();
   }
 }

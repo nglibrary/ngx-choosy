@@ -52,8 +52,20 @@ RelativeToWindow({
 })
 
 
-this.overlay().create().host(comp).open();
-
+events.choosy
+  - seleced
+  - removed
+events.global
+  - window resize
+  - doc click
+events.overlay
+  - backdrop click
+  - host coords
+  - created
+  - destroyed
+events.host
+  - attached
+  - detached
 ref.close();
 ref.componentInstance;
 ref.events;

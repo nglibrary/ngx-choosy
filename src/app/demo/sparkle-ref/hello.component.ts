@@ -21,6 +21,7 @@ import { SparkleFriendly } from '../../module/ngx-choosy/sparkle/sparkle';
 export class HelloComponent implements OnInit, SparkleFriendly {
   events;
   config;
+  name = 'hello';
   text = 'JAMES BOND';
   constructor() {}
 

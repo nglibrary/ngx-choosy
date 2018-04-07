@@ -13,6 +13,7 @@ export class SparkleFriendly {
   constructor() {}
   events;
   config;
+  name: string;
 }
 
 @Injectable()

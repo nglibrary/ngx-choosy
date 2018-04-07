@@ -34,6 +34,7 @@ import 'rxjs/add/observable/fromEvent';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { SparkleFriendly } from '../../sparkle/sparkle';
 
 const keyCodes = {
   '38': 'UP',
@@ -51,10 +52,11 @@ const keyCodes = {
   styleUrls: ['./choosy.style.scss'],
   providers: [ChoosyListService]
 })
-export class ChoosyComponent implements OnInit, OnChanges, OnDestroy {
+export class ChoosyComponent implements OnInit, OnChanges, OnDestroy, SparkleFriendly {
   instanceID = null;
   initialized = new Subject<any>();
   initialOptions: Observable<any>;
+  name = 'choosy';
   @Input() config: Partial<ChoosyConfig> = {};
   @Input()
   set options(opt) {
