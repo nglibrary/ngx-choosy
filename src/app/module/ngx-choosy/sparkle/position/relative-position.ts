@@ -41,7 +41,7 @@ export class RelativePosition extends Position {
       this.hostHeight = 'auto';
     }
     const props = this.calculatePos(this.pos, s, h);
-    return { ...props, width: this.hostWidth, height: this.hostHeight };
+    return { ...this.round(props), width: this.hostWidth, height: this.hostHeight };
   }
 
   private getSize(el): { x: number; y: number } {
@@ -231,5 +231,12 @@ export class RelativePosition extends Position {
     const index = placements.indexOf(current);
     const even = index % 2 === 0;
     return even ? placements[index + 1] : placements[index - 1];
+  }
+
+  private round(props) {
+    Object.keys(props).forEach(x => {
+      props[x] = Math.round(props[x]);
+    });
+    return props;
   }
 }

@@ -15,6 +15,7 @@ export const DefaultOverlayInstanceConfig: OverlayInstanceConfig = {
   backdrop: false,
   containerClass: 'overlay-container',
   hostContainerClass: 'host-container',
+  backdropClass: 'backdrop',
   watchWindowResize: false,
   watchDocClick: false,
   windowResizeCallback: () => {},
@@ -30,6 +31,7 @@ export class OverlayInstance {
   computePos: Subject<boolean> = new Subject();
   hostContainer: HTMLElement;
   container: HTMLElement;
+  backdrop: HTMLElement;
   id: string;
   positionSubscription: Subscription;
   events: BehaviorSubject<string> = new BehaviorSubject('init');
@@ -47,9 +49,15 @@ export class OverlayInstance {
         style: 'left:0;position: fixed;top: 0;width: 100%;height: 100%;background: rgba(63, 81, 181, 0.39);'
       }
     });
+    this.backdrop = this.dom.createElement('div', {
+      className: this.config.backdropClass
+    });
     this.hostContainer = this.dom.createElement('div', {
       className: this.config.hostContainerClass
     });
+    if (this.config.backdrop) {
+      this.dom.insertChildren(this.container, this.backdrop);
+    }
     this.dom.insertChildren(this.config.parentElement || this.dom.html.BODY, this.container, this.hostContainer);
     this.events.next('attached');
     this.calculateCoords();
@@ -73,6 +81,7 @@ export class OverlayInstance {
 
   cleanup() {
     this.positionSubscription.unsubscribe();
+    this.container = this.hostContainer = this.backdrop = this.view = null;
   }
 
   private calculateCoords() {

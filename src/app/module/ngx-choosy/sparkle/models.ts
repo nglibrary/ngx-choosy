@@ -48,6 +48,7 @@ export interface OverlayInstanceConfig {
   backdrop: boolean;
   containerClass: string;
   hostContainerClass: string;
+  backdropClass: string;
   watchWindowResize: boolean;
   watchDocClick: boolean;
   windowResizeCallback: () => void;
