@@ -31,6 +31,7 @@ export class RelativePosition extends Position {
   }
   getPositions(hostElement: HTMLElement): PositionCoOrds {
     const s = this.getCoords(this.src);
+    const h = this.getCoords(hostElement);
 
     if (this.hostWidth === '100%') {
       this.hostWidth = s.width;
@@ -39,46 +40,7 @@ export class RelativePosition extends Position {
     if (this.hostHeight === '100%') {
       this.hostHeight = 'auto';
     }
-    const h = this.getCoords(hostElement);
-    let props;
-    switch (this.pos) {
-      case OutsidePlacement.BOTTOM:
-        props = this.calculateBottom(s, h);
-        break;
-      case OutsidePlacement.TOP:
-        props = this.calculateTop(s, h);
-        break;
-      case OutsidePlacement.LEFT:
-        props = this.calculateLeft(s, h);
-        break;
-      case OutsidePlacement.RIGHT:
-        props = this.calculateRight(s, h);
-        break;
-      case OutsidePlacement.TOP_LEFT:
-        props = this.calculateTopLeft(s, h);
-        break;
-      case OutsidePlacement.TOP_RIGHT:
-        props = this.calculateTopRight(s, h);
-        break;
-      case OutsidePlacement.BOTTOM_LEFT:
-        props = this.calculateBottomLeft(s, h);
-        break;
-      case OutsidePlacement.BOTTOM_RIGHT:
-        props = this.calculateBottomRight(s, h);
-        break;
-      case OutsidePlacement.RIGHT_TOP:
-        props = this.calculateRightTop(s, h);
-        break;
-      case OutsidePlacement.RIGHT_BOTTOM:
-        props = this.calculateRightBottom(s, h);
-        break;
-      case OutsidePlacement.LEFT_TOP:
-        props = this.calculateLeftTop(s, h);
-        break;
-      case OutsidePlacement.LEFT_BOTTOM:
-        props = this.calculateLeftBottom(s, h);
-        break;
-    }
+    const props = this.calculatePos(this.pos, s, h);
     return { ...props, width: this.hostWidth, height: this.hostHeight };
   }
 
@@ -185,5 +147,89 @@ export class RelativePosition extends Position {
     const left = src.right;
     const top = src.top + src.height - host.height;
     return { left, top };
+  }
+
+  private getProps(pos, s, h) {
+    let props;
+    switch (pos) {
+      case OutsidePlacement.BOTTOM:
+        props = this.calculateBottom(s, h);
+        break;
+      case OutsidePlacement.TOP:
+        props = this.calculateTop(s, h);
+        break;
+      case OutsidePlacement.LEFT:
+        props = this.calculateLeft(s, h);
+        break;
+      case OutsidePlacement.RIGHT:
+        props = this.calculateRight(s, h);
+        break;
+      case OutsidePlacement.TOP_LEFT:
+        props = this.calculateTopLeft(s, h);
+        break;
+      case OutsidePlacement.TOP_RIGHT:
+        props = this.calculateTopRight(s, h);
+        break;
+      case OutsidePlacement.BOTTOM_LEFT:
+        props = this.calculateBottomLeft(s, h);
+        break;
+      case OutsidePlacement.BOTTOM_RIGHT:
+        props = this.calculateBottomRight(s, h);
+        break;
+      case OutsidePlacement.RIGHT_TOP:
+        props = this.calculateRightTop(s, h);
+        break;
+      case OutsidePlacement.RIGHT_BOTTOM:
+        props = this.calculateRightBottom(s, h);
+        break;
+      case OutsidePlacement.LEFT_TOP:
+        props = this.calculateLeftTop(s, h);
+        break;
+      case OutsidePlacement.LEFT_BOTTOM:
+        props = this.calculateLeftBottom(s, h);
+        break;
+    }
+    return props;
+  }
+
+  private calculatePos(pos, s, h, c = true) {
+    const props = this.getProps(pos, s, h);
+    console.log('@@@@', props);
+    if (!c) {
+      return props;
+    }
+    if (this.isOverflowed({ ...props, width: h.width, height: h.height })) {
+      return this.calculatePos(this.nextPosition(pos), s, h, false);
+    }
+
+    return props;
+  }
+
+  private isOverflowed(props) {
+    const { innerHeight, innerWidth } = window;
+    props.bottom = props.top + props.height;
+    props.right = props.left + props.width;
+    return props.bottom > innerHeight || props.top <= 0 || props.left <= 0 || props.right > innerWidth;
+  }
+
+  private nextPosition(current) {
+    const placements = [
+      OutsidePlacement.TOP,
+      OutsidePlacement.BOTTOM,
+      OutsidePlacement.LEFT,
+      OutsidePlacement.RIGHT,
+      OutsidePlacement.TOP_LEFT,
+      OutsidePlacement.TOP_RIGHT,
+      OutsidePlacement.BOTTOM_LEFT,
+      OutsidePlacement.BOTTOM_RIGHT,
+      OutsidePlacement.LEFT_TOP,
+      OutsidePlacement.LEFT_BOTTOM,
+      OutsidePlacement.RIGHT_TOP,
+      OutsidePlacement.RIGHT_BOTTOM
+    ];
+
+    const index = placements.indexOf(current);
+    const even = index % 2 === 0;
+    return even ? placements[index + 1] : placements[index - 1];
   }
 }

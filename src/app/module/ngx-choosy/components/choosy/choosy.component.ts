@@ -162,6 +162,7 @@ export class ChoosyComponent implements OnInit, OnChanges, OnDestroy, SparkleFri
       })
       .filter(x => x !== 'ENTER')
       .subscribe(a => {
+        // todo: smooth scroll
         this.elRef.nativeElement.querySelector('choosy-list>div.active').scrollIntoView(false);
       });
   }

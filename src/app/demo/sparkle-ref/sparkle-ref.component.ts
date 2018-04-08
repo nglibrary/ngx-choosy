@@ -22,15 +22,19 @@ export class SparkleRefComponent implements OnInit {
     const props = {
       options: this.data
     };
+    const relative = new RelativePosition({
+      pos: OutsidePlacement.RIGHT_TOP,
+      src: this.anchor.nativeElement,
+      hostWidth: 'auto'
+    });
+    const global = new GlobalPosition({
+      placement: InsidePlacement.CENTER,
+      hostWidth: 'auto',
+      hostHeight: 'auto'
+    });
     this.ref = this.sparkle
       .host(ChoosyComponent, props)
-      .overlay(
-        new RelativePosition({
-          pos: OutsidePlacement.BOTTOM_LEFT,
-          src: this.anchor.nativeElement,
-          hostWidth: 'auto'
-        })
-      )
+      .overlay(relative)
       .create();
   }
   create() {

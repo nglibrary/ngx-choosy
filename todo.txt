@@ -73,3 +73,11 @@ ref.config;
 ref.posUpdate();
 
 container.component(comp).overlay().open();
+
+///
+backdrop
+auto pos change
+ngzone
+translationX
+30secondaofcode
+on scroll pos update
