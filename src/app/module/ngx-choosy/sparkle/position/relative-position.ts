@@ -198,7 +198,7 @@ export class RelativePosition extends Position {
     if (!c) {
       return props;
     }
-    if (this.isOverflowed({ ...props, width: h.width, height: h.height })) {
+    if (this.autoUpdate && this.isOverflowed({ ...props, width: h.width, height: h.height })) {
       return this.calculatePos(this.nextPosition(pos), s, h, false);
     }
 

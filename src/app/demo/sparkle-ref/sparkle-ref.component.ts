@@ -23,9 +23,10 @@ export class SparkleRefComponent implements OnInit {
       options: this.data
     };
     const relative = new RelativePosition({
-      pos: OutsidePlacement.RIGHT_TOP,
+      pos: OutsidePlacement.LEFT,
       src: this.anchor.nativeElement,
-      hostWidth: 'auto'
+      hostWidth: 'auto',
+      autoUpdate: true
     });
     const global = new GlobalPosition({
       placement: InsidePlacement.CENTER,
