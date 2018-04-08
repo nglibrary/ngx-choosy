@@ -43,7 +43,7 @@ export class OverlayInstance {
   }
   create() {
     this.container = this.dom.createElement('div', {
-      className: this.config.containerClass,
+      className: this.config.containerClass + ' ' + this.position.getClassName(),
       attr: {
         'data-overlay-id': this.id,
         style: 'left:0;position: fixed;top: 0;width: 100%;height: 100%;background: rgba(63, 81, 181, 0.39);'

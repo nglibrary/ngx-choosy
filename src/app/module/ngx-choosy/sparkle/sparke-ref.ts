@@ -4,9 +4,10 @@ import { OverlayInstance } from './overlay-instance';
 import { Messenger } from './helper/messenger';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
-import { map, filter, tap } from 'rxjs/operators';
+import { map, filter, tap, observeOn, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import { ComponentInstance } from './component-instance';
+import { animationFrame } from 'rxjs/scheduler/animationFrame';
 
 @Injectable()
 export class SparkleRef<C> {
@@ -47,9 +48,11 @@ export class SparkleRef<C> {
       });
   }
   onWindowResize() {
-    this.windowResizeSubscription = fromEvent(window, 'resize').subscribe(() => {
-      this._overlay.computePos.next(true);
-    });
+    this.windowResizeSubscription = fromEvent(window, 'resize')
+      .pipe(debounceTime(10), observeOn(animationFrame), distinctUntilChanged())
+      .subscribe(() => {
+        this._overlay.computePos.next(true);
+      });
   }
 
   private addEvent(name, type) {

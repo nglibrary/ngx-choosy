@@ -23,7 +23,7 @@ export class SparkleRefComponent implements OnInit {
       options: this.data
     };
     const relative = new RelativePosition({
-      pos: OutsidePlacement.LEFT,
+      pos: OutsidePlacement.BOTTOM,
       src: this.anchor.nativeElement,
       hostWidth: 'auto',
       autoUpdate: true

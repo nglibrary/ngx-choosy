@@ -1,0 +1,7 @@
+div{
+  border:10px solid red;
+}
+
+:host{
+  border:3px solid green;
+}
