@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SparkleFriendly } from '../../module/ngx-choosy/sparkle/sparkle';
+import { SparkleFriendly } from '../../module/sparkle/sparkle';
 
 @Component({
   selector: 'app-hello',
