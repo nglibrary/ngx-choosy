@@ -23,6 +23,8 @@ import { ComponentType, OutsidePlacement, InsidePlacement } from '../../../spark
 import { ComponentInstance } from '../../../sparkle/component-ins';
 import { Subject } from 'rxjs/Subject';
 import { GlobalPosition } from '../../../sparkle/position/global-position';
+import { Sparkle } from '../../../sparkle/sparkle';
+import { SparkleRef } from '../../../sparkle/sparke-ref';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -36,7 +38,7 @@ import { GlobalPosition } from '../../../sparkle/position/global-position';
     // }
   ]
 })
-export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
+export class SelectDirective implements ControlValueAccessor, OnInit {
   hostIns: ComponentHost<ChoosyComponent>;
   overlayRef: OverlayInstance;
   choosy: ChoosyComponent;
@@ -46,12 +48,13 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
   @Output() selected: EventEmitter<any> = new EventEmitter();
   value: any = null;
   instanceID: string = null;
+  ref: SparkleRef<ChoosyComponent>;
   private choosyCompIns: ChoosyComponent;
   private changeFn: Function;
   private optionSelected: Subject<any> = new Subject();
   constructor(
     private configService: ConfigService,
-    private overlay: Overlay,
+    private sparkle: Sparkle<ChoosyComponent>,
     private renderer: Renderer2,
     private elRef: ElementRef,
     public model: NgControl
@@ -69,7 +72,7 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
     if (this.overlayRef) {
       return;
     }
-    this.createChoosy();
+    this.open();
   }
 
   @HostListener('blur')
@@ -92,6 +95,10 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
 
       // this.selected.emit(x);
     });
+  }
+
+  ngAfterViewInit() {
+    this.createChoosy();
   }
 
   writeValue(value: any): void {
@@ -118,28 +125,35 @@ export class ChoosySelectDirective implements ControlValueAccessor, OnInit {
   }
 
   private createChoosy() {
-    // this.overlayRef = this.overlay.create(
-    //   new GlobalPosition({
-    //     placement: InsidePlacement.BOTTOM,
-    //     hostHeight: 200,
-    //     hostWidth: 200,
-    //     offset: 20
-    //   })
-    // );
-    // this.insID = this.overlayRef.id;
-    // this.hostIns = this.overlayRef.attachComponent(ChoosyComponent, {
-    //   options: this.options,
-    //   config: this.config,
-    //   instanceID: this.insID
-    // });
-    // this.choosy = this.hostIns.getCompIns().component;
-    // this.choosy.listService.setOptionAsSelected(this.value);
-    // this.choosy.events.filter(x => x.name === 'optionSelected').subscribe(x => this.optionSelected.next(x.value));
+    const props = {
+      options: this.options,
+      config: this.config,
+      instanceID: this.insID
+      // view: HelloComponent
+    };
+    const relative = new RelativePosition({
+      pos: OutsidePlacement.BOTTOM,
+      src: this.elRef.nativeElement,
+      hostWidth: 'auto',
+      autoUpdate: true
+    });
+
+    this.ref = this.sparkle
+      .host(ChoosyComponent, props)
+      .overlay(relative)
+      .create();
+  }
+
+  open() {
+    const r = this.ref.open();
+    console.log('###', r);
+    this.choosy = r.compIns.component;
+    this.choosy.listService.setOptionAsSelected(this.value);
+    this.choosy.events.filter(x => x.name === 'optionSelected').subscribe(x => this.optionSelected.next(x.value));
   }
 
   private destroyChoosy() {
-    this.overlayRef.destroy();
-    this.overlayRef = null;
+    this.ref.close();
     this.choosy = null;
   }
 }

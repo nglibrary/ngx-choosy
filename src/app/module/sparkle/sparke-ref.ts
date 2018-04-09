@@ -27,7 +27,8 @@ export class SparkleRef<C> {
   open() {
     const view = this._host.attach().componentView();
     this._overlay.create().setView(view);
-    const comp = this._host.getCompIns().component as any;
+    this.compIns = this._host.getCompIns();
+    const comp = this.compIns.component as any;
     this.addEvent(comp.name, comp);
     this.onDocumentClick();
     this.onWindowResize();

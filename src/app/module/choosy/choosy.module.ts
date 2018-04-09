@@ -8,7 +8,7 @@ import { ListComponent } from './common/components/list/list.component';
 import { ItemsComponent } from './common/components/items/items.component';
 import { ChipsComponent } from './common/components/chips/chips.component';
 
-// import { ChoosySelectDirective } from './directives/select.directive';
+import { SelectDirective } from './common/directives/select.directive';
 // import { ChoosyMenuDirective } from './directives/choosy-menu.directive';
 // import { ChoosyMultiSelectDirective } from './directives/choosy-multi-select.directive';
 
@@ -26,7 +26,7 @@ import { SparkleModule } from '../sparkle/sparkle.module';
     ListComponent,
     ItemsComponent,
     ChipsComponent,
-    // SelectDirective,
+    SelectDirective,
     // ChoosyMenuDirective,
     // ChoosyMultiSelectDirective,
     GroupByPipe
@@ -35,8 +35,8 @@ import { SparkleModule } from '../sparkle/sparkle.module';
   exports: [
     ChoosyComponent,
     ItemsComponent,
-    ChipsComponent
-    // ChoosySelectDirective
+    ChipsComponent,
+    SelectDirective
     // ChoosyMenuDirective,
     // ChoosyMultiSelectDirective
   ],

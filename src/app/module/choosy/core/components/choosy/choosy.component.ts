@@ -57,6 +57,7 @@ export class ChoosyComponent implements OnInit, OnChanges, OnDestroy, SparkleFri
   initialized = new Subject<any>();
   initialOptions: Observable<any>;
   name = 'choosy';
+  view;
   @Input() config: Partial<Config> = {};
   @Input()
   set options(opt) {

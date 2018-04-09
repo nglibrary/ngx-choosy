@@ -20,7 +20,8 @@ export class SparkleRefComponent implements OnInit {
 
   ngOnInit() {
     const props = {
-      options: this.data
+      options: this.data,
+      view: HelloComponent
     };
     const relative = new RelativePosition({
       pos: OutsidePlacement.BOTTOM,
@@ -33,6 +34,7 @@ export class SparkleRefComponent implements OnInit {
       hostWidth: 'auto',
       hostHeight: 'auto'
     });
+
     this.ref = this.sparkle
       .host(ChoosyComponent, props)
       .overlay(relative)
