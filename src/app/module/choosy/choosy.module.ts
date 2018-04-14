@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders, Injector } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChoosyComponent } from './core/components/choosy/choosy.component';
@@ -16,6 +16,11 @@ import { ConfigService, ListService, SearchService } from './core/services';
 import { CHOOSY_CONFIG, choosyDefaultConfig } from './config';
 import { GroupByPipe } from './common/pipes/groupby.pipe';
 import { SparkleModule } from '../sparkle/sparkle.module';
+import { DefaultViewComponent } from './views/default/default.component';
+
+export class ServiceLocator {
+  static injector;
+}
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, SparkleModule],
@@ -27,22 +32,27 @@ import { SparkleModule } from '../sparkle/sparkle.module';
     ItemsComponent,
     ChipsComponent,
     SelectDirective,
+    DefaultViewComponent,
     // ChoosyMenuDirective,
     // ChoosyMultiSelectDirective,
     GroupByPipe
   ],
-  entryComponents: [ChoosyComponent],
+  entryComponents: [ChoosyComponent, DefaultViewComponent],
   exports: [
     ChoosyComponent,
     ItemsComponent,
     ChipsComponent,
-    SelectDirective
+    SelectDirective,
+    DefaultViewComponent
     // ChoosyMenuDirective,
     // ChoosyMultiSelectDirective
   ],
   providers: [ConfigService, ListService, SearchService]
 })
 export class ChoosyModule {
+  constructor(injector: Injector) {
+    ServiceLocator.injector = injector;
+  }
   static forRoot(globalConfig: any = {}): ModuleWithProviders {
     return {
       ngModule: ChoosyModule,

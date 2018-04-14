@@ -194,7 +194,6 @@ export class RelativePosition extends Position {
 
   private calculatePos(pos, s, h, c = true) {
     const props = this.getProps(pos, s, h);
-    console.log('@@@@', props);
     if (!c) {
       return props;
     }

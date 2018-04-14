@@ -16,12 +16,10 @@ export class ChipsComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit() {
-    console.log('instanceof', this.ref instanceof ChoosyComponent);
     this.ref.listService
       .getAllSelectedOptions()
       .map(a => a.filter(x => x.state && x.state.selected === true))
       .subscribe(a => {
-        console.log('ref view', a);
         this.options = a;
       });
   }

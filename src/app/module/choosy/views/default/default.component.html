@@ -1,0 +1,12 @@
+<ng-container *ngIf="!optionsLoading && initialOptions">
+  <ng-container *ngComponentOutlet="view"></ng-container>
+  <choosy-header *ngIf="config.search?.enable" (search)="onSearch($event)"></choosy-header>
+  <choosy-list [options]="initialOptions" [optionTpl]="optionTpl" [config]="config"></choosy-list>
+  <choosy-footer [options]="initialOptions" *ngIf="config.footer?.enable"></choosy-footer>
+</ng-container>
+
+<ng-container *ngIf="optionsLoading">
+  <div class="choosy-loading">
+    loading...
+  </div>
+</ng-container>

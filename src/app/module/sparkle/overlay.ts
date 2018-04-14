@@ -23,7 +23,6 @@ export class Overlay {
       .pipe(filter(e => e.name === 'REMOVE_OVERLAY_INS'))
       .subscribe(e => {
         delete this.instances[e.data];
-        console.log('removed: ', this.instances);
       });
   }
   create(position: Position = new DefaultPosition(), id: string = this.ID) {

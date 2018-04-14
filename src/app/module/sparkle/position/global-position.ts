@@ -21,7 +21,6 @@ export class GlobalPosition extends Position {
     this.offset = offset;
   }
   getPositions(hostElement?: HTMLElement) {
-    console.log('got', this);
     const host = hostElement.getBoundingClientRect();
     let props;
     const src = {
@@ -59,7 +58,6 @@ export class GlobalPosition extends Position {
       default:
         break;
     }
-    console.log('props', props);
     return { ...props, width: this.hostWidth, height: this.hostHeight, position: 'fixed' };
   }
 

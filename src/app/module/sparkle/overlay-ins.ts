@@ -93,8 +93,6 @@ export class OverlayInstance {
   }
 
   private watchSrcElementPos() {
-    of((this.position as any).src).subscribe(e => {
-      console.log('element', e);
-    });
+    of((this.position as any).src).subscribe(e => {});
   }
 }

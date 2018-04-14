@@ -31,7 +31,6 @@ export class Sparkle<C> {
       .pipe(filter(e => e.name === 'REMOVE_OVERLAY_INS'))
       .subscribe(e => {
         delete this._sparkleRefs[e.data];
-        console.log('removed: ', this._sparkleRefs);
       });
   }
   overlay(position: Position, id = this.utils.ID): Sparkle<C> {
@@ -44,9 +43,11 @@ export class Sparkle<C> {
     return this;
   }
   create(): SparkleRef<C> {
-    if (!this._sparkleRefs[this._id]) {
-      this._sparkleRefs[this._id] = new SparkleRef(this._overlay, this._host, this._messenger, this._id);
+    if (this._sparkleRefs[this._id]) {
+      this._sparkleRefs[this._id].close();
+      delete this._sparkleRefs[this._id];
     }
+    this._sparkleRefs[this._id] = new SparkleRef(this._overlay, this._host, this._messenger, this._id);
     return this._sparkleRefs[this._id];
   }
 }

@@ -4,7 +4,7 @@ import { OverlayInstance } from './overlay-ins';
 import { Messenger } from './helper/messenger';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
-import { map, filter, tap, observeOn, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { map, filter, tap, observeOn, distinctUntilChanged, debounceTime, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import { ComponentInstance } from './component-ins';
 import { animationFrame } from 'rxjs/scheduler/animationFrame';
@@ -14,8 +14,9 @@ export class SparkleRef<C> {
   compIns: ComponentInstance<C>;
   events = {};
   config;
-  private docClickSubscription: Subscription;
-  private windowResizeSubscription: Subscription;
+  count = 0;
+  static c = 0;
+  private alive: Subject<any> = new Subject();
   constructor(
     private _overlay: OverlayInstance,
     private _host: ComponentHost<C>,
@@ -23,6 +24,8 @@ export class SparkleRef<C> {
     public id: string
   ) {
     this.addEvent('overlay', this._overlay);
+    this.count++;
+    console.log('sparkle ref initiated', this.count);
   }
   open() {
     const view = this._host.attach().componentView();
@@ -40,28 +43,33 @@ export class SparkleRef<C> {
     this._messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
     this.cleanup();
     this._overlay.cleanup();
+    SparkleRef.c++;
+    console.log(`SparkleRef called: ${SparkleRef.c} times`);
   }
   onDocumentClick() {
-    this.docClickSubscription = fromEvent(this._overlay.container, 'click')
-      .pipe(map((e: any) => e.target), filter(this._overlay.isHostContainerElement.bind(this._overlay)))
+    fromEvent(this._overlay.container, 'click')
+      .pipe(
+        takeUntil(this.alive),
+        map((e: any) => e.target),
+        filter(this._overlay.isHostContainerElement.bind(this._overlay))
+      )
       .subscribe((elem: any) => {
         this.close();
       });
   }
   onWindowResize() {
-    this.windowResizeSubscription = fromEvent(window, 'resize')
-      .pipe(debounceTime(10), observeOn(animationFrame), distinctUntilChanged())
+    fromEvent(window, 'resize')
+      .pipe(takeUntil(this.alive), debounceTime(10), observeOn(animationFrame), distinctUntilChanged())
       .subscribe(() => {
         this._overlay.computePos.next(true);
       });
   }
 
   private addEvent(name, type) {
-    this.events[name] = type.events.asObservable();
+    this.events[name] = type.events.asObservable().pipe(takeUntil(this.alive));
   }
 
   private cleanup() {
-    this.docClickSubscription.unsubscribe();
-    this.windowResizeSubscription.unsubscribe();
+    this.alive.next(true);
   }
 }

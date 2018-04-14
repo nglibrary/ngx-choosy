@@ -25,6 +25,8 @@ import { Subject } from 'rxjs/Subject';
 import { GlobalPosition } from '../../../sparkle/position/global-position';
 import { Sparkle } from '../../../sparkle/sparkle';
 import { SparkleRef } from '../../../sparkle/sparke-ref';
+import { DefaultViewComponent } from '../../views/default/default.component';
+import { takeUntil, filter } from 'rxjs/operators';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -48,13 +50,15 @@ export class SelectDirective implements ControlValueAccessor, OnInit {
   @Output() selected: EventEmitter<any> = new EventEmitter();
   value: any = null;
   instanceID: string = null;
+  sparkleIns: Sparkle<ChoosyComponent>;
   ref: SparkleRef<ChoosyComponent>;
   private choosyCompIns: ChoosyComponent;
   private changeFn: Function;
   private optionSelected: Subject<any> = new Subject();
+  private alive: Subject<any> = new Subject();
   constructor(
     private configService: ConfigService,
-    private sparkle: Sparkle<ChoosyComponent>,
+    private sparkle: Sparkle<DefaultViewComponent>,
     private renderer: Renderer2,
     private elRef: ElementRef,
     public model: NgControl
@@ -92,13 +96,16 @@ export class SelectDirective implements ControlValueAccessor, OnInit {
     this.optionSelected.subscribe(x => {
       this.writeValue(x);
       this.destroyChoosy();
-
       // this.selected.emit(x);
     });
   }
 
   ngAfterViewInit() {
     this.createChoosy();
+  }
+
+  ngOnDestroy() {
+    this.alive.next(true);
   }
 
   writeValue(value: any): void {
@@ -128,7 +135,7 @@ export class SelectDirective implements ControlValueAccessor, OnInit {
     const props = {
       options: this.options,
       config: this.config,
-      instanceID: this.insID
+      instanceID: this.insID || 'abc'
       // view: HelloComponent
     };
     const relative = new RelativePosition({
@@ -138,21 +145,22 @@ export class SelectDirective implements ControlValueAccessor, OnInit {
       autoUpdate: true
     });
 
-    this.ref = this.sparkle
-      .host(ChoosyComponent, props)
-      .overlay(relative)
-      .create();
+    this.sparkleIns = this.sparkle.host(DefaultViewComponent, props).overlay(relative);
   }
 
   open() {
-    const r = this.ref.open();
-    console.log('###', r);
-    this.choosy = r.compIns.component;
+    this.ref = this.sparkleIns.create().open();
+    console.log(`SelectDirective opened: `, this.ref.c);
+    this.choosy = this.ref.compIns.component;
     this.choosy.listService.setOptionAsSelected(this.value);
-    this.choosy.events.filter(x => x.name === 'optionSelected').subscribe(x => this.optionSelected.next(x.value));
+    this.choosy.events.pipe(filter(x => x.name === 'optionSelected'), takeUntil(this.alive)).subscribe(x => {
+      this.optionSelected.next(x.value);
+      console.log('its subscribed...');
+    });
   }
 
   private destroyChoosy() {
+    this.alive.next(true);
     this.ref.close();
     this.choosy = null;
   }

@@ -13,6 +13,7 @@ add inside choosy
 choosy heaer city selction hover, header image change
 
 movie list - left right section - on hover a item show cast in right section
+show  list groups first, on click of group name ,show the options under the group
 
 
 //////////////////
@@ -81,3 +82,11 @@ ngzone
 translationX
 30secondaofcode
 on scroll pos update
+
+
+////
+choosyView
+  options
+  config
+  template
+  events

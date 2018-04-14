@@ -241,7 +241,6 @@ export class ListService {
     let index = 0;
     let uid;
     const items = this.optionsSub.getValue().filter(x => !x.state.hidden && !x.state.disabled);
-    console.log('items', items);
     const totalItems = items.length;
     const activeItemIndex = items.findIndex(x => x.state.active);
     const selectedItemIndex = items.findIndex(x => x.state.selected);
