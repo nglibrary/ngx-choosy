@@ -4,7 +4,11 @@
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
     "module": "es2015",
-    "types": []
+    "types": [],
+    "paths": {
+      "@choosy/ngx-choosy": [ "../dist/choosy" ],
+      "@blink/core": [ "../blink/src/public_api" ]
+    }
   },
   "exclude": [
     "test.ts",

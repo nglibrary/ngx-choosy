@@ -1,0 +1,76 @@
+$doc--base-font-size: 14px;
+$doc--base-font-size-xl: 16px;
+$doc--app-name: 'SPUTNIK';
+$doc--debug: false;
+$doc--font-family: 'Roboto';
+$doc--current-theme: 'CLASSIC';
+$doc--themes: (
+	'classic':'CLASSIC',
+	'dexter':'DEXTER'
+);
+$doc--colors-basic: (
+	'bg':#FBFBFB,
+	'bg-alt':#F7F8FC,
+	'bg-alt-dark':#d7d7d7,
+	'text':#808080,
+	'heading':#333,
+	'subheading':#999,
+	'subtext':#999,
+	'border':#cbcbcb,
+	'para':#808080,
+	'dark':#000,
+	'input-border':#ccc
+);
+
+$doc--colors-theme: (
+	'primary':#606BEB,
+	'primary-o':#1e3640,
+	'secondary':#F7F8FC,
+	'success':#3fc782,
+	'warning':#f78f1e,
+	'error':#e3505a,
+	'danger':#e3505a,
+	'dark':#000,
+	'info':#03A9F4,
+	'subheading':#333,
+	'link-alt':#999,
+);
+$doc--colors: (
+	'basic':$doc--colors-basic,
+	'theme':$doc--colors-theme
+);
+
+$doc--client-color: #fec500;
+
+$doc--font-sizes: (
+	'sm':0.9rem,
+	'md':1rem,
+	'lg':1.4rem,
+	'xl':4rem,
+	'h1':3.2rem,
+	'h2':2rem,
+	'h3':1.75rem,
+	'h4':1.5rem,
+	'h5':1.25rem,
+	'h6':1rem
+);
+$doc-folder-image-size: 15rem;
+$doc-folder-illus: (
+	'bg': #ddd,
+	'front':#fff,
+	'back':#fff,
+	'file':$doc--client-color,
+	'file-shadow':darken($doc--client-color, 10%)
+);
+$doc--border-rad: 3px;
+$doc--icons-font: 'choosy';
+$doc--icon-font-path: '../assets/fonts/icons';
+
+
+$doc--grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1600px
+);

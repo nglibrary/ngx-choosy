@@ -1,0 +1,27 @@
+.spu-util-flex-2 {
+	flex: 2 !important;
+}
+
+.spu-util-valign-middle {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.spu-util-tt-lowercase {
+	text-transform: lowercase;
+}
+
+.spu-util-cover-span{
+	display:flex;
+	flex-direction: column;
+}
+
+.spu-util-cursor-pointer{
+	cursor: pointer;
+}
+
+.spu-util-pos-right{
+	right: 0;
+    left: auto !important;
+}

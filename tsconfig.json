@@ -14,6 +14,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
-  }
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@choosy/core": [ "dist/choosy" ],
+      "@blink/core": [ "./blink/src/public_api" ]
+    }
+  },
+  "exclude": [
+    ".ng_build"
+  ]
 }

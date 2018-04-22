@@ -1,0 +1,55 @@
+.spu-main-title {
+	color: clr('heading');
+	font-weight: 300;
+	margin: 1.5rem 0;
+}
+.spu-main-title-h1 {
+	color: clr('heading');
+	font-size:fs('h1');
+	font-weight: 300;
+	margin: 1.5rem 0;
+}
+.spu-main-title-h3 {
+	color: clr('heading');
+	font-size:fs('h3');
+	font-weight: 300;
+	margin: 1.5rem 0;
+}
+
+.spu-sub-title {
+	font-weight: 400;
+	color: clr('subheading');
+	font-size: fs('md');
+	margin: 0;
+}
+
+.spu-welcome-para {
+	color: clr('para');
+	font-weight: 300;
+	font-size: fs('h2');
+	font-style: italic;
+}
+
+a.spu-link-light {
+	color: transparentize(#fff, 0.5);
+	&:hover,
+	&.active {
+		text-decoration: none;
+		color: transparentize(#fff, 0.3);
+	}
+	&.active {
+		font-weight: 500;
+	}
+}
+
+a.spu-link-dark {
+	color: transparentize(clr('primary', 'theme'), 0.5);
+	&:hover,
+	&.active {
+		text-decoration: none;
+		color: clr('primary', 'theme');
+	}
+	&.active {
+		font-weight: 500;
+	}
+}

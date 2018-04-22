@@ -1,0 +1,40 @@
+<div class="col-md-12 row no-gutters px-0" id="playground-layout">
+  <section class="col-md-8">
+    <button class="btn btn-primary" #refButton>Reference</button>
+  </section>
+
+  <section class="col-md-4">
+
+    <div class="setter">
+      <h3>Choose Position</h3>
+      <div class="form-group">
+        <select id="positon" class="form-control" [(ngModel)]="selectedPosition">
+          <option value="choose">Choose</option>
+          <option [value]="pos" *ngFor="let pos of keys(positions)">{{pos}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="setter">
+      <h3>Choose placement</h3>
+      <div class="form-group">
+        <select id="placement" class="form-control" [(ngModel)]="selectedPlacement">
+          <option value="choose">Choose</option>
+          <option [value]="placement.name" *ngFor="let placement of positions[selectedPosition]?.placements">{{placement.name}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="setter">
+      <h3>Choose component</h3>
+      <div class="form-group">
+        <select id="component" class="form-control" [(ngModel)]="selectedComponent">
+          <option value="choose" >Choose</option>
+          <option [value]="component" *ngFor="let component of keys(testComponents)">{{component}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="setter-action">
+      <button class="btn btn-danger" (click)="initiateBlink()">Initiate</button>
+    </div>
+  </section>
+</div>

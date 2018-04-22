@@ -1,0 +1,20 @@
+{
+  "name": "@blink/core",
+  "version": "1.0.0-alpha.0",
+  "repository": "https://github.com/dherges/ng-packaged.git",
+  "author": "Lokesh <mexican.dirtyfellow@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "peerDependencies": {
+    "@angular/core": ">=5.2.0",
+    "@angular/common": ">=5.2.0"
+  },
+  "ngPackage": {
+    "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
+    "lib": {
+      "entryFile": "src/public_api.ts",
+      "styleIncludePaths": ["./src/assets/styles/blink/"]
+    },
+    "dest": "../dist/blink"
+  }
+}

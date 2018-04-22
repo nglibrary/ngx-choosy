@@ -1,0 +1,68 @@
+/* 
+	calulation resource: https://offroadcode.com/rem-calculator/
+*/
+
+.form-group.spu-comp-basic-input {
+	margin-bottom: 2.5rem;
+	width:100%;
+	label {
+		color: clr('primary', 'theme');
+		font-size: fs('sm');
+		font-weight: 500;
+		width:100%;
+		margin-bottom: 0.1rem;
+	}
+
+	.input-group {
+		.form-control {
+			order: 1;
+		}
+
+		.input-group-addon:first-child:not(:last-child),
+		.input-group-addon.first-child {
+			order: 0 !important;
+			padding-left: 0;
+		}
+
+		.input-group-addon:last-child {
+			order: 2;
+		}
+		select.form-control{
+			height: 2.2rem;
+		}
+	}
+
+	.form-control,
+	.input-group-addon {
+		background-color: transparent;
+		border: 0 solid clr('input-border');
+		border-bottom-width: 0.0625rem;
+		border-radius: 0;
+		transition: none;
+	}
+
+	.form-control {
+		padding-left: 0;
+
+		&:focus ~ span,
+		&:focus {
+			border-bottom-color: clr('primary', 'theme');
+			border-bottom-width: 0.125rem;
+			padding-bottom: 0.4375rem; // fix for jump
+		}
+	}
+
+	.form-control.ng-invalid.ng-touched,
+	.form-control.ng-invalid.ng-touched ~ span {
+		border-bottom-color: clr('error', 'theme');
+		border-bottom-width: 0.125rem;
+		padding-bottom: 0.4375rem; // fix for jump
+	}
+
+	&.basic-input-lg{
+		.form-control{
+			font-size:fs('h1');
+			font-weight: 300;
+		}
+	}
+}

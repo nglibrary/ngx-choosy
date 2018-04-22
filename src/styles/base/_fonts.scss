@@ -1,0 +1,7 @@
+@include classic-theme() {
+	@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,700');
+}
+
+@include dexter-theme() {
+	@import url('https://fonts.googleapis.com/css?family=Barlow:100,100i,300,300i,400,400i,500,600,700');
+}

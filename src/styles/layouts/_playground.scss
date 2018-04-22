@@ -1,0 +1,23 @@
+#playground-layout {
+  height: 100%;
+  section:first-child{
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .setter{
+    padding: 2rem 4rem;
+    &:hover{
+      background-color: transparentize(clr('primary','theme'),0.95);
+    }
+    h3{
+      font-weight: 500;
+      font-size: 1rem;
+    }
+  }
+  .setter-action{
+    text-align: center;
+    padding: 1rem;
+  }
+}
