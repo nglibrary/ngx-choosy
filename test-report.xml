@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="F:\choosy\choosy-doc\src\app\app.component.spec.ts">
+    <testCase name="AppComponent should create the app" duration="706"/>
+    <testCase name="AppComponent should have as title &apos;doc&apos;" duration="278"/>
+    <testCase name="AppComponent should render title in a h1 tag" duration="621">
+      <failure message="TypeError: Cannot read property &apos;textContent&apos; of null"><![CDATA[TypeError: Cannot read property 'textContent' of null
+    at F:\choosy\choosy-doc\src\app\app.component.spec.ts:30:35
+    at ZoneDelegate.Object.<anonymous>.ZoneDelegate.invoke (F:\choosy\choosy-doc\node_modules\zone.js\dist\zone.js:388:26)
+    at AsyncTestZoneSpec.Object.<anonymous>.AsyncTestZoneSpec.onInvoke (F:\choosy\choosy-doc\node_modules\zone.js\dist\async-test.js:106:39)
+    at ProxyZoneSpec.Object.<anonymous>.ProxyZoneSpec.onInvoke (F:\choosy\choosy-doc\node_modules\zone.js\dist\proxy.js:125:39)
+    at ZoneDelegate.Object.<anonymous>.ZoneDelegate.invoke (F:\choosy\choosy-doc\node_modules\zone.js\dist\zone.js:387:32)
+    at Zone.Object.<anonymous>.Zone.runGuarded (F:\choosy\choosy-doc\node_modules\zone.js\dist\zone.js:151:47)
+    at runInTestZone (F:\choosy\choosy-doc\node_modules\@angular\core\bundles\core-testing.umd.js:141:25)
+    at F:\choosy\choosy-doc\node_modules\@angular\core\bundles\core-testing.umd.js:80:13
+    at ZoneDelegate.Object.<anonymous>.ZoneDelegate.invoke (F:\choosy\choosy-doc\node_modules\zone.js\dist\zone.js:388:26)
+    at ProxyZoneSpec.Object.<anonymous>.ProxyZoneSpec.onInvoke (F:\choosy\choosy-doc\node_modules\zone.js\dist\proxy.js:128:39)
+    at ZoneDelegate.Object.<anonymous>.ZoneDelegate.invoke (F:\choosy\choosy-doc\node_modules\zone.js\dist\zone.js:387:32)
+    at Zone.Object.<anonymous>.Zone.run (F:\choosy\choosy-doc\node_modules\zone.js\dist\zone.js:138:43)
+    at Object.testBody.length.done (F:\choosy\choosy-doc\node_modules\jest-zone-patch\index.js:51:29)
+    at resolve (F:\choosy\choosy-doc\node_modules\jest-jasmine2\build\queue_runner.js:52:12)
+    at new Promise (<anonymous>)
+    at mapper (F:\choosy\choosy-doc\node_modules\jest-jasmine2\build\queue_runner.js:39:19)
+    at promise.then (F:\choosy\choosy-doc\node_modules\jest-jasmine2\build\queue_runner.js:73:82)
+    at <anonymous>]]></failure>
+    </testCase>
+  </file>
+</testExecutions>

@@ -9,6 +9,13 @@
     "@angular/core": ">=5.2.0",
     "@angular/common": ">=5.2.0"
   },
+  "dependencies": {
+    "fuse.js": "3.2.0",
+    "deepmerge": "2.1.0"
+  },
+  "devDependencies": {
+    "@types/deepmerge": "2.1.0"
+  },
   "ngPackage": {
     "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
     "lib": {

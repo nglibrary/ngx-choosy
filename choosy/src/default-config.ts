@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { ChoosyConfig } from './models';
 
-export const CHOOSY_CONFIG = new InjectionToken<ChoosyConfig>('choosy-default-config');
+export const DEFAULT_CONFIG = new InjectionToken<ChoosyConfig>('default-config');
 
 export const choosyDefaultConfig: ChoosyConfig = {
   search: {
@@ -32,6 +32,7 @@ export const choosyDefaultConfig: ChoosyConfig = {
     checkbox: false
   },
   autoComplete: {
+    enable: false,
     minChars: 2
   },
   groupBy: null

@@ -98,7 +98,7 @@ export class BlinkTestComponent implements OnInit {
     let options = {};
     if (this.selectedPosition === 'RelativePosition') {
       options = {
-        pos: placement,
+        placement: placement,
         hostWidth: 'auto',
         hostHeight: 'auto',
         src: this.refButton.nativeElement,

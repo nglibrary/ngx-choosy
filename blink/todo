@@ -1,2 +1,3 @@
 # change Inside/Outside placements to Relative/Global
-# Global top scroll offset 
+# Global top scroll offset
+# proper window scroll/doc resize callbacks

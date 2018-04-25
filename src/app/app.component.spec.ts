@@ -1,15 +1,16 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { BlinkTestComponent } from './blink-test/blink-test.component';
+import { BlinkModule } from '@blink/core';
+import { MinimalComponent } from './blink-test/test-components/minimal';
+import { LargeComponent } from './blink-test/test-components/large';
+import { FormsModule } from '@angular/forms';
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
+      imports: [RouterTestingModule, FormsModule, BlinkModule],
+      declarations: [AppComponent, BlinkTestComponent, MinimalComponent, LargeComponent]
     }).compileComponents();
   }));
   it('should create the app', async(() => {

@@ -1,0 +1,7 @@
+<h3>Choosy</h3>
+<div class="col-md-12">
+  <div class="col-md-3 mx-auto">
+    <input type="search" (input)="ref.fetch($event.target.value)">
+    <choosy-basic [options]="options" [autoCompleteFn]="getNames.bind(this)" [config]="config" #ref="choosyRef"></choosy-basic>
+  </div>
+</div>

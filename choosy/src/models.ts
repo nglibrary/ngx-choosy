@@ -29,14 +29,32 @@ export interface ChoosyMultiSelect {
   checkbox?: boolean;
 }
 export interface ChoosyAutoComplete {
+  enable?: boolean;
   minChars?: number;
 }
 
 export type ChoosyOptions = ChoosyOption[];
 
 // TODO: add all
-export type ChoosyEvent = 'optionSelected' | 'optionsAdded';
+export type ChoosyEvent =
+  | 'optionSelected'
+  | 'optionsAdded'
+  | 'optionRemoved'
+  | 'optionDisabled'
+  | 'markedPrevAsActive'
+  | 'markedNextAsActive'
+  | 'removeAllActive'
+  | 'clearFilteredOptions'
+  | 'optionsFiltered'
+  | 'configUpdated'
+  | 'clearedAllSelectedOptions'
+  | 'clearedSelectedOptions'
+  | 'optionsEnabled'
+  | 'optionEnabled'
+  | 'optionSet';
 
 export type SparklePosition = 'AUTO' | 'FIXED';
 
 export type ChoosyTheme = 'default' | 'modern' | 'skeleton' | 'freestyle';
+
+export type FilterInput = ((option: any) => boolean) | string;

@@ -6,12 +6,9 @@
     "module": "es2015",
     "types": [],
     "paths": {
-      "@choosy/ngx-choosy": [ "../dist/choosy" ],
-      "@blink/core": [ "../blink/src/public_api" ]
+      "@choosy/ngx-choosy": ["../dist/choosy"],
+      "@blink/core": ["../blink/src/public_api"]
     }
   },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
-  ]
+  "exclude": ["test.ts", "**/*.spec.ts"]
 }

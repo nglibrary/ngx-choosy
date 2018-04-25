@@ -3,7 +3,7 @@ import { Position } from './position';
 
 export interface Config {
   src?: HTMLElement;
-  pos?: OutsidePlacement;
+  placement?: OutsidePlacement;
   autoUpdate?: boolean;
   hostWidth?: string | number;
   hostHeight?: string | number;
@@ -11,20 +11,20 @@ export interface Config {
 
 export class RelativePosition extends Position {
   src: HTMLElement;
-  private pos: OutsidePlacement;
+  private placement: OutsidePlacement;
   private autoUpdate: boolean;
   private hostWidth: string | number;
   private hostHeight: string | number;
   constructor({
     src,
-    pos = OutsidePlacement.TOP,
+    placement = OutsidePlacement.TOP,
     autoUpdate = false,
     hostWidth = '100%',
     hostHeight = '100%'
   }: Config) {
     super();
     this.src = src;
-    this.pos = pos;
+    this.placement = placement;
     this.hostWidth = hostWidth;
     this.hostHeight = hostHeight;
     this.autoUpdate = autoUpdate;
@@ -40,7 +40,7 @@ export class RelativePosition extends Position {
     if (this.hostHeight === '100%') {
       this.hostHeight = 'auto';
     }
-    const props = this.calculatePos(this.pos, s, h);
+    const props = this.calculatePos(this.placement, s, h);
     return { ...this.round(props), width: this.hostWidth, height: this.hostHeight };
   }
 

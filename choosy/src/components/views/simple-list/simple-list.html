@@ -1,0 +1,34 @@
+<ng-container *ngIf="options|async as opt">
+  <ng-container *ngFor="let option of opt;trackBy:trackByFn">
+    <div [class.selected]="option.state.selected" [class.disabled]="option.state.disabled" [class.active]="option.state.active"
+      (click)="selection(option,option.state)" *ngIf="!option.state.hidden">
+      <ng-template *ngTemplateOutlet="tpl; context: { $implicit: option.value,state:option.state }">
+      </ng-template>
+    </div>
+  </ng-container>
+</ng-container>
+
+
+<ng-template #defaultOptionTpl let-option>
+  {{option}}
+</ng-template>
+
+<ng-template #checkboxDefaultOptionTpl let-option let-state="state">
+  <div class="choosy-checkbox-tpl">
+    <span>
+      <input type="checkbox" [checked]="state.selected">
+    </span>
+    <span> {{option}}</span>
+  </div>
+</ng-template>
+
+<ng-template #checkboxCustomOptionTpl let-option let-state="state">
+  <div class="choosy-checkbox-tpl">
+    <span>
+      <input type="checkbox" [checked]="state.selected">
+    </span>
+    <span>
+      <ng-template *ngTemplateOutlet="optionTpl; context: { $implicit: option }"></ng-template>
+    </span>
+  </div>
+</ng-template>

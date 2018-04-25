@@ -8,20 +8,13 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2017", "dom"],
     "baseUrl": "./",
     "paths": {
-      "@choosy/core": [ "dist/choosy" ],
-      "@blink/core": [ "./blink/src/public_api" ]
+      "@choosy/core": ["./choosy/src/public_api"],
+      "@blink/core": ["./blink/src/public_api"]
     }
   },
-  "exclude": [
-    ".ng_build"
-  ]
+  "exclude": [".ng_build"]
 }
