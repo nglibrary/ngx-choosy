@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { ChoosyOption, ChoosyOptions, ChoosyEvent, FilterInput } from '../models';
+import { ChoosyOption, ChoosyOptions, ChoosyEvent, FilterInput, ChoosyConfig, ChoosySearch } from '../models';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SearchService } from './search.service';
@@ -9,7 +9,7 @@ import { share, map } from 'rxjs/operators';
 @Injectable()
 export class OptionsService implements OnDestroy {
   optionsSub: BehaviorSubject<ChoosyOptions> = new BehaviorSubject([]);
-  settings: any = {
+  settings: Partial<ChoosyConfig> = {
     type: 'select'
   };
   selectedOptionsBucket: ChoosyOptions = [];
@@ -22,10 +22,10 @@ export class OptionsService implements OnDestroy {
 
   selectOption(option: ChoosyOption): void {
     const opts = this.optionsSub.getValue().map((o: ChoosyOption) => {
-      if (this.settings.type !== 'multi-select') {
+      if (!this.settings.multiSelect.enable) {
         o.state.selected = false;
       }
-      if (o.uid === option.uid && this.settings.type === 'multi-select' && this.settings.multiselect.removeOnSelect) {
+      if (o.uid === option.uid && this.settings.multiSelect.enable && this.settings.multiSelect.removeOnSelect) {
         o.state.hidden = true;
       }
       if (o.uid === option.uid) {
@@ -81,7 +81,7 @@ export class OptionsService implements OnDestroy {
         o.state.selected = true;
         setOpt = o;
       }
-      if (this.settings.type === 'multi-select' && this.settings.multiselect.removeOnSelect) {
+      if (this.settings.multiSelect.enable && this.settings.multiSelect.removeOnSelect) {
         o.state.hidden = false;
       }
       return o;
@@ -111,7 +111,7 @@ export class OptionsService implements OnDestroy {
       if (o.uid === option.uid) {
         o.state.selected = false;
       }
-      if (o.uid === option.uid && this.settings.type === 'multi-select') {
+      if (o.uid === option.uid && this.settings.multiSelect.enable) {
         o.state.hidden = false;
       }
       return o;
@@ -150,14 +150,14 @@ export class OptionsService implements OnDestroy {
   }
   // TODO
   // when filter is active (has filtered items) , other actions like add, remove.. should be in sync with filtered items
-  filterOptions(keyword: string, config = { keys: ['value'] }): void {
+  filterOptions(keyword: string, searchConfig: ChoosySearch): void {
     const collection = this.optionsSub.getValue();
     if (this._latestFilteredOptions.length === 0) {
       this._latestFilteredOptions = collection;
     }
 
-    this._searchService.search(this._latestFilteredOptions, keyword, config).then(res => {
-      const nxt = keyword.length === 0 && res.length === 0 ? this._latestFilteredOptions : res;
+    this._searchService.search(this._latestFilteredOptions, keyword, searchConfig).then(res => {
+      const nxt = keyword.length === 0 ? this._latestFilteredOptions : res;
       this._triggerAction(nxt, 'optionsFiltered', res);
     });
   }

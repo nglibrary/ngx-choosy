@@ -10,15 +10,23 @@ import { ChoosyConfig } from 'choosy/src/models';
 export class ChoosyTestComponent implements OnInit {
   options = [];
   namesAPI = 'https://api.myjson.com/bins/b9zqf';
+  moviesAPI = 'https://api.myjson.com/bins/1e1rf3';
   config: ChoosyConfig = {
+    search: {
+      keys: ['value.title']
+    },
     autoComplete: {
       enable: true
-    }
+    },
+    groupBy: 'genre'
   };
   constructor(private http: HttpClient) {}
 
   ngOnInit() {}
   getNames(keyword) {
     return this.http.get(this.namesAPI);
+  }
+  getMovies(keyword) {
+    return this.http.get(this.moviesAPI);
   }
 }

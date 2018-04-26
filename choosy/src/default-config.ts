@@ -5,7 +5,7 @@ export const DEFAULT_CONFIG = new InjectionToken<ChoosyConfig>('default-config')
 
 export const choosyDefaultConfig: ChoosyConfig = {
   search: {
-    shouldSort: true,
+    shouldSort: false,
     threshold: 0.0,
     tokenize: true,
     matchAllTokens: true,
@@ -28,6 +28,7 @@ export const choosyDefaultConfig: ChoosyConfig = {
   displayValue: 'value',
   theme: 'default',
   multiSelect: {
+    enable: false,
     removeOnSelect: false,
     checkbox: false
   },

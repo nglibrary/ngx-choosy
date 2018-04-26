@@ -2,6 +2,12 @@
 <div class="col-md-12">
   <div class="col-md-3 mx-auto">
     <input type="search" (input)="ref.fetch($event.target.value)">
-    <choosy-basic [options]="options" [autoCompleteFn]="getNames.bind(this)" [config]="config" #ref="choosyRef"></choosy-basic>
+    <choosy-basic [options]="options" [autoCompleteFn]="getMovies.bind(this)" [config]="config" #ref="choosyRef" [optionTpl]="moviesTpl"></choosy-basic>
+    <input type="search" (input)="ref2.fetch($event.target.value)">
+    <choosy-simple-group [options]="options" [autoCompleteFn]="getMovies.bind(this)" [config]="config" #ref2="choosyRef" [optionTpl]="moviesTpl"></choosy-simple-group>
   </div>
 </div>
+
+<ng-template #moviesTpl let-movie>
+  {{movie.title}}
+</ng-template>

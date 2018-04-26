@@ -1,5 +1,5 @@
 export interface ChoosyConfig {
-  search?: any;
+  search?: ChoosySearch;
   footer?: ChoosyFooter;
   dropDown?: any;
   displayValue?: any;
@@ -8,6 +8,30 @@ export interface ChoosyConfig {
   multiSelect?: ChoosyMultiSelect;
   autoComplete?: ChoosyAutoComplete;
   groupBy?: string | null;
+}
+
+export interface ChoosySearch {
+  enable?: boolean;
+  autoFocus?: boolean;
+  hasClearBtn?: boolean;
+  id?: string;
+  caseSensitive?: boolean;
+  includeMatches?: boolean;
+  includeScore?: boolean;
+  shouldSort?: boolean;
+  sortFn?: (a: { score: number }, b: { score: number }) => number;
+  getFn?: (obj: any, path: string) => any;
+  keys?: string[];
+  verbose?: boolean;
+  tokenize?: boolean;
+  tokenSeparator?: RegExp;
+  matchAllTokens?: boolean;
+  location?: number;
+  distance?: number;
+  threshold?: number;
+  maxPatternLength?: number;
+  minMatchCharLength?: number;
+  findAllMatches?: boolean;
 }
 
 export interface ChoosyOption {
@@ -25,6 +49,7 @@ export interface ChoosyFooter {
   enable?: boolean;
 }
 export interface ChoosyMultiSelect {
+  enable?: boolean;
   removeOnSelect?: boolean;
   checkbox?: boolean;
 }

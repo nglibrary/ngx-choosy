@@ -47,7 +47,7 @@ export class SimpleList extends BaseView implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.init();
-    if (this.config.type === 'multi-select' && this.config.multiSelect.checkbox) {
+    if (this.config.multiSelect.enable && this.config.multiSelect.checkbox) {
       this.tpl = this.optionTpl ? this.checkboxCustomOptionTpl : this.checkboxDefaultOptionTpl;
     } else {
       this.tpl = this.optionTpl || this.defaultOptionTpl;
