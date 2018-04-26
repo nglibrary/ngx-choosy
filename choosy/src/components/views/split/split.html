@@ -1,11 +1,16 @@
 <ng-container *ngIf="options|async as opt">
-  <ng-container *ngFor="let option of opt;trackBy:trackByFn">
+  <div class="split-view-left" *ngFor="let option of opt;trackBy:trackByFn" (mouseenter)="hover(option.value)" (mouseleave)="hover(null)">
     <div [class.selected]="option.state.selected" [class.disabled]="option.state.disabled" [class.active]="option.state.active"
-      (click)="selection(option,option.state)" (mouseenter)="hover(option,true)" (mouseleave)="hover(option,false)" *ngIf="!option.state.hidden">
+      (click)="selection(option,option.state)" *ngIf="!option.state.hidden">
       <ng-template *ngTemplateOutlet="tpl; context: { $implicit: option.value,state:option.state }">
       </ng-template>
     </div>
-  </ng-container>
+    <div class="split-view-right">
+      <ng-container *ngIf="hoveredOptionValue">
+        <ng-template *ngTemplateOutlet="previewTpl;context:{$implicit:hoveredOptionValue}"></ng-template>
+      </ng-container>
+    </div>
+  </div>
 </ng-container>
 
 

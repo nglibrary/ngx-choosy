@@ -82,5 +82,15 @@
     margin-right:0.5rem;
   }
 }
+  /* previewer */
 
+  & ::ng-deep .choosy-previewer-panel{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    overflow: hidden;
+    > div{
+      flex: 0 0 50%;
+    }
+  }
 // @import './themes/_freestyle.scss'

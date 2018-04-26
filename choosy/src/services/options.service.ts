@@ -143,6 +143,13 @@ export class OptionsService implements OnDestroy {
       this.optionsLoading.next(false);
     });
   }
+  updateOptionHoverState(option: ChoosyOption, status): void {
+    const opts = this.optionsSub.getValue().map((o: ChoosyOption) => {
+      if (o.uid === option.uid) o.state.hover = status;
+      return o;
+    });
+    this._triggerAction(opts, 'optionHoverStateChanged', status);
+  }
   updateSettings(settings: any) {
     this.settings = settings;
     this.events.next({ name: 'configUpdated', value: this.settings });
@@ -173,11 +180,18 @@ export class OptionsService implements OnDestroy {
     return this.optionsLoading.asObservable().pipe(share());
   }
 
+  getLastSelectedOption() {
+    return this.optionsSub.pipe(
+      map(x => x.filter(y => y.state.selected)),
+      map(s => s.length>0 ? s[s.length-1]:null)
+    );
+  }
+
   getSelectedOptions() {
     return this.optionsSub.pipe(
       map(x => x.filter(y => y.state.selected)),
       map(s => {
-        return this.settings.type === 'select' ? (s[0] && s[0].value) || [] : s.map(d => d.value);
+        return this.settings.multiSelect ?s.map(d => d.value) : (s[0] && s[0].value) || [] ;
       })
     );
   }
@@ -188,7 +202,8 @@ export class OptionsService implements OnDestroy {
         disabled: false,
         selected: false,
         hidden: false,
-        active: false
+        active: false,
+        hover: false
       },
       value: !option || (typeof option === 'object' && Object.keys(option).length === 0) ? '-' : option
     };

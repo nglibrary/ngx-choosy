@@ -1,13 +1,28 @@
 <h3>Choosy</h3>
 <div class="col-md-12">
+  <div class="col-md-6 mx-auto">
+    <input type="search" (input)="ref3.fetch($event.target.value)">
+    <choosy-previewer [options]="options" [autoCompleteFn]="fetchRealMovies.bind(this)" [config]="previewConfig" #ref3="choosyRef"
+      [optionTpl]="moviesTpl" [previewTpl]="previewTpl"></choosy-previewer>
+
+    <hr>
+  </div>
+</div>
+<div class="col-md-12">
   <div class="col-md-3 mx-auto">
     <input type="search" (input)="ref.fetch($event.target.value)">
     <choosy-basic [options]="options" [autoCompleteFn]="getMovies.bind(this)" [config]="config" #ref="choosyRef" [optionTpl]="moviesTpl"></choosy-basic>
+    <hr>
     <input type="search" (input)="ref2.fetch($event.target.value)">
     <choosy-simple-group [options]="options" [autoCompleteFn]="getMovies.bind(this)" [config]="config" #ref2="choosyRef" [optionTpl]="moviesTpl"></choosy-simple-group>
+
   </div>
 </div>
 
 <ng-template #moviesTpl let-movie>
   {{movie.title}}
+</ng-template>
+<ng-template #previewTpl let-movie>
+  <!-- {{movie.title}} -->
+  <img [src]="'https://image.tmdb.org/t/p/w300'+movie.poster_path" width="100%">
 </ng-template>

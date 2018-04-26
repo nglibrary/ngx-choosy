@@ -41,6 +41,7 @@ export interface ChoosyOption {
     selected: boolean;
     hidden: boolean;
     active: boolean;
+    hover: boolean;
   };
   value: string | object;
 }
@@ -76,6 +77,7 @@ export type ChoosyEvent =
   | 'clearedSelectedOptions'
   | 'optionsEnabled'
   | 'optionEnabled'
+  | 'optionHoverStateChanged'
   | 'optionSet';
 
 export type SparklePosition = 'AUTO' | 'FIXED';

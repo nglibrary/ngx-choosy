@@ -8,13 +8,17 @@ import {
   HostBinding,
   ElementRef,
   ChangeDetectorRef,
-  AfterViewInit
+  AfterViewInit,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import { ChoosyOption, ChoosyConfig } from '../../../models';
 import { OptionsService } from '../../../services/options.service';
 import { ConfigService } from '../../../services/config.service';
 import { Observable } from 'rxjs/Observable';
 import { BaseView } from '../base-view';
+import { Subject } from 'rxjs/Subject';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'choosy-simple-list-view',
@@ -26,6 +30,7 @@ export class SimpleList extends BaseView implements OnInit, AfterViewInit {
   @Input() options: Observable<any>;
   @Input() config: ChoosyConfig;
   @Input() optionTpl: TemplateRef<any>;
+  @Output() hoveredOption: EventEmitter<any> = new EventEmitter();
   @ViewChild('defaultOptionTpl', { read: TemplateRef })
   defaultOptionTpl;
   @ViewChild('checkboxDefaultOptionTpl', { read: TemplateRef })
@@ -33,11 +38,13 @@ export class SimpleList extends BaseView implements OnInit, AfterViewInit {
   @ViewChild('checkboxCustomOptionTpl', { read: TemplateRef })
   checkboxCustomOptionTpl;
   @HostBinding('style.maxHeight') height: string;
+  lastSelectedOption: ChoosyOption;
   name = 'simple-list';
+  alive: Subject<any> = new Subject();
 
   private tpl: TemplateRef<any>;
   constructor(
-    private listService: OptionsService,
+    private optionsService: OptionsService,
     private configService: ConfigService,
     private elRef: ElementRef,
     private cdRef: ChangeDetectorRef
@@ -54,12 +61,17 @@ export class SimpleList extends BaseView implements OnInit, AfterViewInit {
     }
     this.height = this.config.dropDown.height + 'px';
     // todo: refactor
-    this.options.subscribe(x => {
+    this.options.pipe(takeUntil(this.alive)).subscribe(x => {
       if ((this.cdRef as any).destroyed) {
         return;
       }
       this.cdRef.detectChanges();
     });
+
+    this.optionsService
+      .getLastSelectedOption()
+      .pipe(takeUntil(this.alive))
+      .subscribe(opt => (this.lastSelectedOption = opt));
   }
   ngAfterViewInit() {
     const scollEl = this.elRef.nativeElement;
@@ -77,6 +89,22 @@ export class SimpleList extends BaseView implements OnInit, AfterViewInit {
       return;
     }
     const method = state.selected ? 'clearSelectedOption' : 'selectOption';
-    (this.listService as any)[method](option);
+    (this.optionsService as any)[method](option);
+  }
+
+  hover(option, status) {
+    let opt = option;
+    if (!status && this.lastSelectedOption) {
+      opt = this.lastSelectedOption;
+    } else if (!status && !this.lastSelectedOption) {
+      opt = null;
+    }
+    this.hoveredOption.emit(opt);
+    // this.optionsService.updateOptionHoverState(option, status);
+  }
+
+  ngOnDestroy() {
+    this.alive.next(true);
+    this.alive.complete();
   }
 }
