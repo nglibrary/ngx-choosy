@@ -1,3 +1,8 @@
-<p>
-  iconic works!
-</p>
+<choosy-basic [options]="options" [optionTpl]="placesTpl" [config]="{search:{ keys: ['value.name']}}"></choosy-basic>
+
+<ng-template #placesTpl let-item let-state="state">
+  <div class="illus" [class.selected]="state.selected">
+    <i class="freestyle-icon freestyle-{{item.name}}" [ngClass]="{selected:state.selected}"></i>
+    <!-- <div>{{item.title}}</div> -->
+  </div>
+</ng-template>
