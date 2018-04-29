@@ -1,0 +1,14 @@
+choosy-loader-widget {
+  display: block;
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.6rem;
+  }
+  .choosy-icon-spin {
+    animation: spin 2s infinite linear;
+    display: inline-flex;
+    margin-right: 0.3rem;
+  }
+}

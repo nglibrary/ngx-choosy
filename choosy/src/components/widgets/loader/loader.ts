@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'choosy-loader-widget',
   template: `
-  <div class="choosy-loading">
+  <div class="choosy-loader">
+    <i class="choosy-icon choosy-icon-loader choosy-icon-spin"></i> 
     loading...
-    <i class="choosy-icon choosy-icon-loader"></i>
   </div>
   `
 })

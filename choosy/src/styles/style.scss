@@ -1,5 +1,6 @@
 @import './config';
 @import './helpers/_index';
+@import './animations/_index';
 @import './types/_index';
 @import './base/_index';
 @import './widgets/_index';
@@ -51,7 +52,7 @@
 //   &.selected {
 //     background-color: $choosy-selected;
 //     color: #fff;
-//   } 
+//   }
 //   &.active {
 //     background-color: transparentize($choosy-selected, 0.5);
 //     color: #fff;

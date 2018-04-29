@@ -1,14 +1,15 @@
-choosy-option-widget{
+choosy-option-widget {
   display: block;
 }
-choosy-option-widget>div{
-  padding:0.4rem 0.6rem;
+choosy-option-widget > div {
+  padding: 0.4rem 0.6rem;
   cursor: pointer;
   border-radius: $choosy--option-border-rad;
-  &:hover,&.active{
+  &:hover,
+  &.active {
     background-color: choosy-clr('option-hover-bg');
   }
-  &.selected{
+  &.selected {
     background-color: choosy-clr('option-selected-bg');
   }
 }

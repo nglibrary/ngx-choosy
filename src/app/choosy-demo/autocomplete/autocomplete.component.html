@@ -1,3 +1,5 @@
-<p>
-  autocomplete works!
-</p>
+<input type="text" class="form-control" (input)="ref.fetch($event.target.value)" placeholder="search any movies...">
+<choosy-basic [options]="options" [config]="config" [autoCompleteFn]="fetchMovies.bind(this)" [optionTpl]="moviesTpl" #ref="choosyRef"></choosy-basic>
+<ng-template #moviesTpl let-movie>
+  {{movie.title}}
+</ng-template>
