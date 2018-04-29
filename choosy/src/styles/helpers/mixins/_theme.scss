@@ -1,0 +1,11 @@
+@mixin classic-theme {
+	@if $doc--current-theme=='CLASSIC' {
+		@content;
+	}
+}
+
+@mixin dark-theme {
+	@if $doc--current-theme=='DARK' {
+		@content;
+	}
+}

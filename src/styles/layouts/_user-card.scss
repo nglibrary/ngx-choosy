@@ -1,0 +1,18 @@
+#user-card{
+  display: flex;
+  img{
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    margin-right: 10px;
+  }
+  .detail{
+    flex:1
+  }
+  .title{
+    font-weight: 600;
+  }
+  .sub{
+    font-size: 0.8rem;
+  }
+}

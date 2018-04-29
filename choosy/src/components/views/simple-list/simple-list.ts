@@ -30,16 +30,9 @@ export class SimpleList extends BaseView implements OnInit, AfterViewInit {
   @Input() options: Observable<any>;
   @Input() config: ChoosyConfig;
   @Input() optionTpl: TemplateRef<any>;
-  @Output() hoveredOption: EventEmitter<any> = new EventEmitter();
-  @ViewChild('defaultOptionTpl', { read: TemplateRef })
-  defaultOptionTpl;
-  @ViewChild('checkboxDefaultOptionTpl', { read: TemplateRef })
-  checkboxDefaultOptionTpl;
-  @ViewChild('checkboxCustomOptionTpl', { read: TemplateRef })
-  checkboxCustomOptionTpl;
+  @Output() optionHover: EventEmitter<any> = new EventEmitter();
   @HostBinding('style.maxHeight') height: string;
   lastSelectedOption: ChoosyOption;
-  name = 'simple-list';
   alive: Subject<any> = new Subject();
 
   private tpl: TemplateRef<any>;
@@ -54,11 +47,6 @@ export class SimpleList extends BaseView implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.init();
-    if (this.config.multiSelect.enable && this.config.multiSelect.checkbox) {
-      this.tpl = this.optionTpl ? this.checkboxCustomOptionTpl : this.checkboxDefaultOptionTpl;
-    } else {
-      this.tpl = this.optionTpl || this.defaultOptionTpl;
-    }
     this.height = this.config.dropDown.height + 'px';
     // todo: refactor
     this.options.pipe(takeUntil(this.alive)).subscribe(x => {
@@ -75,7 +63,7 @@ export class SimpleList extends BaseView implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     const scollEl = this.elRef.nativeElement;
-    const targetEl = this.elRef.nativeElement.querySelector('.selected');
+    const targetEl = this.elRef.nativeElement.querySelector('choosy-option-widget>.selected');
     if (!targetEl) {
       return;
     }
@@ -84,22 +72,25 @@ export class SimpleList extends BaseView implements OnInit, AfterViewInit {
   trackByFn(index, item) {
     return item.uid;
   }
-  selection(option, state) {
-    if (state.disabled) {
+
+  optionClicked(option: ChoosyOption) {
+    this.cdRef.detectChanges();
+    if (option.state.disabled) {
       return;
     }
-    const method = state.selected ? 'clearSelectedOption' : 'selectOption';
+    const method = option.state.selected ? 'clearSelectedOption' : 'selectOption';
     (this.optionsService as any)[method](option);
+    this.cdRef.detectChanges();
   }
 
-  hover(option, status) {
+  hover({ option, status }) {
     let opt = option;
     if (!status && this.lastSelectedOption) {
       opt = this.lastSelectedOption;
     } else if (!status && !this.lastSelectedOption) {
       opt = null;
     }
-    this.hoveredOption.emit(opt);
+    this.optionHover.emit(opt);
     // this.optionsService.updateOptionHoverState(option, status);
   }
 

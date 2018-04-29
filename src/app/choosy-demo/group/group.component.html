@@ -1,0 +1,5 @@
+<choosy-simple-group [options]="options" [config]="{groupBy:'country'}" [optionTpl]="userTpl"></choosy-simple-group>
+
+<ng-template #userTpl let-user>
+  {{user.name}}
+</ng-template>

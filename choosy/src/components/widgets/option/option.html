@@ -1,0 +1,8 @@
+<div [class.selected]="option.state.selected" [class.disabled]="option.state.disabled" [class.active]="option.state.active"
+  (click)="clicked.emit(option)" (mouseenter)="hoverStatus(option,true)" (mouseleave)="hoverStatus(option,false)">
+  <ng-template *ngTemplateOutlet="optionTpl; context: { $implicit: option.value,state:option.state }">
+  </ng-template>
+</div>
+<ng-template #defaultOptionTpl let-option>
+  {{option}}
+</ng-template>

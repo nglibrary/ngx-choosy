@@ -1,0 +1,24 @@
+
+doc-section{
+  display: block;
+    background: #fafbfc;
+    padding: 3rem;
+    border-top: 1px solid #e9eff5;
+    &:nth-child(odd){
+      background: #f5f7f9;
+    }
+    h3{
+      text-transform: capitalize;
+      font-size: 1.5rem;
+      color: #607D8B;
+    }
+    p{
+      color:clr('text');
+    }
+    .actions{
+      a{
+        display: inline-block;
+        margin-right: 1rem;
+      }
+    }
+}

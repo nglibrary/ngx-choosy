@@ -22,6 +22,7 @@ export class OptionsService implements OnDestroy {
 
   selectOption(option: ChoosyOption): void {
     const opts = this.optionsSub.getValue().map((o: ChoosyOption) => {
+      o.state.active = false;
       if (!this.settings.multiSelect.enable) {
         o.state.selected = false;
       }
@@ -76,9 +77,11 @@ export class OptionsService implements OnDestroy {
       o.state.selected = false;
       if (typeof cbOrStr === 'function' && cbOrStr(o.value)) {
         o.state.selected = true;
+        o.state.active = false;
         setOpt = o;
       } else if (typeof cbOrStr === 'string' && cbOrStr === o.value) {
         o.state.selected = true;
+        o.state.active = false;
         setOpt = o;
       }
       if (this.settings.multiSelect.enable && this.settings.multiSelect.removeOnSelect) {
@@ -183,7 +186,7 @@ export class OptionsService implements OnDestroy {
   getLastSelectedOption() {
     return this.optionsSub.pipe(
       map(x => x.filter(y => y.state.selected)),
-      map(s => s.length>0 ? s[s.length-1]:null)
+      map(s => (s.length > 0 ? s[s.length - 1] : null))
     );
   }
 
@@ -191,7 +194,7 @@ export class OptionsService implements OnDestroy {
     return this.optionsSub.pipe(
       map(x => x.filter(y => y.state.selected)),
       map(s => {
-        return this.settings.multiSelect ?s.map(d => d.value) : (s[0] && s[0].value) || [] ;
+        return this.settings.multiSelect ? s.map(d => d.value) : (s[0] && s[0].value) || [];
       })
     );
   }

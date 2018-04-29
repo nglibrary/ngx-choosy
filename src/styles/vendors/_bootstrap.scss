@@ -4,7 +4,7 @@ $body-color: clr('text', 'basic');
 $link-color: clr('primary', 'theme');
 $link-hover-color: clr('primary-o', 'theme');
 $blue: clr('primary', 'theme');
-$red: clr('error', 'theme');
+$red: clr('danger', 'theme');
 $orange: clr('warning', 'theme');
 $green: clr('success', 'theme');
 
@@ -13,7 +13,7 @@ $theme-colors: (
   secondary: clr('secondary', 'theme'),
   success: clr('success', 'theme'),
   warning: clr('warning', 'theme'),
-  danger: clr('error', 'theme'),
+  danger: clr('danger', 'theme'),
   info: clr('info', 'theme'),
   dark: clr('dark', 'theme')
 );

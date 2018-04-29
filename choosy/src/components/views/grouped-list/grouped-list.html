@@ -1,37 +1,9 @@
 <ng-container *ngIf="options|async as groups">
   <ng-container *ngFor="let group of (groups | groupBy:config.groupBy)">
-    <span>{{group.key}}</span>
+    <div class="choosy-group-heading">{{group.key}}</div>
     <ng-container *ngFor="let groupitem of group.value">
-      <div [class.selected]="groupitem.state.selected" [class.disabled]="groupitem.state.disabled" [class.active]="groupitem.state.active"
-        (click)="selection(groupitem,groupitem.state)" *ngIf="!groupitem.state.hidden">
-        <ng-template *ngTemplateOutlet="tpl; context: { $implicit: groupitem.value,state:groupitem.state }">
-        </ng-template>
-      </div>
+      <choosy-option-widget [option]="groupitem" [optionTpl]="optionTpl" (clicked)="optionClicked($event)" (hover)="hover($event)"
+        *ngIf="!groupitem.state.hidden"></choosy-option-widget>
     </ng-container>
   </ng-container>
 </ng-container>
-
-
-<ng-template #defaultOptionTpl let-option>
-  {{option}}
-</ng-template>
-
-<ng-template #checkboxDefaultOptionTpl let-option let-state="state">
-  <div class="choosy-checkbox-tpl">
-    <span>
-      <input type="checkbox" [checked]="state.selected">
-    </span>
-    <span> {{option}}</span>
-  </div>
-</ng-template>
-
-<ng-template #checkboxCustomOptionTpl let-option let-state="state">
-  <div class="choosy-checkbox-tpl">
-    <span>
-      <input type="checkbox" [checked]="state.selected">
-    </span>
-    <span>
-      <ng-template *ngTemplateOutlet="optionTpl; context: { $implicit: option }"></ng-template>
-    </span>
-  </div>
-</ng-template>

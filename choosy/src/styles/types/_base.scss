@@ -1,0 +1,10 @@
+.choosy{
+    @include smooth-font();
+    display: block;
+    width: 100%;
+    border: 1px solid choosy-clr('view-border-col');
+    background: choosy-clr('view-bg-col');
+    border-radius: $choosy--view-border-rad;
+    margin-top: $choosy--filter-inp-border-rad;
+    color: choosy-clr('view-text-col');
+}

@@ -43,10 +43,10 @@ $icons: (
 	font-weight: normal;
 	src: url('#{$doc--icon-font-path}/choosy.ttf?olqd7c') format('truetype'),
 		url('#{$doc--icon-font-path}/choosy.woff?olqd7c') format('woff'),
-		url('#{$doc--icon-font-path}/choosy.svg?olqd7c#sputnik') format('svg');
+		url('#{$doc--icon-font-path}/choosy.svg?olqd7c#choosy') format('svg');
 }
 
-.spu-icon {
+.doc-icon {
 	/* use !important to prevent issues with browser extensions that change fonts */
 	font-family: $doc--icons-font !important;
 

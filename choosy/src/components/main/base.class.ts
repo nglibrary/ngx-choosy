@@ -9,7 +9,8 @@ import {
   EventEmitter,
   ChangeDetectorRef,
   SimpleChange,
-  OnChanges
+  OnChanges,
+  ViewEncapsulation
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -24,7 +25,7 @@ const keyCodes = {
   '13': 'ENTER'
 };
 
-export const BASE_CONFIG = {
+export const BASE_CONFIG: Component = {
   preserveWhitespaces: false,
   exportAs: 'choosyRef',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,7 +33,7 @@ export const BASE_CONFIG = {
 };
 
 export abstract class ChoosyBase implements OnChanges {
-  abstract name = 'choosy';
+  readonly name = 'base';
   insId = null;
   initialOptions: Observable<any>;
   @Input() config: Partial<ChoosyConfig> = {};
@@ -63,7 +64,9 @@ export abstract class ChoosyBase implements OnChanges {
   ) {}
   init() {
     this.insIdAttr = this.insId;
-    this.classNameAttr = this.config.theme;
+    this.classNameAttr = `choosy choosy-type-${this.constructor.name.toLocaleLowerCase()} choosy-theme-${
+      this.config.theme
+    }`;
 
     this.optionsService.setName(this.insId);
 
@@ -119,7 +122,7 @@ export abstract class ChoosyBase implements OnChanges {
       .subscribe(x => this._keyPressSub.next(x));
   }
 
-  watchKeyboardActions(optionEl: string = '.choosy-view>div.active') {
+  watchKeyboardActions(optionEl: string = '.choosy-view>choosy-option-widget div.active') {
     this._keyPressSub
       .asObservable()
       .pipe(
@@ -136,8 +139,8 @@ export abstract class ChoosyBase implements OnChanges {
         filter(x => x !== 'ENTER')
       )
       .subscribe(a => {
-        // todo: smooth scroll
-        this.elRef.nativeElement.querySelector(optionEl).scrollIntoView(false);
+        let q = this.elRef.nativeElement.querySelector(optionEl);
+        q.parentNode.parentNode.scrollTop = q.offsetTop - q.parentNode.parentNode.offsetTop;
       });
   }
 

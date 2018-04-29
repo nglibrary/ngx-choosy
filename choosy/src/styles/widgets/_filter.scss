@@ -1,0 +1,22 @@
+choosy-filter-widget{
+  >div{
+    display: block;
+    padding: 0.6rem;
+    position: relative;
+  }
+  input[type='text']{
+    border:1px solid choosy-clr('filter-inp-border-col');
+    border-radius: $choosy--filter-inp-border-rad;
+    box-shadow: none;
+    line-height: 1;
+    padding: 0.4rem;
+    padding-right: 1.6rem;
+    width: 100%;
+  }
+  .choosy-icon{
+    position: absolute;
+    right: 1.2rem;
+    top: 1.2rem;
+    color:choosy-clr('filter-inp-border-col');
+  }
+}

@@ -3,9 +3,9 @@
 </div>
 <div class="choosy-previewer-panel" *ngIf="!optionsLoading && initialOptions">
   <div class="main-panel">
-    <choosy-search-bar *ngIf="config.search?.enable" (search)="search($event)"></choosy-search-bar>
-    <choosy-simple-list-view [options]="initialOptions" [optionTpl]="optionTpl" [config]="config" (hoveredOption)="hoveredOption=$event"></choosy-simple-list-view>
-    <choosy-info-panel [options]="initialOptions" *ngIf="config.footer?.enable"></choosy-info-panel>
+    <choosy-filter-widget *ngIf="config.search?.enable" (search)="search($event)"></choosy-filter-widget>
+    <choosy-simple-list-view [options]="initialOptions" [optionTpl]="optionTpl" [config]="config" (optionHover)="hoveredOption=$event"></choosy-simple-list-view>
+    <choosy-info-panel-widget [options]="initialOptions" *ngIf="config.footer.enable"></choosy-info-panel-widget>
   </div>
   <div class="preview-panel">
     <ng-container *ngIf="hoveredOption">
@@ -14,4 +14,4 @@
   </div>
 </div>
 
-<choosy-loader *ngIf="optionsLoading"></choosy-loader>
+<choosy-loader-widget *ngIf="optionsLoading"></choosy-loader-widget>

@@ -7,9 +7,8 @@ import { ChoosyBase, BASE_CONFIG } from '../base.class';
   selector: 'choosy-basic',
   templateUrl: 'basic.html',
   styleUrls: ['basic.scss']
-})
+} as any)
 export class Basic extends ChoosyBase implements OnInit {
-  name = 'choosy-basic';
   constructor(
     protected optionsService: OptionsService,
     protected configService: ConfigService,
@@ -17,6 +16,7 @@ export class Basic extends ChoosyBase implements OnInit {
     protected cdRef: ChangeDetectorRef
   ) {
     super(optionsService, configService, elRef, cdRef);
+    console.log('test anno', this);
   }
 
   ngOnInit() {

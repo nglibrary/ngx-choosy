@@ -1,0 +1,14 @@
+<choosy-basic [options]="options" [optionTpl]="userTpl" [config]="{search:{keys:['value.name','value.surname','value.email']}}"
+  (events)=captureEvents($event)></choosy-basic>
+
+<ng-template #userTpl let-user>
+  <div id="user-card">
+    <img [src]="user.photo">
+    <div class="detail">
+      <div class="title">{{user.name}} {{user.surname}}</div>
+      <div>
+        <span class="sub">{{user.email}}</span>
+      </div>
+    </div>
+  </div>
+</ng-template>

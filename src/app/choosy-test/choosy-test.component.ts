@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ChoosyConfig } from 'choosy/src/models';
 import { map } from 'rxjs/operators';
+import { ChoosyConfig } from '../../../choosy/src/models';
 
 @Component({
   selector: 'doc-choosy-test',

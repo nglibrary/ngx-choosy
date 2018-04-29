@@ -1,0 +1,3 @@
+@function choosy-clr($key) {
+	@return map-get($choosy--colors, $key);
+}

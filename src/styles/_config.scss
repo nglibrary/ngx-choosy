@@ -1,39 +1,31 @@
 $doc--base-font-size: 14px;
 $doc--base-font-size-xl: 16px;
-$doc--app-name: 'SPUTNIK';
+$doc--app-name: 'CHOOSY';
 $doc--debug: false;
-$doc--font-family: 'Roboto';
+$doc--font-family: 'Nunito Sans','Roboto'; 
+$doc--font-family-asap: 'Asap','Roboto'; 
 $doc--current-theme: 'CLASSIC';
 $doc--themes: (
 	'classic':'CLASSIC',
 	'dexter':'DEXTER'
 );
 $doc--colors-basic: (
-	'bg':#FBFBFB,
-	'bg-alt':#F7F8FC,
-	'bg-alt-dark':#d7d7d7,
-	'text':#808080,
+	'bg':#fff,
+	'text':#aaaab1,
 	'heading':#333,
-	'subheading':#999,
-	'subtext':#999,
 	'border':#cbcbcb,
 	'para':#808080,
-	'dark':#000,
-	'input-border':#ccc
+	'dark':#000
 );
 
 $doc--colors-theme: (
-	'primary':#606BEB,
-	'primary-o':#1e3640,
-	'secondary':#F7F8FC,
+	'primary':#F8768F,
+	'secondary':#41495D,
 	'success':#3fc782,
 	'warning':#f78f1e,
-	'error':#e3505a,
 	'danger':#e3505a,
 	'dark':#000,
-	'info':#03A9F4,
-	'subheading':#333,
-	'link-alt':#999,
+	'info':#03A9F4
 );
 $doc--colors: (
 	'basic':$doc--colors-basic,

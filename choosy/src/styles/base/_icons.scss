@@ -1,0 +1,39 @@
+$choosy--icons:(
+  check: "\e92b", 
+  chevron-down: "\e92e",
+  loader: "\e986",
+  search: "\e9c1", 
+  close: "\ea02",
+  test:"\0tyu" 
+);
+
+@font-face {
+  font-family: 'choosy-foo';
+  src: url('#{$choosy--font-path}/choosy.woff?1ummwi') format('woff'),
+  url('#{$choosy--font-path}/choosy.ttf?1ummwi') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.choosy-icon {
+  font-family: 'choosy-foo' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+@function unicode($str) {
+  @return unquote("\"") + $str + unquote("\""); 
+}
+@each $icon in $choosy--icons {
+  .choosy-icon-#{nth($icon, 1)} {
+    &:before {
+      content: nth($icon, 2);
+      color:unicode(nth($icon, 2));
+    }
+  }
+}
