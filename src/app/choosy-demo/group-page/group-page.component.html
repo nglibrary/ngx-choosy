@@ -1,0 +1,10 @@
+<choosy-group-page [options]="options" [config]="{search:{keys:['value.name']},groupBy:'season',multiSelect:{enable:true}}"
+  [optionTpl]="episodeTpl"></choosy-group-page>
+
+<ng-template #seasonTpl let-season>
+  Season: {{season}}
+</ng-template>
+
+<ng-template #episodeTpl let-episode>
+  {{episode.name}}
+</ng-template>

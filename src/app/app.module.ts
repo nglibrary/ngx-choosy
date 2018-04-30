@@ -24,6 +24,7 @@ import { BasicSelectComponent } from './choosy-demo/basic-select/basic-select.co
 import { BasicButtonComponent } from './choosy-demo/basic-button/basic-button.component';
 import { SectionComponent } from './choosy-utils/section/section.component';
 import { CustomTemplateComponent } from './choosy-demo/custom-template/custom-template.component';
+import { GroupPageComponent } from './choosy-demo/group-page/group-page.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { CustomTemplateComponent } from './choosy-demo/custom-template/custom-te
     BasicSelectComponent,
     BasicButtonComponent,
     SectionComponent,
-    CustomTemplateComponent
+    CustomTemplateComponent,
+    GroupPageComponent
   ],
   imports: [BrowserModule, HttpClientModule, AppRoutingModule, ChoosyModule.forRoot(), BlinkModule, FormsModule],
   providers: [],

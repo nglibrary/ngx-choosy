@@ -3,8 +3,9 @@
 </div>
 <ng-container *ngIf="!optionsLoading && initialOptions">
   <choosy-filter-widget *ngIf="config.search?.enable" (search)="search($event)"></choosy-filter-widget>
-  <choosy-simple-list-view [options]="initialOptions" [optionTpl]="optionTpl" [config]="config"></choosy-simple-list-view>
+  <choosy-grouped-page-view [options]="initialOptions" [optionTpl]="optionTpl" [config]="config"></choosy-grouped-page-view>
 
   <choosy-info-panel-widget [options]="initialOptions" *ngIf="config.footer?.enable"></choosy-info-panel-widget>
 </ng-container>
-<choosy-loader-widget *ngIf="optionsLoading"></choosy-loader-widget> 
+
+<choosy-loader-widget *ngIf="optionsLoading"></choosy-loader-widget>
