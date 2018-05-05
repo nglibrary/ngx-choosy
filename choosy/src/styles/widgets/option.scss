@@ -1,7 +1,8 @@
 choosy-option-widget {
   display: block;
 }
-choosy-option-widget > div {
+choosy-option-widget > div,
+.choosy-option {
   padding: 0.4rem 0.6rem;
   cursor: pointer;
   border-radius: $choosy--option-border-rad;
@@ -11,5 +12,10 @@ choosy-option-widget > div {
   }
   &.selected {
     background-color: choosy-clr('option-selected-bg');
+  }
+  &.between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }

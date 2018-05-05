@@ -1,12 +1,15 @@
 <ng-container *ngIf="options|async as groups">
   <ng-container *ngIf="!selectedGroup">
     <ng-container *ngFor="let group of (groups | groupBy:config.groupBy)">
-      <div class="choosy-group-heading" (click)="selectGroup(group.value)">{{group.key}} ( {{countSelected(group.value)}} /{{group.value.length}})</div>
+      <div class="choosy-option between" (click)="selectGroup(group.value)">{{group.key}}
+        <small>({{countSelected(group.value)}} /{{group.value.length}})</small>
+      </div>
     </ng-container>
   </ng-container>
 
   <ng-container *ngIf="selectedGroup">
-    <div class="choosy-group-heading" (click)="removeGroup()">back</div>
+    <div class="choosy-back-button" (click)="removeGroup()">
+      <i class="choosy-icon choosy-icon-back"></i> back</div>
     <ng-container *ngFor="let groupitem of selectedGroup">
       <choosy-option-widget [option]="groupitem" [optionTpl]="optionTpl" (clicked)="optionClicked($event)" (hover)="hover($event)"
         *ngIf="!groupitem.state.hidden"></choosy-option-widget>

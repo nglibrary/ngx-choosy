@@ -1,22 +1,22 @@
-$choosy--icons:(
-  check: "\e92b", 
-  chevron-down: "\e92e",
-  loader: "\e986",
-  search: "\e9c1", 
-  close: "\ea02",
-  test:"\0tyu" 
+$choosy--icons: (
+  check: '\e92b',
+  chevron-down: '\e92e',
+  loader: '\e986',
+  search: '\e9c1',
+  close: '\ea02',
+  back: '\e910'
 );
 
 @font-face {
-  font-family: 'choosy-foo';
-  src: url('#{$choosy--font-path}/choosy.woff?1ummwi') format('woff'),
-  url('#{$choosy--font-path}/choosy.ttf?1ummwi') format('truetype');
+  font-family: 'choosy-icons';
+  src: url('#{$choosy--font-path}/choosy.woff?8k246p') format('woff'),
+    url('#{$choosy--font-path}/choosy.ttf?8k246p') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 .choosy-icon {
-  font-family: 'choosy-foo' !important;
+  font-family: 'choosy-icons' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -27,13 +27,12 @@ $choosy--icons:(
   -moz-osx-font-smoothing: grayscale;
 }
 @function unicode($str) {
-  @return unquote("\"") + $str + unquote("\""); 
+  @return unquote('"') + $str + unquote('"');
 }
 @each $icon in $choosy--icons {
   .choosy-icon-#{nth($icon, 1)} {
     &:before {
       content: nth($icon, 2);
-      color:unicode(nth($icon, 2));
     }
   }
 }
